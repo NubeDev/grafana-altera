@@ -19,7 +19,9 @@ This would all be done through a table view the same as what alerta has https://
 The alerta Table Plugin would be a widget that could be added in the grafana dashboard.
 The user could then do actions like
 
-
+- Delete/Update/Watch/Ach/Shelve
+- edit notes
+- assign (Not sure if we will use the grafana user API to get the users)
 
 
 ## Grafana alerta Data source
