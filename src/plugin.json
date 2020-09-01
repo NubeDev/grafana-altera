@@ -13,8 +13,8 @@
       "grafana-alerta"
     ],
     "logos": {
-      "small": "img/logo.svg",
-      "large": "img/logo.svg"
+      "small": "public/assets/images/logo.svg",
+      "large": "public/assets/images/logo.svg"
     },
     "links": [
       {

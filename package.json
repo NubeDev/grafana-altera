@@ -15,11 +15,20 @@
     "url": "https://github.com/grafana/simple-react-panel/issues",
     "email": "plugins@grafana.com"
   },
+  "dependencies": {
+    "bootstrap": "^4.5.2",
+    "css-loader": "^4.2.2",
+    "loaders.css": "0.1.2",
+    "resolve-url-loader": "^3.1.1",
+    "style-loader": "^1.2.1"
+  },
   "devDependencies": {
     "@grafana/data": "7.0.1",
     "@grafana/toolkit": "7.0.1",
     "@grafana/ui": "7.0.1",
-    "emotion": "10.0.27"
+    "emotion": "10.0.27",
+    "sass": "1.26.5",
+    "sass-loader": "8.0.2"
   },
   "engines": {
     "node": ">=12 <13"
