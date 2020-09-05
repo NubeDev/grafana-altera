@@ -1,8 +1,16 @@
 import React, {Component} from 'react'
 
-export class AlertaUpCell extends Component {
+export class AlertaUpCell extends Component<any, {upCount: number}> {
+  constructor(props: any) {
+    super(props);
+    this.setState({
+      upCount: 0
+    })
+  }
+
   showAlert() {
-    alert("I'll move this line up!")
+    this.setState({upCount: this.state.upCount + 1})
+    alert("I'll move this line up! " + this.state.upCount)
   }
 
   render() {

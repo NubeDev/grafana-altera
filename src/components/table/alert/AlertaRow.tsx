@@ -5,18 +5,17 @@ import {AlertaTruncateCell} from "./AlertaTruncateCell";
 import {AlertaRowTools} from "./AlertaRowTools";
 import {AlertaUpCell} from "./AlertaUpCell";
 
-export interface AlertaRowState {
+interface RowState {
   rowColor: string
 }
 
-export class AlertaRow extends Component<{ alert: IAlert }, AlertaRowState> {
+export class AlertaRow extends Component<{ alert: IAlert }, RowState> {
   constructor(props: any) {
     super(props);
-    this.setState({
-      rowColor: this.props.alert.severity == 'major' ? 'orange' : 'green'
-    })
+    this.state = {
+      rowColor: (this.props.alert.severity == 'major') ? 'orange' : 'green'
+    }
   }
-
 
   render() {
     return (

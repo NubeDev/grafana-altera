@@ -10,7 +10,7 @@ export class AlertaTableBody extends Component {
   render() {
     return (
       <tbody>
-      {data.map((item) => <AlertaRow alert={item}/>)}
+      {data.map((item) => item && <AlertaRow alert={item}/>)}
       </tbody>
     )
   }
