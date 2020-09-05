@@ -1,0 +1,311 @@
+{
+  "alerts": [
+    {
+      "attributes": {
+        "ip": "95.91.215.129",
+        "region": "EU"
+      },
+      "correlate": [
+        "HttpServerError",
+        "HttpServerOK",
+        "HttpServerRunning"
+      ],
+      "createTime": "2020-09-05T20:56:05.840Z",
+      "customer": null,
+      "duplicateCount": 0,
+      "environment": "Production",
+      "event": "HttpServerRunning",
+      "group": "Web",
+      "history": [
+        {
+          "event": "HttpServerRunning",
+          "href": "http://188.166.245.250:8080/api/alert/7b312468-eacc-45d8-ba1b-140ae07f47c2",
+          "id": "7b312468-eacc-45d8-ba1b-140ae07f47c2",
+          "severity": "normal",
+          "status": "closed",
+          "text": "Everything is down.",
+          "type": "new",
+          "updateTime": "2020-09-05T20:56:05.840Z",
+          "user": null,
+          "value": "Bad Gateway (501)"
+        }
+      ],
+      "href": "http://188.166.245.250:8080/api/alert/7b312468-eacc-45d8-ba1b-140ae07f47c2",
+      "id": "7b312468-eacc-45d8-ba1b-140ae07f47c2",
+      "lastReceiveId": "7b312468-eacc-45d8-ba1b-140ae07f47c2",
+      "lastReceiveTime": "2020-09-05T20:56:05.849Z",
+      "origin": "curl",
+      "previousSeverity": "indeterminate",
+      "rawData": null,
+      "receiveTime": "2020-09-05T20:56:05.849Z",
+      "repeat": false,
+      "resource": "web01",
+      "service": [
+        "example.com"
+      ],
+      "severity": "normal",
+      "status": "closed",
+      "tags": [
+        "dc1"
+      ],
+      "text": "Everything is down.",
+      "timeout": 86400,
+      "trendIndication": "lessSevere",
+      "type": "exceptionAlert",
+      "updateTime": "2020-09-05T20:56:05.849Z",
+      "value": "Bad Gateway (501)"
+    },
+    {
+      "attributes": {
+        "ip": "95.91.215.129",
+        "region": "EU"
+      },
+      "correlate": [
+        "HttpServerError",
+        "HttpServerOK",
+        "HttpServerDead"
+      ],
+      "createTime": "2020-09-05T19:23:06.003Z",
+      "customer": null,
+      "duplicateCount": 0,
+      "environment": "Production",
+      "event": "HttpServerDead",
+      "group": "Web",
+      "history": [
+        {
+          "event": "HttpServerDead",
+          "href": "http://188.166.245.250:8080/api/alert/815bc76c-d8a9-4e5d-ab1f-1a30a49386b6",
+          "id": "815bc76c-d8a9-4e5d-ab1f-1a30a49386b6",
+          "severity": "major",
+          "status": "open",
+          "text": "Everything is down.",
+          "type": "new",
+          "updateTime": "2020-09-05T19:23:06.003Z",
+          "user": null,
+          "value": "Bad Gateway (501)"
+        }
+      ],
+      "href": "http://188.166.245.250:8080/api/alert/815bc76c-d8a9-4e5d-ab1f-1a30a49386b6",
+      "id": "815bc76c-d8a9-4e5d-ab1f-1a30a49386b6",
+      "lastReceiveId": "815bc76c-d8a9-4e5d-ab1f-1a30a49386b6",
+      "lastReceiveTime": "2020-09-05T19:23:06.013Z",
+      "origin": "curl",
+      "previousSeverity": "indeterminate",
+      "rawData": null,
+      "receiveTime": "2020-09-05T19:23:06.013Z",
+      "repeat": false,
+      "resource": "web01",
+      "service": [
+        "example.com"
+      ],
+      "severity": "major",
+      "status": "open",
+      "tags": [
+        "dc1"
+      ],
+      "text": "Everything is down.",
+      "timeout": 86400,
+      "trendIndication": "moreSevere",
+      "type": "exceptionAlert",
+      "updateTime": "2020-09-05T19:23:06.013Z",
+      "value": "Bad Gateway (501)"
+    },
+    {
+      "attributes": {
+        "ip": "116.98.58.15",
+        "region": "EU"
+      },
+      "correlate": [
+        "HttpServerError",
+        "HttpServerOK",
+        "HttpServerProblem"
+      ],
+      "createTime": "2020-09-02T02:27:52.208Z",
+      "customer": null,
+      "duplicateCount": 0,
+      "environment": "Production",
+      "event": "HttpServerProblem",
+      "group": "Web",
+      "history": [
+        {
+          "event": "HttpServerProblem",
+          "href": "http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "id": "629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "severity": "major",
+          "status": "open",
+          "text": "Everything is down.",
+          "type": "new",
+          "updateTime": "2020-09-02T02:27:52.208Z",
+          "user": null,
+          "value": "Bad Gateway (501)"
+        },
+        {
+          "event": "HttpServerProblem",
+          "href": "http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "id": "629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "severity": "major",
+          "status": "ack",
+          "text": "ack operator action",
+          "type": "ack",
+          "updateTime": "2020-09-02T02:28:16.664Z",
+          "user": "alice",
+          "value": "Bad Gateway (501)"
+        },
+        {
+          "event": "HttpServerProblem",
+          "href": "http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "id": "629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "severity": "major",
+          "status": "open",
+          "text": "unack operator action",
+          "type": "unack",
+          "updateTime": "2020-09-02T02:28:19.094Z",
+          "user": "alice",
+          "value": "Bad Gateway (501)"
+        },
+        {
+          "event": "HttpServerProblem",
+          "href": "http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "id": "629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "severity": "major",
+          "status": "shelved",
+          "text": "shelve operator action",
+          "type": "shelve",
+          "updateTime": "2020-09-02T02:28:21.833Z",
+          "user": "alice",
+          "value": "Bad Gateway (501)"
+        },
+        {
+          "event": "HttpServerProblem",
+          "href": "http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "id": "629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+          "severity": "major",
+          "status": "open",
+          "text": "unshelve operator action",
+          "type": "unshelve",
+          "updateTime": "2020-09-02T02:28:22.913Z",
+          "user": "alice",
+          "value": "Bad Gateway (501)"
+        }
+      ],
+      "href": "http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+      "id": "629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+      "lastReceiveId": "629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+      "lastReceiveTime": "2020-09-02T02:27:52.215Z",
+      "origin": "curl",
+      "previousSeverity": "indeterminate",
+      "rawData": null,
+      "receiveTime": "2020-09-02T02:27:52.215Z",
+      "repeat": false,
+      "resource": "web01",
+      "service": [
+        "example.com"
+      ],
+      "severity": "major",
+      "status": "open",
+      "tags": [
+        "dc1"
+      ],
+      "text": "Everything is down.",
+      "timeout": 86400,
+      "trendIndication": "moreSevere",
+      "type": "exceptionAlert",
+      "updateTime": "2020-09-02T02:28:22.913Z",
+      "value": "Bad Gateway (501)"
+    },
+    {
+      "attributes": {
+        "ip": "123.209.208.127",
+        "region": "EU"
+      },
+      "correlate": [
+        "HttpServerError",
+        "HttpServerOK"
+      ],
+      "createTime": "2020-08-15T03:38:29.797Z",
+      "customer": null,
+      "duplicateCount": 0,
+      "environment": "Production",
+      "event": "HttpServerError",
+      "group": "Web",
+      "history": [
+        {
+          "event": "HttpServerError",
+          "href": "http://188.166.245.250:8080/api/alert/26afcf74-2f26-4d07-b371-e52f85dc8927",
+          "id": "26afcf74-2f26-4d07-b371-e52f85dc8927",
+          "severity": "major",
+          "status": "open",
+          "text": "Site is down.",
+          "type": "new",
+          "updateTime": "2020-08-15T03:38:29.797Z",
+          "user": "alice",
+          "value": "Bad Gateway (501)"
+        },
+        {
+          "event": "HttpServerError",
+          "href": "http://188.166.245.250:8080/api/alert/26afcf74-2f26-4d07-b371-e52f85dc8927",
+          "id": "26afcf74-2f26-4d07-b371-e52f85dc8927",
+          "severity": "major",
+          "status": "ack",
+          "text": "",
+          "type": "ack",
+          "updateTime": "2020-08-15T03:40:14.480Z",
+          "user": "alice",
+          "value": "Bad Gateway (501)"
+        },
+        {
+          "event": "HttpServerError",
+          "href": "http://188.166.245.250:8080/api/alert/26afcf74-2f26-4d07-b371-e52f85dc8927",
+          "id": "26afcf74-2f26-4d07-b371-e52f85dc8927",
+          "severity": "major",
+          "status": "open",
+          "text": "open operator action",
+          "type": "open",
+          "updateTime": "2020-08-15T03:42:20.917Z",
+          "user": "alice",
+          "value": "Bad Gateway (501)"
+        }
+      ],
+      "href": "http://188.166.245.250:8080/api/alert/26afcf74-2f26-4d07-b371-e52f85dc8927",
+      "id": "26afcf74-2f26-4d07-b371-e52f85dc8927",
+      "lastReceiveId": "26afcf74-2f26-4d07-b371-e52f85dc8927",
+      "lastReceiveTime": "2020-08-15T03:38:29.802Z",
+      "origin": "curl",
+      "previousSeverity": "indeterminate",
+      "rawData": null,
+      "receiveTime": "2020-08-15T03:38:29.802Z",
+      "repeat": false,
+      "resource": "web02",
+      "service": [
+        "example.com"
+      ],
+      "severity": "major",
+      "status": "open",
+      "tags": [
+        "dc1"
+      ],
+      "text": "Site is down.",
+      "timeout": 86400,
+      "trendIndication": "moreSevere",
+      "type": "exceptionAlert",
+      "updateTime": "2020-08-15T03:42:20.917Z",
+      "value": "Bad Gateway (501)"
+    }
+  ],
+  "autoRefresh": true,
+  "lastTime": "2020-09-05T20:56:05.849Z",
+  "more": false,
+  "page": 1,
+  "pageSize": 50,
+  "pages": 1,
+  "severityCounts": {
+    "major": 3,
+    "normal": 1
+  },
+  "status": "ok",
+  "statusCounts": {
+    "closed": 1,
+    "open": 3
+  },
+  "total": 4
+}
