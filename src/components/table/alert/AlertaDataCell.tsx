@@ -1,13 +1,14 @@
-import React, {Component} from 'react'
-import {IDataCell} from "../../../models/IDataCell";
+import React, { Component } from 'react';
+
+import { IDataCell } from '../../../models/IDataCell';
 
 export class AlertaDataCell extends Component<IDataCell> {
 
-  cellClass: string = "text-no-wrap black--text"
+  cellClass: string = 'text-no-wrap black--text';
 
   constructor(props: IDataCell) {
     super(props);
-    if(this.props.cellClass.trim() !== "") {
+    if (this.props.cellClass.trim() !== '') {
       this.cellClass = this.props.cellClass
     }
   }

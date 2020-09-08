@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
-import {AlertaTable} from "./table/AlertaTable";
-import {AlertaTablePaging} from "./table/AlertaTablePaging";
+import React, { Component } from 'react';
+
+import { AlertaTable } from './table/AlertaTable';
+import { AlertaTablePaging } from './table/AlertaTablePaging';
 
 export class AlertaPanelBody extends Component<any, any> {
   render() {
@@ -10,8 +11,8 @@ export class AlertaPanelBody extends Component<any, any> {
           <div className="v-window-item v-enter-to">
             <div>
               <div className="alert-table comfortable">
-                <AlertaTable/>
-                <AlertaTablePaging/>
+                <AlertaTable />
+                <AlertaTablePaging />
               </div>
             </div>
           </div>

@@ -1,9 +1,10 @@
-import React, {PureComponent} from 'react';
-import {PanelProps} from '@grafana/data';
-import {Moment} from 'moment';
-import {GrafanaAlertaOptions} from './types';
+import React, { PureComponent } from 'react';
+import { PanelProps } from '@grafana/data';
+import { Moment } from 'moment';
+
 import './App.scss';
-import {AlertaPanel} from "./components/AlertaPanel";
+import { GrafanaAlertaOptions } from './types';
+import { AlertaPanel } from './components/AlertaPanel';
 
 interface Props extends PanelProps<GrafanaAlertaOptions> {
 };
@@ -15,7 +16,7 @@ interface State {
 export class AppComponent extends PureComponent<Props, State> {
   render() {
     return (
-      <AlertaPanel/>
+      <AlertaPanel />
     );
   }
 };

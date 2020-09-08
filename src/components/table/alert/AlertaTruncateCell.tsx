@@ -1,13 +1,14 @@
-import React, {Component} from 'react'
-import {IDataCell} from "../../../models/IDataCell";
+import React, { Component } from 'react';
+
+import { IDataCell } from '../../../models/IDataCell';
 
 export class AlertaTruncateCell extends Component<IDataCell> {
 
-  cellClass: string = "text-no-wrap black--text"
+  cellClass: string = 'text-no-wrap black--text';
 
   constructor(props: IDataCell) {
     super(props);
-    if(this.props.cellClass.trim() !== "") {
+    if (this.props.cellClass.trim() !== '') {
       this.cellClass = this.props.cellClass
     }
   }
@@ -15,11 +16,11 @@ export class AlertaTruncateCell extends Component<IDataCell> {
   render() {
     return (
       <td className={this.cellClass}>
-          <span>
-            <div className="fixed-table">
-              <div className="text-truncate"><span>{this.props.text}</span></div>
-            </div>
-          </span>
+        <span>
+          <div className="fixed-table">
+            <div className="text-truncate"><span>{this.props.text}</span></div>
+          </div>
+        </span>
       </td>
     )
   }
