@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
-// @ts-ignore
 import raw from './data/test-data.json';
 import { AlertaRow } from './alert/AlertaRow';
-import { IAlert } from '../../models/IAlert';
+import { IAlert } from 'shared/models/alert.model';
 
 const data: IAlert[] = raw.alerts;
 

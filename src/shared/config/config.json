@@ -1,0 +1,184 @@
+{
+  "actions": [], 
+  "alarm_model": {
+    "colors": {
+      "severity": {
+        "cleared": "#00CC00", 
+        "critical": "red", 
+        "debug": "#9D006D", 
+        "indeterminate": "lightblue", 
+        "informational": "#00CC00", 
+        "major": "orange", 
+        "minor": "yellow", 
+        "normal": "#00CC00", 
+        "ok": "#00CC00", 
+        "security": "blue", 
+        "trace": "#7554BF", 
+        "unknown": "silver", 
+        "warning": "dodgerblue"
+      }, 
+      "text": "black"
+    }, 
+    "defaults": {
+      "normal_severity": "normal", 
+      "previous_severity": "indeterminate", 
+      "status": "open"
+    }, 
+    "name": "Alerta 8.0.0", 
+    "severity": {
+      "cleared": 7, 
+      "critical": 1, 
+      "debug": 8, 
+      "indeterminate": 5, 
+      "informational": 6, 
+      "major": 2, 
+      "minor": 3, 
+      "normal": 7, 
+      "ok": 7, 
+      "security": 0, 
+      "trace": 9, 
+      "unknown": 10, 
+      "warning": 4
+    }, 
+    "status": {
+      "ack": "C", 
+      "assign": "B", 
+      "blackout": "E", 
+      "closed": "F", 
+      "expired": "G", 
+      "open": "A", 
+      "shelved": "D", 
+      "unknown": "H"
+    }
+  }, 
+  "audio": {
+    "new": null
+  }, 
+  "auth_required": false, 
+  "aws_region": "us-east-1", 
+  "azure_tenant": "common", 
+  "client_id": "736147134702-glkb1pesv716j1utg4llg7c3rr7nnhli.apps.googleusercontent.com", 
+  "cognito_domain": null, 
+  "colors": {
+    "severity": {
+      "cleared": "#00CC00", 
+      "critical": "red", 
+      "debug": "#9D006D", 
+      "indeterminate": "lightblue", 
+      "informational": "#00CC00", 
+      "major": "orange", 
+      "minor": "yellow", 
+      "normal": "#00CC00", 
+      "ok": "#00CC00", 
+      "security": "blue", 
+      "trace": "#7554BF", 
+      "unknown": "silver", 
+      "warning": "dodgerblue"
+    }, 
+    "text": "black"
+  }, 
+  "columns": [
+    "severity", 
+    "status", 
+    "lastReceiveTime", 
+    "timeoutLeft", 
+    "duplicateCount", 
+    "customer", 
+    "environment", 
+    "service", 
+    "resource", 
+    "event", 
+    "value", 
+    "text"
+  ], 
+  "customer_views": false, 
+  "dates": {
+    "longDate": "ddd D MMM, YYYY HH:mm:ss.SSS Z", 
+    "mediumDate": "ddd D MMM HH:mm", 
+    "shortTime": "HH:mm"
+  }, 
+  "debug": true, 
+  "email_verification": false, 
+  "endpoint": "", 
+  "filter": {
+    "status": [
+      "open", 
+      "ack"
+    ]
+  }, 
+  "github_url": "https://github.com", 
+  "gitlab_url": "https://gitlab.com", 
+  "indicators": {
+    "queries": [
+      {
+        "query": [
+          [
+            "environment", 
+            "Production"
+          ]
+        ], 
+        "text": "Production"
+      }, 
+      {
+        "query": [
+          [
+            "environment", 
+            "Development"
+          ]
+        ], 
+        "text": "Development"
+      }, 
+      {
+        "query": {
+          "q": "event:Heartbeat"
+        }, 
+        "text": "Heartbeats"
+      }, 
+      {
+        "query": "group=Misc", 
+        "text": "Misc."
+      }
+    ], 
+    "severity": [
+      "critical", 
+      "major", 
+      "minor", 
+      "warning", 
+      "indeterminate", 
+      "informational"
+    ]
+  }, 
+  "keycloak_realm": null, 
+  "keycloak_url": null, 
+  "oidc_auth_url": null, 
+  "provider": "basic", 
+  "refresh_interval": 5000, 
+  "severity": {
+    "cleared": 7, 
+    "critical": 1, 
+    "debug": 8, 
+    "indeterminate": 5, 
+    "informational": 6, 
+    "major": 2, 
+    "minor": 3, 
+    "normal": 7, 
+    "ok": 7, 
+    "security": 0, 
+    "trace": 9, 
+    "unknown": 10, 
+    "warning": 4
+  }, 
+  "signup_enabled": true, 
+  "site_logo_url": "", 
+  "sort_by": [
+    "severity", 
+    "lastReceiveTime"
+  ], 
+  "timeouts": {
+    "ack": 0, 
+    "alert": 86400, 
+    "heartbeat": 86400, 
+    "shelve": 7200
+  }, 
+  "tracking_id": "UA-44644195-5"
+}

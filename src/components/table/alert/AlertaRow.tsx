@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 
-import { IAlert } from '../../../models/IAlert';
+import { IAlert } from 'shared/models/alert.model';
 import { AlertaDataCell } from './AlertaDataCell';
 import { AlertaTruncateCell } from './AlertaTruncateCell';
 import { AlertaRowTools } from './AlertaRowTools';
 import { AlertaUpCell } from './AlertaUpCell';
+import config from '../../../shared/config/config.json';
+
+const severityColors: any = config.alarm_model.colors.severity;
 
 interface RowState {
   rowColor: string
@@ -13,14 +16,15 @@ interface RowState {
 export class AlertaRow extends Component<{ alert: IAlert }, RowState> {
   constructor(props: any) {
     super(props);
-    this.state = {
-      rowColor: (this.props.alert.severity == 'major') ? 'orange' : 'green'
-    }
+  }
+
+  severityColor(severity: string): string {
+    return severityColors[severity] || 'white';
   }
 
   render() {
     return (
-      <tr className="hover-lighten" style={{ backgroundColor: this.state.rowColor }}>
+      <tr className="hover-lighten" style={{ backgroundColor: this.severityColor(this.props.alert.severity) }}>
         <AlertaUpCell />
 
         <AlertaDataCell cellClass="" textClass="label label-major" text={this.props.alert.severity} />
