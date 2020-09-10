@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 
 import { IDataCell } from 'shared/models/data-cell.model';
+import config from '../../../shared/config/config.json';
 
 export class AlertaDataCell extends Component<IDataCell> {
+  
+  textColor(): string {
+    return config.alarm_model.colors.text
+      ? `${config.alarm_model.colors.text}--text`
+      : ''
+  }
 
-  cellClass: string = 'text-no-wrap black--text';
+  cellClass: string = 'text-no-wrap ' + this.textColor();
 
   constructor(props: IDataCell) {
     super(props);
