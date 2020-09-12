@@ -66,7 +66,7 @@
       ], 
       "severity": "warning", 
       "status": "ack", 
-      "tags": [], 
+      "tags": ["watch:alice", "dc1"], 
       "text": "Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.", 
       "timeout": 86400, 
       "trendIndication": "moreSevere", 

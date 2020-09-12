@@ -6,3 +6,7 @@
 .text-capitalize {
   text-transform: 'capitalize';
 }
+
+.hover-lighten:hover {
+  border-top: 1px solid #ddd !important;
+}

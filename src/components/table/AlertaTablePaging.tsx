@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 
-export class AlertaTablePaging extends Component<any, any> {
+interface IAlertaTablePagingProps {
+  theme: any;
+}
+
+export class AlertaTablePaging extends Component<IAlertaTablePagingProps, any> {
   render() {
     return (
-      <div className="v-datatable v-table v-datatable--select-all theme--light">
+      <div className={['v-datatable v-table v-datatable--select-all', this.props.theme].join(' ')}>
         <div className="v-datatable__actions">
           <div className="v-datatable__actions__select">Rows per page:
-            <div role="combobox"
-                 className="v-input v-text-field v-select v-input--hide-details v-input--is-label-active v-input--is-dirty theme--light">
+            <div role="combobox" className={['v-input v-text-field v-select v-input--hide-details v-input--is-label-active v-input--is-dirty', this.props.theme].join(' ')}>
               <div className="v-input__control">
                 <div className="v-input__slot">
                   <div className="v-select__slot">
@@ -17,8 +20,7 @@ export class AlertaTablePaging extends Component<any, any> {
                     </div>
                     <div className="v-input__append-inner">
                       <div className="v-input__icon v-input__icon--append">
-                        <i aria-hidden="true"
-                           className="v-icon material-icons theme--light">arrow_drop_down</i>
+                        <i aria-hidden="true" className={['v-icon material-icons', this.props.theme].join(' ')}>arrow_drop_down</i>
                       </div>
                     </div>
                   </div>
@@ -29,16 +31,14 @@ export class AlertaTablePaging extends Component<any, any> {
           </div>
           <div className="v-datatable__actions__range-controls">
             <div className="v-datatable__actions__pagination">1-1 of 1</div>
-            <button type="button" className="v-btn v-btn--disabled v-btn--flat v-btn--icon theme--light"
-                    aria-label="Previous page">
+            <button type="button" className={['v-btn v-btn--disabled v-btn--flat v-btn--icon', this.props.theme].join(' ')} aria-label="Previous page">
               <div className="v-btn__content">
-                <i aria-hidden="true" className="v-icon material-icons theme--light">chevron_left</i>
+                <i aria-hidden="true" className={['v-icon material-icons', this.props.theme].join(' ')}>chevron_left</i>
               </div>
             </button>
-            <button type="button" className="v-btn v-btn--disabled v-btn--flat v-btn--icon theme--light"
-                    aria-label="Next page">
+            <button type="button" className={['v-btn v-btn--disabled v-btn--flat v-btn--icon', this.props.theme].join(' ')} aria-label="Next page">
               <div className="v-btn__content">
-                <i aria-hidden="true" className="v-icon material-icons theme--light">chevron_right</i>
+                <i aria-hidden="true" className={['v-icon material-icons', this.props.theme].join(' ')}>chevron_right</i>
               </div>
             </button>
           </div>

@@ -1,4 +1,4 @@
 export enum PreviousSeverity {
-  INDETERMINATE = "indeterminate",
-  NORMAL = "normal",
+  INDETERMINATE = 'indeterminate',
+  NORMAL = 'normal',
 }

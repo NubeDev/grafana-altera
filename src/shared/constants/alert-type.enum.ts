@@ -1,3 +1,3 @@
 export enum AlertType {
-  EXCEPTION_ALERT = "exceptionAlert",
+  EXCEPTION_ALERT = 'exceptionAlert',
 }

@@ -4,6 +4,7 @@ import { TrendIndication } from 'shared/constants/trend-indication.enum';
 
 interface IAlertaUpCellProps {
   trendIndication: any;
+  theme: any;
 }
 
 export class AlertaUpCell extends Component<IAlertaUpCellProps, { upCount: number }> {
@@ -21,7 +22,7 @@ export class AlertaUpCell extends Component<IAlertaUpCellProps, { upCount: numbe
 
   renderIcon() {
     let iconType;
-    const iconClass = 'v-icon trend-arrow v-icon--link material-icons theme--light';
+    const iconClass = ['v-icon trend-arrow v-icon--link material-icons', this.props.theme].join(' ');
     if (this.props.trendIndication == TrendIndication.MORE_SEVERE) {
       iconType = 'arrow_upward';
     } else if (this.props.trendIndication == TrendIndication.LESS_SEVERE) {

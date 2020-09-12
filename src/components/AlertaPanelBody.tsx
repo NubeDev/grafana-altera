@@ -3,7 +3,11 @@ import React, { Component } from 'react';
 import { AlertaTable } from './table/AlertaTable';
 import { AlertaTablePaging } from './table/AlertaTablePaging';
 
-export class AlertaPanelBody extends Component<any, any> {
+interface IAlertaPanelBodyProps {
+  theme: any;
+}
+
+export class AlertaPanelBody extends Component<IAlertaPanelBodyProps, any> {
   render() {
     return (
       <div className="v-window">
@@ -11,8 +15,8 @@ export class AlertaPanelBody extends Component<any, any> {
           <div className="v-window-item v-enter-to">
             <div>
               <div className="alert-table comfortable">
-                <AlertaTable />
-                <AlertaTablePaging />
+                <AlertaTable theme={this.props.theme} />
+                <AlertaTablePaging theme={this.props.theme} />
               </div>
             </div>
           </div>

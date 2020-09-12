@@ -1,6 +1,9 @@
 export enum Status {
-  ACK = "ack",
-  CLOSED = "closed",
-  OPEN = "open",
-  SHELVED = "shelved",
+  ACK = 'ack',
+  ACKED = 'ACKED',
+  CLOSED = 'closed',
+  OPEN = 'open',
+  SHELVED = 'shelved',
+  SHLVD = 'SHLVD',
+  NORM = 'NORM'
 }
