@@ -8,16 +8,12 @@ interface IAlertaUpCellProps {
 }
 
 export class AlertaUpCell extends Component<IAlertaUpCellProps, { upCount: number }> {
+
   constructor(props: IAlertaUpCellProps) {
     super(props);
     this.setState({
       upCount: 0
     })
-  }
-
-  showAlert() {
-    this.setState({ upCount: this.state.upCount + 1 })
-    alert('I\'ll move this line up! ' + this.state.upCount)
   }
 
   renderIcon() {
