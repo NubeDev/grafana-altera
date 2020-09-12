@@ -13,12 +13,11 @@ const severityColors: any = config.alarm_model.colors.severity;
 
 interface IAlertaRowProps {
   alert: IAlert;
-  theme: any;
-}
+};
 
 interface RowState {
   rowColor: string;
-}
+};
 
 export class AlertaRow extends Component<IAlertaRowProps, RowState> {
   constructor(props: any) {
@@ -41,7 +40,7 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
   render() {
     return (
       <tr className="hover-lighten" style={{ backgroundColor: this.severityColor(this.props.alert.severity) }}>
-        <AlertaUpCell trendIndication={this.props.alert.trendIndication} theme={this.props.theme} />
+        <AlertaUpCell trendIndication={this.props.alert.trendIndication} />
 
         <AlertaDataCell cellClass="" textClass={`label ${'label-' + this.props.alert.severity.toLowerCase()} text-capitalize`} text={this.props.alert.severity} />
         <AlertaDataCell cellClass="" textClass="label text-capitalize" text={this.props.alert.status} />
@@ -56,7 +55,7 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
         <AlertaDataCell cellClass="" textClass="" text={this.props.alert.value} />
         <AlertaTruncateCell cellClass="" textClass="" text={this.props.alert.text} />
 
-        <AlertaRowTools alert={this.props.alert} theme={this.props.theme} />
+        <AlertaRowTools alert={this.props.alert} />
       </tr>
     )
   }

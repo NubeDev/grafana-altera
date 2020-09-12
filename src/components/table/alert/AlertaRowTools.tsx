@@ -3,16 +3,20 @@ import React, {Component} from 'react';
 import config from '../../../shared/config/config.json';
 import { IAlert } from 'shared/models/alert.model';
 import { Status } from 'shared/constants/status.enum';
+import { ThemeContext } from 'shared/config/ThemeContext';
 
 const severityColors: any = config.alarm_model.colors.severity;
 const textColors: any = config.alarm_model.colors.text;
 
 interface IAlertaRowToolsProps {
   alert: IAlert;
-  theme: any;
-}
+};
 
 export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
+
+  static contextType = ThemeContext;
+
+  theme: any = this.context;
 
   textColor(): string {
     return textColors ? `${textColors}--text` : '';
@@ -20,9 +24,9 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
 
   // CSS class
   cellClass: string = 'text-no-wrap ' + this.textColor();
-  buttonClass: string = ['btn--plain pa-0 ma-0 v-btn v-btn--flat v-btn--icon v-btn--small', this.props.theme].join(' ');
+  buttonClass: string = ['btn--plain pa-0 ma-0 v-btn v-btn--flat v-btn--icon v-btn--small', this.theme].join(' ');
   btnContentClass: string = 'v-btn__content';
-  iTagClass: string = ['v-icon material-icons', this.props.theme].join(' ');
+  iTagClass: string = ['v-icon material-icons', this.theme].join(' ');
 
   username(): string {
     // return this.$store.getters['auth/getUsername'];

@@ -7,8 +7,7 @@ import { IAlert } from 'shared/models/alert.model';
 const rows: IAlert[] = raw.alerts;
 
 interface IAlertaTablePagingProps {
-  theme: any;
-}
+};
 
 function EnhancedTable() {
   const [page, setPage] = React.useState(0);
