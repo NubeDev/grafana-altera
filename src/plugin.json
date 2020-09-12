@@ -1,9 +1,9 @@
 {
   "type": "panel",
-  "name": "grafana-altera",
+  "name": "Grafana Alerta Table Plugin",
   "id": "nube-dev-grafana-altera",
   "info": {
-    "description": "grafana-altera",
+    "description": "Grafana Alerta Table Plugin",
     "author": {
       "name": "NubeDev",
       "url": ""
@@ -13,8 +13,8 @@
       "grafana-alerta"
     ],
     "logos": {
-      "small": "public/assets/images/logo.svg",
-      "large": "public/assets/images/logo.svg"
+      "small": "public/assets/images/nube-dev-logo.svg",
+      "large": "public/assets/images/nube-dev-logo.svg"
     },
     "links": [
       {
