@@ -10,3 +10,11 @@
 .hover-lighten:hover {
   border-top: 1px solid #ddd !important;
 }
+
+.v-datatable {
+  .no-record {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+  }
+}
