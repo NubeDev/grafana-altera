@@ -13,8 +13,8 @@
       "grafana-alerta"
     ],
     "logos": {
-      "small": "public/assets/images/nube-dev-logo.svg",
-      "large": "public/assets/images/nube-dev-logo.svg"
+      "small": "img/nube-dev-logo.png",
+      "large": "img/nube-dev-logo.png"
     },
     "links": [
       {
