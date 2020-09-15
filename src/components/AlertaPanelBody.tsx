@@ -2,31 +2,28 @@ import React, { Component } from 'react';
 
 import { AlertaTable } from './table/AlertaTable';
 import { AlertaTablePaging } from './table/AlertaTablePaging';
-import { IAlert } from 'shared/models/alert.model';
-import raw from './table/data/test-data.json';
-import AlertsApi from '../services/api/alert.service'
+import raw from './table/data/alerts.json';
+// import AlertsApi from '../services/api/alert.service';
+import { IAlertResponse } from 'shared/models/model-responses/alert-response';
 
-const data: IAlert[] = raw.alerts;
+const data: IAlertResponse = raw;
 
 interface IAlertaPanelBodyProps {
 };
 
 interface IAlertaPanelBodyState {
-  alerts: IAlert[];
+  alertResponse: IAlertResponse;
 };
 
 export class AlertaPanelBody extends Component<IAlertaPanelBodyProps, IAlertaPanelBodyState> {
 
-  componentDidMount() {
-    AlertsApi.getAlerts()
-      .then(res => {
-        const alerts = res.data;
-        console.log({ alerts });
-        this.setState({
-          alerts
-        });
-      });
-  }
+  // componentDidMount() {
+  //   AlertsApi.getAlerts()
+  //     .then(res => {
+  //       const alerts = res.data;
+  //       console.log({ alerts });
+  //     });
+  // }
 
   render() {
     return (
@@ -35,8 +32,8 @@ export class AlertaPanelBody extends Component<IAlertaPanelBodyProps, IAlertaPan
           <div className="v-window-item v-enter-to">
             <div>
               <div className="alert-table comfortable">
-                <AlertaTable alerts={data} />
-                <AlertaTablePaging alerts={data} />
+                <AlertaTable alertResponse={data} />
+                <AlertaTablePaging alertResponse={data} />
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { IDataCell } from 'shared/models/data-cell.model';
+import { IDataCell } from 'shared/models/model-data/data-cell.model';
 import config from '../../../shared/config/config.json';
 
 export class AlertaDataCell extends Component<IDataCell> {

@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import { AlertaTableHeader } from './AlertaTableHeader';
 import { AlertaTableBody } from './AlertaTableBody';
 import { ThemeContext } from 'shared/config/ThemeContext';
-import { IAlert } from 'shared/models/alert.model';
+import { IAlertResponse } from 'shared/models/model-responses/alert-response';
 
 interface IAlertaTableProps {
-  alerts: IAlert[];
+  alertResponse: IAlertResponse;
 };
 
 export class AlertaTable extends Component<IAlertaTableProps> {
@@ -21,7 +21,7 @@ export class AlertaTable extends Component<IAlertaTableProps> {
       <div className="v-table__overflow">
         <table className={['v-datatable v-table v-datatable--select-all', theme].join(' ')}>
           <AlertaTableHeader />
-          <AlertaTableBody alerts={this.props.alerts} />
+          <AlertaTableBody alertResponse={this.props.alertResponse} />
         </table>
       </div>
     )

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 
 import { AlertaRow } from './alert/AlertaRow';
-import { IAlert } from 'shared/models/alert.model';
+import { IAlertResponse } from 'shared/models/model-responses/alert-response';
 
 interface IAlertaTableBodyProps {
-  alerts: IAlert[];
+  alertResponse: IAlertResponse;
 };
 
 export class AlertaTableBody extends Component<IAlertaTableBodyProps> {
   render() {
-    let data = this.props.alerts;
+    let data = this.props.alertResponse.alerts;
     return (
       <tbody>
         {

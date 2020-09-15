@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import moment from 'moment';
 
-import { IAlert } from 'shared/models/alert.model';
+import { IAlert } from 'shared/models/model-data/alert.model';
 import { AlertaDataCell } from './AlertaDataCell';
 import { AlertaTruncateCell } from './AlertaTruncateCell';
 import { AlertaRowTools } from './AlertaRowTools';

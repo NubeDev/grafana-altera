@@ -29,7 +29,9 @@ export class AppComponent extends PureComponent<Props, State> {
   render() {
     return (
       <ThemeContext.Provider value={this.state.theme}>
-        <AlertaPanel />
+        <div className={['application', this.state.theme].join(' ')}>
+          <AlertaPanel />
+        </div>
       </ThemeContext.Provider>
     );
   }

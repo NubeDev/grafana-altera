@@ -1,6 +1,6 @@
 import { IAlert } from './alert.model';
-import { ISeverityCounts } from './severity-counts.model';
-import { IStatusCounts } from './status-counts.model';
+import { ISeverityCount } from './severity-count.model';
+import { IStatusCount } from './status-count.model';
 
 export interface IRootObject {
   alerts: IAlert[];
@@ -10,8 +10,8 @@ export interface IRootObject {
   page: number;
   pageSize: number;
   pages: number;
-  severityCounts: ISeverityCounts;
+  severityCounts: ISeverityCount;
   status: string;
-  statusCounts: IStatusCounts;
+  statusCounts: IStatusCount;
   total: number;
 }

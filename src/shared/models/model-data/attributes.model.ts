@@ -1,3 +1,4 @@
 export interface IAttributes {
-  ipAddress: string;
+  ip: string;
+  region: string;
 }

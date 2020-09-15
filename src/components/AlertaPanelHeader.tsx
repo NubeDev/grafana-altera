@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
 import { ThemeContext } from 'shared/config/ThemeContext';
+import { IEnvironmentResponse } from 'shared/models/model-responses/environment-response';
+import raw from './table/data/environments.json';
+
+const data: IEnvironmentResponse = raw;
 
 interface IAlertaPanelHeaderProps {
 };
@@ -8,6 +12,19 @@ interface IAlertaPanelHeaderProps {
 export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, any> {
 
   static contextType = ThemeContext;
+
+  environments(): string[] {
+    const result = data.environments.map(e => e.environment).sort();
+    return ['ALL'].concat(result);
+  }
+
+  environmentCounts() {
+    return data.environments.reduce((group: any, e) => {
+      group[e.environment] = e.count;
+      group['ALL'] = group['ALL'] + e.count;
+      return group;
+    }, { 'ALL': 0 })
+  }
 
   render() {
 
@@ -20,16 +37,15 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, any> {
             <div className="v-tabs__slider-wrapper" style={{ left: "0px", width: "597px" }}>
               <div className="v-tabs__slider accent"></div>
             </div>
-            <div className="v-tabs__div">
-              <a href="#tab-ALL" className="v-tabs__item v-tabs__item--active">
-                ALL&nbsp;(1)
-              </a>
-            </div>
-            <div className="v-tabs__div">
-              <a href="#tab-Production" className="v-tabs__item">
-                Production&nbsp;(1)
-              </a>
-            </div>
+            {data.environments.length > 0 &&
+              this.environments().map((env) => env &&
+                <div className="v-tabs__div">
+                  <a href={'#tab-' + env} className="v-tabs__item v-tabs__item--active">
+                    { env }&nbsp;({ this.environmentCounts()[env] || 0 })
+                  </a>
+                </div>
+              )
+            }
             <div className="spacer"></div>
             <button type="button" className={['v-btn v-btn--flat v-btn--icon filter-active', theme].join(' ')}>
               <div className="v-btn__content">

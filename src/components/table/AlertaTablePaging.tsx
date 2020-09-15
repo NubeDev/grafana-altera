@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import TablePagination from '@material-ui/core/TablePagination';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { IAlert } from 'shared/models/alert.model';
+import { IAlertResponse } from 'shared/models/model-responses/alert-response';
 import { ThemeContext } from 'shared/config/ThemeContext';
 import { THEME } from 'shared/constants/theme.constants';
 
 interface IAlertaTablePagingProps {
-  alerts: IAlert[];
+  alertResponse: IAlertResponse;
 };
 
 function EnhancedTable(props: any) {
@@ -61,7 +61,7 @@ export class AlertaTablePaging extends Component<IAlertaTablePagingProps, any> {
 
     return (
       <div className={['v-datatable v-table v-datatable--select-all', theme].join(' ')}>
-        <EnhancedTable alerts={this.props.alerts} theme={theme} />
+        <EnhancedTable alerts={this.props.alertResponse.alerts} theme={theme} />
       </div>
     )
   }

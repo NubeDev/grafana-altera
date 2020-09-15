@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { IDataCell } from 'shared/models/data-cell.model';
-import config from '../../../shared/config/config.json';
+import { IDataCell } from 'shared/models/model-data/data-cell.model';
+import config from 'shared/config/config.json';
 
 export class AlertaTruncateCell extends Component<IDataCell> {
 

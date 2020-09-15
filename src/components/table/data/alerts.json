@@ -1,0 +1,199 @@
+{
+  "alerts":[
+     {
+        "attributes":{
+           "ip":"116.98.58.15",
+           "region":"EU"
+        },
+        "correlate":[
+           "HttpServerError",
+           "HttpServerOK",
+           "HttpServerProblem"
+        ],
+        "createTime":"2020-09-02T02:27:52.208Z",
+        "customer":null,
+        "duplicateCount":0,
+        "environment":"Production",
+        "event":"HttpServerProblem",
+        "group":"Web",
+        "history":[
+           {
+              "event":"HttpServerProblem",
+              "href":"http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "id":"629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "severity":"major",
+              "status":"open",
+              "text":"Everything is down.",
+              "type":"new",
+              "updateTime":"2020-09-02T02:27:52.208Z",
+              "user":null,
+              "value":"Bad Gateway (501)"
+           },
+           {
+              "event":"HttpServerProblem",
+              "href":"http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "id":"629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "severity":"major",
+              "status":"ack",
+              "text":"ack operator action",
+              "type":"ack",
+              "updateTime":"2020-09-02T02:28:16.664Z",
+              "user":"alice",
+              "value":"Bad Gateway (501)"
+           },
+           {
+              "event":"HttpServerProblem",
+              "href":"http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "id":"629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "severity":"major",
+              "status":"open",
+              "text":"unack operator action",
+              "type":"unack",
+              "updateTime":"2020-09-02T02:28:19.094Z",
+              "user":"alice",
+              "value":"Bad Gateway (501)"
+           },
+           {
+              "event":"HttpServerProblem",
+              "href":"http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "id":"629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "severity":"major",
+              "status":"shelved",
+              "text":"shelve operator action",
+              "type":"shelve",
+              "updateTime":"2020-09-02T02:28:21.833Z",
+              "user":"alice",
+              "value":"Bad Gateway (501)"
+           },
+           {
+              "event":"HttpServerProblem",
+              "href":"http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "id":"629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+              "severity":"major",
+              "status":"open",
+              "text":"unshelve operator action",
+              "type":"unshelve",
+              "updateTime":"2020-09-02T02:28:22.913Z",
+              "user":"alice",
+              "value":"Bad Gateway (501)"
+           }
+        ],
+        "href":"http://188.166.245.250:8080/api/alert/629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+        "id":"629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+        "lastReceiveId":"629ec975-bd9e-45b2-8dfc-9bf5a24a1c84",
+        "lastReceiveTime":"2020-09-02T02:27:52.215Z",
+        "origin":"curl",
+        "previousSeverity":"indeterminate",
+        "rawData":null,
+        "receiveTime":"2020-09-02T02:27:52.215Z",
+        "repeat":false,
+        "resource":"web01",
+        "service":[
+           "example.com"
+        ],
+        "severity":"major",
+        "status":"open",
+        "tags":[
+           "dc1"
+        ],
+        "text":"Everything is down.",
+        "timeout":86400,
+        "trendIndication":"moreSevere",
+        "type":"exceptionAlert",
+        "updateTime":"2020-09-02T02:28:22.913Z",
+        "value":"Bad Gateway (501)"
+     },
+     {
+        "attributes":{
+           "ip":"123.209.208.127",
+           "region":"EU"
+        },
+        "correlate":[
+           "HttpServerError",
+           "HttpServerOK"
+        ],
+        "createTime":"2020-08-15T03:38:29.797Z",
+        "customer":null,
+        "duplicateCount":0,
+        "environment":"Production",
+        "event":"HttpServerError",
+        "group":"Web",
+        "history":[
+           {
+              "event":"HttpServerError",
+              "href":"http://188.166.245.250:8080/api/alert/26afcf74-2f26-4d07-b371-e52f85dc8927",
+              "id":"26afcf74-2f26-4d07-b371-e52f85dc8927",
+              "severity":"major",
+              "status":"open",
+              "text":"Site is down.",
+              "type":"new",
+              "updateTime":"2020-08-15T03:38:29.797Z",
+              "user":"alice",
+              "value":"Bad Gateway (501)"
+           },
+           {
+              "event":"HttpServerError",
+              "href":"http://188.166.245.250:8080/api/alert/26afcf74-2f26-4d07-b371-e52f85dc8927",
+              "id":"26afcf74-2f26-4d07-b371-e52f85dc8927",
+              "severity":"major",
+              "status":"ack",
+              "text":"",
+              "type":"ack",
+              "updateTime":"2020-08-15T03:40:14.480Z",
+              "user":"alice",
+              "value":"Bad Gateway (501)"
+           },
+           {
+              "event":"HttpServerError",
+              "href":"http://188.166.245.250:8080/api/alert/26afcf74-2f26-4d07-b371-e52f85dc8927",
+              "id":"26afcf74-2f26-4d07-b371-e52f85dc8927",
+              "severity":"major",
+              "status":"open",
+              "text":"open operator action",
+              "type":"open",
+              "updateTime":"2020-08-15T03:42:20.917Z",
+              "user":"alice",
+              "value":"Bad Gateway (501)"
+           }
+        ],
+        "href":"http://188.166.245.250:8080/api/alert/26afcf74-2f26-4d07-b371-e52f85dc8927",
+        "id":"26afcf74-2f26-4d07-b371-e52f85dc8927",
+        "lastReceiveId":"26afcf74-2f26-4d07-b371-e52f85dc8927",
+        "lastReceiveTime":"2020-08-15T03:38:29.802Z",
+        "origin":"curl",
+        "previousSeverity":"indeterminate",
+        "rawData":null,
+        "receiveTime":"2020-08-15T03:38:29.802Z",
+        "repeat":false,
+        "resource":"web02",
+        "service":[
+           "example.com"
+        ],
+        "severity":"major",
+        "status":"open",
+        "tags":[
+           "dc1"
+        ],
+        "text":"Site is down.",
+        "timeout":86400,
+        "trendIndication":"moreSevere",
+        "type":"exceptionAlert",
+        "updateTime":"2020-08-15T03:42:20.917Z",
+        "value":"Bad Gateway (501)"
+     }
+  ],
+  "autoRefresh":true,
+  "lastTime":"2020-09-02T02:27:52.215Z",
+  "more":false,
+  "page":1,
+  "pageSize":20,
+  "pages":1,
+  "severityCounts":{
+     "major":2
+  },
+  "status":"ok",
+  "statusCounts":{
+     "open":2
+  },
+  "total":2
+}

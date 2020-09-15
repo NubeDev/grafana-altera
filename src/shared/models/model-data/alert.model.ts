@@ -5,7 +5,7 @@ export interface IAlert {
   attributes: IAttributes;
   correlate: any[];
   createTime: string;
-  customer?: any;
+  customer: any;
   duplicateCount: number;
   environment: string;
   event: string;
@@ -17,7 +17,7 @@ export interface IAlert {
   lastReceiveTime: string;
   origin: string;
   previousSeverity: string;
-  rawData: string[];
+  rawData: string[] | null;
   receiveTime: string;
   repeat: boolean;
   resource: string;
