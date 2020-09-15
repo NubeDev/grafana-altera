@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { ThemeContext } from 'shared/config/ThemeContext';
 import { IEnvironmentResponse } from 'shared/models/model-responses/environment-response';
-import raw from './table/data/environments_2.json';
+import raw from './table/data/environments.json';
 
 const data: IEnvironmentResponse = raw;
 
