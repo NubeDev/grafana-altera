@@ -5,17 +5,27 @@ import { IAlertResponse } from 'shared/models/model-responses/alert-response';
 
 interface IAlertaTableBodyProps {
   alertResponse: IAlertResponse;
+  page: number;
+  rowsPerPage: number;
 };
 
 export class AlertaTableBody extends Component<IAlertaTableBodyProps> {
   render() {
-    let data = this.props.alertResponse.alerts;
+    const { alertResponse, page, rowsPerPage } = this.props;
     return (
       <tbody>
         {
-          data.map((item) => item && <AlertaRow alert={item} />)
+          alertResponse.alerts
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, index) => {
+              // const labelId = `enhanced-table-checkbox-${index}`;
+
+              return (
+                <AlertaRow alert={row} />
+              );
+            })
         }
-        { data.length === 0 &&
+        {alertResponse.alerts.length === 0 &&
           <tr className="hover-lighten">
             <td colSpan={13} className="text-no-wrap"><span className="no-record">No matching records found!</span></td>
           </tr>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ThemeContext } from 'shared/config/ThemeContext';
+import { ThemeContext } from 'shared/contexts/ThemeContext';
 import { IEnvironmentResponse } from 'shared/models/model-responses/environment-response';
 import raw from './table/data/environments.json';
 

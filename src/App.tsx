@@ -6,7 +6,7 @@ import './App.scss';
 import { GrafanaAlertaOptions } from './types';
 import { AlertaPanel } from './components/AlertaPanel';
 import { THEME } from 'shared/constants/theme.constants';
-import { ThemeContext } from 'shared/config/ThemeContext';
+import { ThemeContext } from 'shared/contexts/ThemeContext';
 
 const isDarkMode = config.theme.isDark;
 

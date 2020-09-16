@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ThemeContext } from 'shared/config/ThemeContext';
+import { ThemeContext } from 'shared/contexts/ThemeContext';
 
 interface IAlertaTableHeaderProps {
 };

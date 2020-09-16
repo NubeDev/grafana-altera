@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import config from '../../../shared/config/config.json';
 import { IAlert } from 'shared/models/model-data/alert.model';
 import { Status } from 'shared/constants/status.enum';
-import { ThemeContext } from 'shared/config/ThemeContext';
+import { ThemeContext } from 'shared/contexts/ThemeContext';
 
 const severityColors: any = config.alarm_model.colors.severity;
 const textColors: any = config.alarm_model.colors.text;
