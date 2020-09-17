@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 
-import { IDataCell } from 'shared/models/model-data/data-cell.model';
 import config from 'shared/config/config.json';
 
-export class AlertaTruncateCell extends Component<IDataCell> {
+interface IAlertaTruncateCellProps {
+  cellClass: any;
+  textClass: any;
+  text: any;
+};
+
+export class AlertaTruncateCell extends Component<IAlertaTruncateCellProps> {
 
   textColor(): string {
     return config.alarm_model.colors.text
@@ -13,7 +18,7 @@ export class AlertaTruncateCell extends Component<IDataCell> {
 
   cellClass: string = 'text-no-wrap ' + this.textColor();
 
-  constructor(props: IDataCell) {
+  constructor(props: IAlertaTruncateCellProps) {
     super(props);
     if (this.props.cellClass.trim() !== '') {
       this.cellClass = this.props.cellClass

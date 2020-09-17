@@ -58,60 +58,63 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
   }
 
   render() {
+
+    const { alert } = this.props;
+
     return (
       <td className={this.cellClass}>
-        <div className="action-buttons" style={{ backgroundColor: this.severityColor(this.props.alert.severity) }}>
+        <div className="action-buttons" style={{ backgroundColor: this.severityColor(alert.severity) }}>
           ...&nbsp;
-          { (this.isAcked(this.props.alert.status) || this.isClosed(this.props.alert.status)) &&
+          { (this.isAcked(alert.status) || this.isClosed(alert.status)) &&
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
                 <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>refresh</i>
               </div>
             </button>
           }
-          { !this.isWatched(this.props.alert.tags) &&
+          { !this.isWatched(alert.tags) &&
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
                 <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>visibility</i>
               </div>
             </button>
           }
-          { this.isWatched(this.props.alert.tags) &&
+          { this.isWatched(alert.tags) &&
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
                 <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>visibility_off</i>
               </div>
             </button>
           }
-          { this.isOpen(this.props.alert.status) &&
+          { this.isOpen(alert.status) &&
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
                 <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>check</i>
               </div>
             </button>
           }
-          { this.isAcked(this.props.alert.status) &&
+          { this.isAcked(alert.status) &&
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
                 <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>undo</i>
               </div>
             </button>
           }
-          { (this.isOpen(this.props.alert.status) || this.isAcked(this.props.alert.status)) &&
+          { (this.isOpen(alert.status) || this.isAcked(alert.status)) &&
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
                 <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>schedule</i>
               </div>
             </button>
           }
-          { this.isShelved(this.props.alert.status) &&
+          { this.isShelved(alert.status) &&
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
                 <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>restore</i>
               </div>
             </button>
           }
-          { !this.isClosed(this.props.alert.status) &&
+          { !this.isClosed(alert.status) &&
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
                 <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>highlight_off</i>

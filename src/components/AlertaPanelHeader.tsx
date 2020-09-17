@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { ThemeContext } from 'shared/contexts/ThemeContext';
 import { IEnvironmentResponse } from 'shared/models/model-responses/environment-response';
-import raw from './table/data/environments.json';
+import raw from './table/data/environments_2.json';
 
 const data: IEnvironmentResponse = raw;
 
@@ -23,7 +23,7 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, any> {
       group[e.environment] = e.count;
       group['ALL'] = group['ALL'] + e.count;
       return group;
-    }, { 'ALL': 0 })
+    }, { 'ALL': 0 });
   }
 
   render() {

@@ -13,18 +13,22 @@ interface IAlertaTableProps {
 };
 
 function EnhancedTable(props: any) {
+  // Set default value page, rowsPerPage
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
 
+  // Handle change page
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
+  // Handle change rows per page
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // Theme
   const color = props.theme === THEME.DARK_MODE ? 'white' : 'black';
   const useStyles = makeStyles({
     root: {
@@ -68,8 +72,10 @@ export class AlertaTable extends Component<IAlertaTableProps> {
 
     let theme = this.context;
 
+    const { alertResponse } = this.props;
+
     return (
-      <EnhancedTable alertResponse={this.props.alertResponse} theme={theme} />
+      <EnhancedTable alertResponse={alertResponse} theme={theme} />
     )
   }
 }

@@ -38,24 +38,27 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
   }
 
   render() {
+
+    const { alert } = this.props;
+
     return (
-      <tr className="hover-lighten" style={{ backgroundColor: this.severityColor(this.props.alert.severity) }}>
-        <AlertaUpCell trendIndication={this.props.alert.trendIndication} />
+      <tr className="hover-lighten" style={{ backgroundColor: this.severityColor(alert.severity) }}>
+        <AlertaUpCell trendIndication={alert.trendIndication} />
 
-        <AlertaDataCell cellClass="" textClass={`label ${'label-' + this.props.alert.severity.toLowerCase()} text-capitalize`} text={this.props.alert.severity} />
-        <AlertaDataCell cellClass="" textClass="label text-capitalize" text={this.props.alert.status} />
-        <AlertaDataCell cellClass="" textClass="" text={this.formatDateTime('mediumDate', this.props.alert.lastReceiveTime)} />
-        <AlertaDataCell cellClass="" textClass="text-xs-right" text={this.formatDateTime('hhmmss', this.props.alert.timeout)} />
-        <AlertaDataCell cellClass="" textClass="" text={this.props.alert.duplicateCount} />
-        <AlertaDataCell cellClass="" textClass="" text={this.props.alert.customer} />
-        <AlertaDataCell cellClass="" textClass="" text={this.props.alert.environment} />
-        <AlertaDataCell cellClass="" textClass="" text={this.props.alert.service.join(", ")} />
-        <AlertaDataCell cellClass="" textClass="" text={this.props.alert.resource} />
-        <AlertaDataCell cellClass="" textClass="" text={this.props.alert.event} />
-        <AlertaDataCell cellClass="" textClass="" text={this.props.alert.value} />
-        <AlertaTruncateCell cellClass="" textClass="" text={this.props.alert.text} />
+        <AlertaDataCell cellClass="" textClass={`label ${'label-' + alert.severity.toLowerCase()} text-capitalize`} text={alert.severity} />
+        <AlertaDataCell cellClass="" textClass="label text-capitalize" text={alert.status} />
+        <AlertaDataCell cellClass="" textClass="" text={this.formatDateTime('mediumDate', alert.lastReceiveTime)} />
+        <AlertaDataCell cellClass="" textClass="text-xs-right" text={this.formatDateTime('hhmmss', alert.timeout)} />
+        <AlertaDataCell cellClass="" textClass="" text={alert.duplicateCount} />
+        <AlertaDataCell cellClass="" textClass="" text={alert.customer} />
+        <AlertaDataCell cellClass="" textClass="" text={alert.environment} />
+        <AlertaDataCell cellClass="" textClass="" text={alert.service.join(", ")} />
+        <AlertaDataCell cellClass="" textClass="" text={alert.resource} />
+        <AlertaDataCell cellClass="" textClass="" text={alert.event} />
+        <AlertaDataCell cellClass="" textClass="" text={alert.value} />
+        <AlertaTruncateCell cellClass="" textClass="" text={alert.text} />
 
-        <AlertaRowTools alert={this.props.alert} />
+        <AlertaRowTools alert={alert} />
       </tr>
     )
   }
