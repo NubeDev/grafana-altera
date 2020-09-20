@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { AlertaTable } from './table/AlertaTable';
 import raw from './table/data/test-data.json';
-// import AlertsApi from '../services/api/alert.service';
+import AlertsApi from '../services/api/alert.service';
 import { IAlertResponse } from 'shared/models/model-responses/alert-response';
 
 const data: IAlertResponse = raw;
@@ -16,13 +16,13 @@ interface IAlertaPanelBodyState {
 
 export class AlertaPanelBody extends Component<IAlertaPanelBodyProps, IAlertaPanelBodyState> {
 
-  // componentDidMount() {
-  //   AlertsApi.getAlerts()
-  //     .then(res => {
-  //       const alerts = res.data;
-  //       console.log({ alerts });
-  //     });
-  // }
+  componentDidMount() {
+    AlertsApi.getAlerts()
+      .then(res => {
+        const alerts = res.data;
+        console.log({ alerts });
+      });
+  }
 
   render() {
     return (
