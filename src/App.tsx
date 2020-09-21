@@ -7,6 +7,7 @@ import { GrafanaAlertaOptions } from './types';
 import { AlertaPanel } from './components/AlertaPanel';
 import { THEME } from 'shared/constants/theme.constants';
 import { ThemeContext } from 'shared/contexts/ThemeContext';
+// import { AlertDetail } from 'components/alerts/alert-detail/AlertDetail';
 
 const isDarkMode = config.theme.isDark;
 
@@ -31,6 +32,7 @@ export class AppComponent extends PureComponent<Props, State> {
       <ThemeContext.Provider value={this.state.theme}>
         <div className={['application', this.state.theme].join(' ')}>
           <AlertaPanel />
+          {/* <AlertDetail /> */}
         </div>
       </ThemeContext.Provider>
     );

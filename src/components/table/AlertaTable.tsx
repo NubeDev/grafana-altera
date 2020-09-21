@@ -7,9 +7,13 @@ import { AlertaTableBody } from './AlertaTableBody';
 import { ThemeContext } from 'shared/contexts/ThemeContext';
 import { IAlertResponse } from 'shared/models/model-responses/alert-response';
 import { THEME } from 'shared/constants/theme.constants';
+import alertService from 'services/api/alert.service';
 
 interface IAlertaTableProps {
-  alertResponse: IAlertResponse;
+};
+
+interface IAlertaTableState {
+  alertResponse?: IAlertResponse;
 };
 
 function EnhancedTable(props: any) {
@@ -64,18 +68,57 @@ function EnhancedTable(props: any) {
   );
 }
 
-export class AlertaTable extends Component<IAlertaTableProps> {
+export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState> {
 
   static contextType = ThemeContext;
+
+  initAlertResponse: IAlertResponse = {
+    alerts: [],
+    autoRefresh: false,
+    lastTime: '',
+    more: false,
+    page: 0,
+    pageSize: 0,
+    pages: 0,
+    severityCounts: {},
+    status: '',
+    statusCounts: {},
+    total: 0
+  };
+
+  state = {
+    alertResponse: this.initAlertResponse
+  };
+
+  componentDidMount() {
+    // Get all Alerts
+    alertService.getAlerts()
+      .then(response => {
+        this.setState({
+          alertResponse: response
+        });
+      })
+      .catch(error => console.log(error));
+  }
 
   render() {
 
     let theme = this.context;
 
-    const { alertResponse } = this.props;
+    const { alertResponse } = this.state;
 
     return (
-      <EnhancedTable alertResponse={alertResponse} theme={theme} />
+      <div className="v-window">
+        <div className="v-window__container">
+          <div className="v-window-item v-enter-to">
+            <div>
+              <div className="alert-table comfortable">
+                <EnhancedTable alertResponse={alertResponse} theme={theme} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     )
   }
 }
