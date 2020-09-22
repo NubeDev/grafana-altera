@@ -8,6 +8,7 @@ import { AlertaTruncateCell } from './AlertaTruncateCell';
 import { AlertaRowTools } from './AlertaRowTools';
 import { AlertaUpCell } from './AlertaUpCell';
 import config from '../../../shared/config/config.json';
+import { Status } from 'shared/constants/status.enum';
 
 const severityColors: any = config.alarm_model.colors.severity;
 
@@ -28,13 +29,45 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
     return severityColors[severity] || 'white';
   }
 
+  pad(s: any) {
+    return ('0' + s).slice(-2);
+  }
+
   formatDateTime(type: string, dateTime: any): string {
-    if (type === 'mediumDate') {
-      return moment(dateTime).format('ddd DD MMM HH:mm');
+    if (type === 'longDate') {
+      return moment(dateTime).format(config.dates.longDate);
+    } else if (type === 'mediumDate') {
+      return moment(dateTime).format(config.dates.mediumDate);
+    } else if (type === 'shortTime') {
+      return moment(dateTime).format(config.dates.shortTime);
     } else if (type === 'hhmmss') {
-      return moment(dateTime).format('HH:mm:ss');
+      const pad = (s: number) => {
+        return ('0' + s).slice(-2);
+      }
+      if (dateTime) {
+        let duration = moment.duration(dateTime, 'seconds');
+        let seconds = pad(duration.seconds());
+        let minutes = pad(duration.minutes());
+        let hours = Math.floor(duration.as('h'));
+        return `${hours}:${minutes}:${seconds}`;
+      }
     }
     return dateTime;
+  }
+
+  timeoutLeft(alert: IAlert) {
+    let ackedOrShelved = this.isShelved(alert.status) || this.isAcked(alert.status);
+    let lastModified = ackedOrShelved && alert.updateTime ? alert.updateTime : alert.lastReceiveTime;
+    let expireTime = moment(lastModified).add(alert.timeout, 'seconds');
+    return expireTime.isAfter() ? expireTime.diff(moment(), 'seconds') : moment.duration();
+  }
+
+  isAcked(status: string) {
+    return status === Status.ack || status === Status.ACKED;
+  }
+
+  isShelved(status: string) {
+    return status === Status.shelved || status === Status.SHLVD;
   }
 
   render() {
@@ -48,7 +81,7 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
         <AlertaDataCell cellClass="" textClass={`label ${'label-' + alert.severity.toLowerCase()} text-capitalize`} text={alert.severity} />
         <AlertaDataCell cellClass="" textClass="label text-capitalize" text={alert.status} />
         <AlertaDataCell cellClass="" textClass="" text={this.formatDateTime('mediumDate', alert.lastReceiveTime)} />
-        <AlertaDataCell cellClass="" textClass="text-xs-right" text={this.formatDateTime('hhmmss', alert.timeout)} />
+        <AlertaDataCell cellClass="" textClass="text-xs-right" text={this.formatDateTime('hhmmss', this.timeoutLeft(alert))} />
         <AlertaDataCell cellClass="" textClass="" text={alert.duplicateCount} />
         <AlertaDataCell cellClass="" textClass="" text={alert.customer} />
         <AlertaDataCell cellClass="" textClass="" text={alert.environment} />

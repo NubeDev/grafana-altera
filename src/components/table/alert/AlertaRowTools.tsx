@@ -38,11 +38,11 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
   }
 
   isOpen(status: string): boolean {
-    return status === Status.OPEN || status === Status.NORM;
+    return status === Status.open || status === Status.NORM;
   }
 
   isAcked(status: string): boolean {
-    return status === Status.ACK || status === Status.ACKED;
+    return status === Status.ack || status === Status.ACKED;
   }
 
   isWatched(tags: string[]): boolean {
@@ -50,11 +50,11 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
   }
 
   isShelved(status: string): boolean {
-    return status === Status.SHELVED || status === Status.SHLVD;
+    return status === Status.shelved || status === Status.SHLVD;
   }
 
   isClosed(status: string): boolean {
-    return status === Status.CLOSED;
+    return status === Status.closed;
   }
 
   render() {

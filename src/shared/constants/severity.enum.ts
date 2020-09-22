@@ -1,6 +1,6 @@
 export enum Severity {
-  DEBUG = 'debug',
-  NORMAL = 'normal',
-  TRACE = 'trace',
-  WARNING = 'warning',
+  debug = 'debug',
+  normal = 'normal',
+  trace = 'trace',
+  warning = 'warning',
 }
