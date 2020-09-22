@@ -1,25 +1,56 @@
 import React, { Component } from 'react';
 
 import { ThemeContext } from 'shared/contexts/ThemeContext';
-import { IEnvironmentResponse } from 'shared/models/model-responses/environment-response';
-import raw from './table/data/environments_2.json';
-
-const data: IEnvironmentResponse = raw;
+import environmentService from 'services/api/environment.service';
+import config from 'shared/config/config.json';
+import { IEnvironment } from 'shared/models/model-data/environment.model';
 
 interface IAlertaPanelHeaderProps {
 };
 
-export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, any> {
+interface IAlertaPanelHeaderState {
+  environments: IEnvironment[];
+};
+
+// Init state param request
+let state = {
+  filter: {
+    status: config.filter.status
+  }
+};
+
+export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlertaPanelHeaderState> {
+
+  constructor(props: IAlertaPanelHeaderProps) {
+    super(props);
+    this.state = {
+      environments: []
+    };
+  }
 
   static contextType = ThemeContext;
 
+  componentDidMount() {
+    this.getEnvironments();
+    setInterval(this.getEnvironments, config.refresh_interval);
+  }
+
+  getEnvironments = async () => {
+    environmentService.getEnvironments({ state })
+      .then(res => {
+        if (res) {
+          this.setState({ environments: res.environments });
+        }
+      });
+  }
+
   environments(): string[] {
-    const result = data.environments.map(e => e.environment).sort();
+    const result = this.state.environments.map(e => e.environment).sort();
     return ['ALL'].concat(result);
   }
 
   environmentCounts() {
-    return data.environments.reduce((group: any, e) => {
+    return this.state.environments.reduce((group: any, e) => {
       group[e.environment] = e.count;
       group['ALL'] = group['ALL'] + e.count;
       return group;
@@ -37,7 +68,7 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, any> {
             <div className="v-tabs__slider-wrapper" style={{ left: "0px", width: "597px" }}>
               <div className="v-tabs__slider accent"></div>
             </div>
-            {data.environments.length > 0 &&
+            {this.state.environments.length > 0 &&
               this.environments().map((env) => env &&
                 <div className="v-tabs__div">
                   <a href={'#tab-' + env} className="v-tabs__item v-tabs__item--active">
