@@ -1,7 +1,7 @@
 import { PanelOptionsEditorBuilder } from '@grafana/data';
 
-import { GrafanaAlertaOptions } from 'types';
+import { IGrafanaAlertaOptions } from 'types';
 
-export const optionsBuilder = (builder: PanelOptionsEditorBuilder<GrafanaAlertaOptions>) => {
+export const optionsBuilder = (builder: PanelOptionsEditorBuilder<IGrafanaAlertaOptions>) => {
   // Global options
 };

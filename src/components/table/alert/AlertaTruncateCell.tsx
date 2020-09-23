@@ -6,14 +6,13 @@ interface IAlertaTruncateCellProps {
   cellClass: any;
   textClass: any;
   text: any;
-};
+}
 
 export class AlertaTruncateCell extends Component<IAlertaTruncateCellProps> {
-
   textColor(): string {
     return config.alarm_model.colors.text
       ? `${config.alarm_model.colors.text}--text`
-      : ''
+      : '';
   }
 
   cellClass: string = 'text-no-wrap ' + this.textColor();
@@ -21,7 +20,7 @@ export class AlertaTruncateCell extends Component<IAlertaTruncateCellProps> {
   constructor(props: IAlertaTruncateCellProps) {
     super(props);
     if (this.props.cellClass.trim() !== '') {
-      this.cellClass = this.props.cellClass
+      this.cellClass = this.props.cellClass;
     }
   }
 
@@ -30,10 +29,12 @@ export class AlertaTruncateCell extends Component<IAlertaTruncateCellProps> {
       <td className={this.cellClass}>
         <span>
           <div className="fixed-table">
-            <div className="text-truncate"><span>{this.props.text}</span></div>
+            <div className="text-truncate">
+              <span>{this.props.text}</span>
+            </div>
           </div>
         </span>
       </td>
-    )
+    );
   }
 }

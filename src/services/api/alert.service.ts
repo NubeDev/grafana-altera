@@ -12,7 +12,7 @@ const actions = {
       queryInProgress.cancel('Too many search requests. Cancelling current query.');
     }
     queryInProgress = axios.CancelToken.source();
-    let config = {
+    const config = {
       params: query,
       cancelToken: queryInProgress.token
     };
@@ -23,7 +23,7 @@ const actions = {
 export default {
 
   getAlerts({ rootGetters, commit, state }: any) {
-    let params = new URLSearchParams(state.query);
+    const params = new URLSearchParams();
 
     // append filter params to query params
     state.filter.environment && params.append('environment', state.filter.environment);
@@ -33,11 +33,7 @@ export default {
     state.filter.group && state.filter.group.map((g: any) => params.append('group', g));
 
     // add server-side sorting
-    let sortBy = state.pagination.sortBy;
-    if (sortBy === 'default' || !sortBy) {
-      sortBy = rootGetters['getConfig']('sort_by');
-    }
-
+    const sortBy = state.pagination.sortBy;
     if (typeof sortBy === 'string') {
       params.append('sort-by', (state.pagination.descending ? '-' : '') + sortBy);
     } else {
@@ -80,6 +76,7 @@ export default {
           pageSize: res.pageSize
         };
       })
+      // tslint:disable-next-line: no-console
       .catch(error => console.log(error));
   }
 }

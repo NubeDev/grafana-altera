@@ -10,19 +10,18 @@ import config from 'shared/config/config.json';
 import { IAlert } from 'shared/models/model-data/alert.model';
 import alertService from 'services/api/alert.service';
 
-interface IAlertaTableProps {
-};
+interface IAlertaTableProps {}
 
 interface IAlertaTableState {
   alerts: IAlert[];
   total: number;
   pageSize: number;
-};
+}
 
 const { useEffect } = React;
 
 // Init state param request
-let state = {
+const state = {
   filter: {
     status: config.filter.status
   },
@@ -33,7 +32,7 @@ let state = {
   }
 };
 
-async function updateData({ state }: any, setAlertState: React.Dispatch<React.SetStateAction<IAlertaTableState>>) {
+async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAlertaTableState>>) {
   alertService.getAlerts({ state })
     .then(res => {
       if (res) {
@@ -60,9 +59,9 @@ function EnhancedTable(props: any) {
 
   useEffect(() => {
     // Update data
-    updateData({ state }, setAlertState);
+    updateData(setAlertState);
     setInterval(() => {
-      updateData({ state }, setAlertState);
+      updateData(setAlertState);
     }, config.refresh_interval);
   }, []);
 
@@ -72,19 +71,18 @@ function EnhancedTable(props: any) {
 
     // Update data
     state.pagination.page = newPage + 1;
-    updateData({ state }, setAlertState);
+    updateData(setAlertState);
   };
 
   // Handle change rows per page
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const rowsPerPage = parseInt(event.target.value, 10);
-    setRowsPerPage(rowsPerPage);
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
 
     // Update data
     state.pagination.page = 1;
-    state.pagination.rowsPerPage = rowsPerPage;
-    updateData({ state }, setAlertState);
+    state.pagination.rowsPerPage = parseInt(event.target.value, 10);
+    updateData(setAlertState);
   };
 
   // Theme
@@ -123,12 +121,10 @@ function EnhancedTable(props: any) {
 }
 
 export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState> {
-
   static contextType = ThemeContext;
 
   render() {
-
-    let theme = this.context;
+    const theme = this.context;
 
     return (
       <div className="v-window">
@@ -142,6 +138,6 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }

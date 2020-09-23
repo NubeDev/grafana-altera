@@ -5,22 +5,20 @@ import environmentService from 'services/api/environment.service';
 import config from 'shared/config/config.json';
 import { IEnvironment } from 'shared/models/model-data/environment.model';
 
-interface IAlertaPanelHeaderProps {
-};
+interface IAlertaPanelHeaderProps {}
 
 interface IAlertaPanelHeaderState {
   environments: IEnvironment[];
-};
+}
 
 // Init state param request
-let state = {
+const state = {
   filter: {
     status: config.filter.status
   }
 };
 
 export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlertaPanelHeaderState> {
-
   constructor(props: IAlertaPanelHeaderProps) {
     super(props);
     this.state = {
@@ -42,7 +40,7 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlert
           this.setState({ environments: res.environments });
         }
       });
-  }
+  };
 
   environments(): string[] {
     const result = this.state.environments.map(e => e.environment).sort();
@@ -52,21 +50,20 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlert
   environmentCounts() {
     return this.state.environments.reduce((group: any, e) => {
       group[e.environment] = e.count;
-      group['ALL'] = group['ALL'] + e.count;
+      group.ALL = group.ALL + e.count;
       return group;
-    }, { 'ALL': 0 });
+    }, { ALL: 0 });
   }
 
   render() {
-
-    let theme = this.context;
+    const theme = this.context;
 
     return (
       <div className={['v-tabs__bar', theme].join(' ')}>
         <div className="v-tabs__wrapper">
           <div className="v-tabs__container v-tabs__container--grow">
-            <div className="v-tabs__slider-wrapper" style={{ left: "0px", width: "597px" }}>
-              <div className="v-tabs__slider accent"></div>
+            <div className="v-tabs__slider-wrapper" style={{ left: '0px', width: '597px' }}>
+              <div className="v-tabs__slider accent" />
             </div>
             {this.state.environments.length > 0 &&
               this.environments().map((env) => env &&
@@ -77,7 +74,7 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlert
                 </div>
               )
             }
-            <div className="spacer"></div>
+            <div className="spacer" />
             <button type="button" className={['v-btn v-btn--flat v-btn--icon filter-active', theme].join(' ')}>
               <div className="v-btn__content">
                 <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')}>filter_list</i>
@@ -92,10 +89,10 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlert
                 </button>
               </div>
             </div>
-            <span className="pr-2"></span>
+            <span className="pr-2" />
           </div>
         </div>
       </div>
-    )
+    );
   }
 }

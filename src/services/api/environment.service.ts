@@ -5,7 +5,7 @@ import { IEnvironmentResponse } from 'shared/models/model-responses/environment-
 
 const actions = {
   getEnvironments(query: object) {
-    let config = {
+    const config = {
       params: query
     };
     return api.get('/environments', config);
@@ -15,7 +15,7 @@ const actions = {
 export default {
 
   getEnvironments({ commit, state }: any) {
-    let params = new URLSearchParams(state.query);
+    const params = new URLSearchParams();
 
     // append filter params to query params
     state.filter.status && state.filter.status.map((st: any) => params.append('status', st));
@@ -53,6 +53,7 @@ export default {
           environments: res.environments
         };
       })
+      // tslint:disable-next-line: no-console
       .catch(error => console.log(error));
   }
 }

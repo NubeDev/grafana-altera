@@ -5,29 +5,28 @@ import { IAlert } from 'shared/models/model-data/alert.model';
 
 interface IAlertaTableBodyProps {
   alerts: IAlert[];
-};
+}
 
 export class AlertaTableBody extends Component<IAlertaTableBodyProps> {
   render() {
     const { alerts } = this.props;
     return (
       <tbody>
-        {
-          alerts
-            .map((row, index) => {
-              // const labelId = `enhanced-table-checkbox-${index}`;
+        {alerts.map((row, index) => {
+          const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <AlertaRow alert={row} />
-              );
-            })
-        }
-        {alerts.length === 0 &&
+          return (
+            <AlertaRow alert={row} key={labelId} />
+          );
+        })}
+        {alerts.length === 0 && (
           <tr className="hover-lighten">
-            <td colSpan={13} className="text-no-wrap"><span className="no-record">No matching records found!</span></td>
+            <td colSpan={13} className="text-no-wrap">
+              <span className="no-record">No matching records found!</span>
+            </td>
           </tr>
-        }
+        )}
       </tbody>
-    )
+    );
   }
 }

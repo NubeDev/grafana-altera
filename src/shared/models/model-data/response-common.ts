@@ -1,4 +1,4 @@
-export interface ResponseCommon {
+export interface IResponseCommon {
   status: string;
   total: number;
   message?: string;

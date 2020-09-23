@@ -5,10 +5,9 @@ import { ThemeContext } from 'shared/contexts/ThemeContext';
 
 interface IAlertaUpCellProps {
   trendIndication: any;
-};
+}
 
 export class AlertaUpCell extends Component<IAlertaUpCellProps, { upCount: number }> {
-
   static contextType = ThemeContext;
 
   theme: any = this.context;
@@ -17,7 +16,7 @@ export class AlertaUpCell extends Component<IAlertaUpCellProps, { upCount: numbe
     super(props);
     this.setState({
       upCount: 0
-    })
+    });
   }
 
   renderIcon() {
@@ -31,7 +30,9 @@ export class AlertaUpCell extends Component<IAlertaUpCellProps, { upCount: numbe
       iconType = 'remove';
     }
 
-    return <i aria-hidden="true" className={iconClass}>{iconType}</i>;
+    return (
+      <i aria-hidden="true" className={iconClass}>{iconType}</i>
+    );
   }
 
   render() {

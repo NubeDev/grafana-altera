@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 
 import { ThemeContext } from 'shared/contexts/ThemeContext';
 
-interface IAlertaTableHeaderProps {
-};
+interface IAlertaTableHeaderProps {}
 
 export class AlertaTableHeader extends Component<IAlertaTableHeaderProps> {
-
   static contextType = ThemeContext;
 
   render() {
-
-    let theme = this.context;
+    const theme = this.context;
 
     return (
       <thead>
@@ -22,7 +19,7 @@ export class AlertaTableHeader extends Component<IAlertaTableHeaderProps> {
                 <div className="v-input__slot">
                   <div className="v-input--selection-controls__input">
                     <input aria-checked="false" role="checkbox" type="checkbox" value="" />
-                    <div className="v-input--selection-controls__ripple"></div>
+                    <div className="v-input--selection-controls__ripple" />
                     <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')}>check_box_outline_blank</i>
                   </div>
                 </div>
@@ -43,9 +40,9 @@ export class AlertaTableHeader extends Component<IAlertaTableHeaderProps> {
           <th>Description</th>
         </tr>
         <tr className="v-datatable__progress">
-          <th colSpan={13} className="column"></th>
+          <th colSpan={13} className="column" />
         </tr>
       </thead>
-    )
+    );
   }
 }

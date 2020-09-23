@@ -6,14 +6,13 @@ interface IAlertaDataCellProps {
   cellClass: any;
   textClass: any;
   text: any;
-};
+}
 
 export class AlertaDataCell extends Component<IAlertaDataCellProps> {
-
   textColor(): string {
     return config.alarm_model.colors.text
       ? `${config.alarm_model.colors.text}--text`
-      : ''
+      : '';
   }
 
   cellClass: string = 'text-no-wrap ' + this.textColor();
@@ -26,13 +25,12 @@ export class AlertaDataCell extends Component<IAlertaDataCellProps> {
   }
 
   render() {
-
     const { textClass, text } = this.props;
 
     return (
       <td className={this.cellClass}>
         <span className={textClass}>{text}</span>
       </td>
-    )
+    );
   }
 }

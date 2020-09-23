@@ -3,7 +3,7 @@ import { PanelProps } from '@grafana/data';
 import { config } from '@grafana/runtime';
 
 import './App.scss';
-import { GrafanaAlertaOptions } from './types';
+import { IGrafanaAlertaOptions } from './types';
 import { AlertaPanel } from './components/AlertaPanel';
 import { THEME } from 'shared/constants/theme.constants';
 import { ThemeContext } from 'shared/contexts/ThemeContext';
@@ -11,16 +11,14 @@ import { ThemeContext } from 'shared/contexts/ThemeContext';
 
 const isDarkMode = config.theme.isDark;
 
-interface Props extends PanelProps<GrafanaAlertaOptions> {
-};
+interface IProps extends PanelProps<IGrafanaAlertaOptions> {}
 
-interface State {
+interface IState {
   theme: any;
-};
+}
 
-export class AppComponent extends PureComponent<Props, State> {
-
-  constructor(props: Props) {
+export class AppComponent extends PureComponent<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       theme: isDarkMode ? THEME.DARK_MODE : THEME.LIGHT_MODE
@@ -37,4 +35,4 @@ export class AppComponent extends PureComponent<Props, State> {
       </ThemeContext.Provider>
     );
   }
-};
+}

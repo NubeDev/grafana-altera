@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import { AlertaPanelHeader } from './AlertaPanelHeader';
 import { AlertaTable } from './table/AlertaTable';
 
-interface IAlertaPanelProps {
-};
+interface IAlertaPanelProps {}
 
 export class AlertaPanel extends Component<IAlertaPanelProps, any> {
   render() {
@@ -15,6 +14,6 @@ export class AlertaPanel extends Component<IAlertaPanelProps, any> {
           <AlertaTable />
         </div>
       </div>
-    )
+    );
   }
 }

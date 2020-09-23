@@ -14,13 +14,13 @@ const severityColors: any = config.alarm_model.colors.severity;
 
 interface IAlertaRowProps {
   alert: IAlert;
-};
+}
 
-interface RowState {
+interface IRowState {
   rowColor: string;
-};
+}
 
-export class AlertaRow extends Component<IAlertaRowProps, RowState> {
+export class AlertaRow extends Component<IAlertaRowProps, IRowState> {
   constructor(props: any) {
     super(props);
   }
@@ -43,12 +43,12 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
     } else if (type === 'hhmmss') {
       const pad = (s: number) => {
         return ('0' + s).slice(-2);
-      }
+      };
       if (dateTime) {
-        let duration = moment.duration(dateTime, 'seconds');
-        let seconds = pad(duration.seconds());
-        let minutes = pad(duration.minutes());
-        let hours = Math.floor(duration.as('h'));
+        const duration = moment.duration(dateTime, 'seconds');
+        const seconds = pad(duration.seconds());
+        const minutes = pad(duration.minutes());
+        const hours = Math.floor(duration.as('h'));
         return `${hours}:${minutes}:${seconds}`;
       }
     }
@@ -56,9 +56,9 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
   }
 
   timeoutLeft(alert: IAlert) {
-    let ackedOrShelved = this.isShelved(alert.status) || this.isAcked(alert.status);
-    let lastModified = ackedOrShelved && alert.updateTime ? alert.updateTime : alert.lastReceiveTime;
-    let expireTime = moment(lastModified).add(alert.timeout, 'seconds');
+    const ackedOrShelved = this.isShelved(alert.status) || this.isAcked(alert.status);
+    const lastModified = ackedOrShelved && alert.updateTime ? alert.updateTime : alert.lastReceiveTime;
+    const expireTime = moment(lastModified).add(alert.timeout, 'seconds');
     return expireTime.isAfter() ? expireTime.diff(moment(), 'seconds') : moment.duration();
   }
 
@@ -71,7 +71,6 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
   }
 
   render() {
-
     const { alert } = this.props;
 
     return (
@@ -85,7 +84,7 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
         <AlertaDataCell cellClass="" textClass="" text={alert.duplicateCount} />
         <AlertaDataCell cellClass="" textClass="" text={alert.customer} />
         <AlertaDataCell cellClass="" textClass="" text={alert.environment} />
-        <AlertaDataCell cellClass="" textClass="" text={alert.service.join(", ")} />
+        <AlertaDataCell cellClass="" textClass="" text={alert.service.join(', ')} />
         <AlertaDataCell cellClass="" textClass="" text={alert.resource} />
         <AlertaDataCell cellClass="" textClass="" text={alert.event} />
         <AlertaDataCell cellClass="" textClass="" text={alert.value} />
@@ -93,6 +92,6 @@ export class AlertaRow extends Component<IAlertaRowProps, RowState> {
 
         <AlertaRowTools alert={alert} />
       </tr>
-    )
+    );
   }
 }

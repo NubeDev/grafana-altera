@@ -1,6 +1,6 @@
 type SeriesSize = 'sm' | 'md' | 'lg';
 
-export interface GrafanaAlertaOptions {
+export interface IGrafanaAlertaOptions {
   text: string;
   showSeriesCount: boolean;
   seriesCountSize: SeriesSize;

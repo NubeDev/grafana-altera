@@ -4,23 +4,19 @@ import { ThemeContext } from 'shared/contexts/ThemeContext';
 
 import './AlertDetail.scss';
 
-interface IAlertDetailProps {
-};
+interface IAlertDetailProps {}
 
 export class AlertDetail extends Component<IAlertDetailProps, any> {
-
   static contextType = ThemeContext;
 
   render() {
-
-    let theme = this.context;
+    const theme = this.context;
 
     return (
       <div className="v-content" data-booted="true" style={{ padding: '0px' }}>
         <div className="v-content__wrap">
           <div className="v-alert v-alert--outline error--text" style={{ display: 'none' }}>
-            <div>
-            </div>
+            <div />
             <a className="v-alert__dismissible">
               <i aria-hidden="true" className={['v-icon v-icon--right material-icons', theme].join(' ')}>cancel</i>
             </a>
@@ -138,7 +134,7 @@ export class AlertDetail extends Component<IAlertDetailProps, any> {
                       <div className="v-tabs__wrapper">
                         <div className="v-tabs__container v-tabs__container--grow">
                           <div className="v-tabs__slider-wrapper" style={{ left: '0px', width: '512px' }}>
-                            <div className="v-tabs__slider accent"></div>
+                            <div className="v-tabs__slider accent" />
                           </div>
                           <div className="v-tabs__div">
                             <a className="v-tabs__item v-tabs__item--active">
@@ -331,7 +327,7 @@ export class AlertDetail extends Component<IAlertDetailProps, any> {
                               <div className="flex xs12 ma-1">
                                 <div className="d-flex align-top">
                                   <div className="flex xs3 text-xs-left">
-                                    <div className="grey--text"></div>
+                                    <div className="grey--text" />
                                   </div>
                                   <div className="flex xs6 text-xs-left">
                                     <div>
@@ -531,7 +527,7 @@ export class AlertDetail extends Component<IAlertDetailProps, any> {
                                       </th>
                                     </tr>
                                     <tr className="v-datatable__progress">
-                                      <th colSpan={9} className="column"></th>
+                                      <th colSpan={9} className="column" />
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -595,7 +591,7 @@ export class AlertDetail extends Component<IAlertDetailProps, any> {
                                               </div>
                                             </div>
                                           </div>
-                                          <div className="v-menu"></div>
+                                          <div className="v-menu" />
                                         </div>
                                       </div>
                                     </div>

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import config from '../../../shared/config/config.json';
 import { IAlert } from 'shared/models/model-data/alert.model';
@@ -10,10 +10,9 @@ const textColors: any = config.alarm_model.colors.text;
 
 interface IAlertaRowToolsProps {
   alert: IAlert;
-};
+}
 
 export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
-
   static contextType = ThemeContext;
 
   theme: any = this.context;
@@ -58,85 +57,84 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
   }
 
   render() {
-
     const { alert } = this.props;
 
     return (
       <td className={this.cellClass}>
         <div className="action-buttons" style={{ backgroundColor: this.severityColor(alert.severity) }}>
           ...&nbsp;
-          { (this.isAcked(alert.status) || this.isClosed(alert.status)) &&
+          {(this.isAcked(alert.status) || this.isClosed(alert.status)) && (
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>refresh</i>
+                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>refresh</i>
               </div>
             </button>
-          }
-          { !this.isWatched(alert.tags) &&
+          )}
+          {!this.isWatched(alert.tags) && (
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>visibility</i>
+                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>visibility</i>
               </div>
             </button>
-          }
-          { this.isWatched(alert.tags) &&
+          )}
+          {this.isWatched(alert.tags) && (
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>visibility_off</i>
+                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>visibility_off</i>
               </div>
             </button>
-          }
-          { this.isOpen(alert.status) &&
+          )}
+          {this.isOpen(alert.status) && (
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>check</i>
+                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>check</i>
               </div>
             </button>
-          }
-          { this.isAcked(alert.status) &&
+          )}
+          {this.isAcked(alert.status) && (
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>undo</i>
+                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>undo</i>
               </div>
             </button>
-          }
-          { (this.isOpen(alert.status) || this.isAcked(alert.status)) &&
+          )}
+          {(this.isOpen(alert.status) || this.isAcked(alert.status)) && (
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>schedule</i>
+                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>schedule</i>
               </div>
             </button>
-          }
-          { this.isShelved(alert.status) &&
+          )}
+          {this.isShelved(alert.status) && (
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>restore</i>
+                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: '20px'}}>restore</i>
               </div>
             </button>
-          }
-          { !this.isClosed(alert.status) &&
+          )}
+          {!this.isClosed(alert.status) && (
             <button type="button" className={this.buttonClass}>
               <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>highlight_off</i>
+                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: '20px'}}>highlight_off</i>
               </div>
             </button>
-          }
+          )}
           <button type="button" className={this.buttonClass}>
             <div className={this.btnContentClass}>
-              <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "20px"}}>delete</i>
+              <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>delete</i>
             </div>
           </button>
           <div className="v-menu v-menu--inline">
             <div className="v-menu__activator">
               <button type="button" className={this.buttonClass}>
                 <div className={this.btnContentClass}>
-                  <i aria-hidden="true" className={this.iTagClass} style={{fontSize: "16px"}}>more_vert</i>
+                  <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '16px' }}>more_vert</i>
                 </div>
               </button>
             </div>
           </div>
         </div>
       </td>
-    )
+    );
   }
 }
