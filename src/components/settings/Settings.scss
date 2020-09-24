@@ -1,0 +1,22 @@
+.settings {
+  margin: 20px;
+
+  .settings-paper {
+    .settings-form {}
+
+    .settings-btn {}
+  }
+}
+
+// .theme--dark .MuiFormControl-root.MuiTextField-root.MuiFormControl-fullWidth {
+//   border: 1px solid hsla(0, 0%, 100%, .7);
+//   border-radius: 4px;
+// }
+
+.theme--dark {
+
+  label,
+  input {
+    color: #fff;
+  }
+}

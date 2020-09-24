@@ -10,6 +10,7 @@
   "rules": {
     "interface-name": true,
     "no-empty-interface": false,
-    "no-unused-expression": false
+    "no-unused-expression": false,
+    "jsx-boolean-value": false
   }
 }
