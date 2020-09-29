@@ -25,6 +25,8 @@
     "axios": "^0.20.0",
     "css-loader": "^4.2.2",
     "express": "^4.17.1",
+    "formik": "^2.1.5",
+    "formik-material-ui": "^3.0.0",
     "loaders.css": "0.1.2",
     "lodash": "latest",
     "moment": "^2.27.0",

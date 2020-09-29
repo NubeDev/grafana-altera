@@ -12,6 +12,7 @@
     "no-empty-interface": false,
     "no-unused-expression": false,
     "jsx-boolean-value": false,
-    "no-console": false
+    "no-console": false,
+    "jsx-no-lambda": false
   }
 }
