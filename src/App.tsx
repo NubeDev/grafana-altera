@@ -7,7 +7,6 @@ import { IGrafanaAlertaOptions } from './types';
 import { AlertaPanel } from './components/AlertaPanel';
 import { THEME } from 'shared/constants/theme.constants';
 import { ThemeContext } from 'shared/contexts/ThemeContext';
-import { Settings } from 'components/settings/Settings';
 // import { AlertDetail } from 'components/alerts/alert-detail/AlertDetail';
 
 const isDarkMode = config.theme.isDark;
@@ -31,9 +30,6 @@ export class AppComponent extends PureComponent<IProps, IState> {
 
     return (
       <ThemeContext.Provider value={this.state.theme}>
-        <div className={clazz}>
-          <Settings />
-        </div>
         <div className={clazz}>
           <AlertaPanel />
           {/* <AlertDetail /> */}

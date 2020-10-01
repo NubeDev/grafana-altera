@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import api from './index';
 import { IAlertResponse } from 'shared/models/model-responses/alert-response';
+import { SERVER_API } from 'shared/constants/server-api.constants';
 
 let queryInProgress: any;
 
@@ -16,7 +17,7 @@ const actions = {
       params: query,
       cancelToken: queryInProgress.token
     };
-    return api.get('/alerts', config);
+    return api.get(SERVER_API.ALE_FETCH_ALERTS, config);
   }
 }
 

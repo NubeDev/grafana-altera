@@ -2,13 +2,14 @@
 
 import api from './index';
 import { IEnvironmentResponse } from 'shared/models/model-responses/environment-response';
+import { SERVER_API } from 'shared/constants/server-api.constants';
 
 const actions = {
   getEnvironments(query: object) {
     const config = {
       params: query
     };
-    return api.get('/environments', config);
+    return api.get(SERVER_API.ALE_FETCH_ENVIRONMENTS, config);
   }
 }
 
