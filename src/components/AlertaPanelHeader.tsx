@@ -65,7 +65,7 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlert
             <div className="v-tabs__slider-wrapper" style={{ left: '0px', width: '597px' }}>
               <div className="v-tabs__slider accent" />
             </div>
-            {this.state.environments.length > 0 &&
+            {(this.state.environments && this.state.environments.length > 0) &&
               this.environments().map((env) => env &&
                 <div className="v-tabs__div">
                   <a href={'#tab-' + env} className="v-tabs__item v-tabs__item--active">
