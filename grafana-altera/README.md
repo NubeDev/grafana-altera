@@ -38,3 +38,13 @@ yarn build
 ```BASH
 node test-server.js
 ```
+
+
+## Setup
+1. Add new panel
+![alt text](https://github.com/NubeDev/grafana-altera/blob/dev/grafana-altera/docs/Screenshot_1.png?raw=true)
+![alt text](https://github.com/NubeDev/grafana-altera/blob/dev/grafana-altera/docs/Screenshot_2.png?raw=true)
+![alt text](https://github.com/NubeDev/grafana-altera/blob/dev/grafana-altera/docs/Screenshot_3.png?raw=true)
+
+2. Apply and Save
+![alt text](https://github.com/NubeDev/grafana-altera/blob/dev/grafana-altera/docs/Screenshot_4.png?raw=true)

@@ -30,3 +30,14 @@ yarn build
 - [Grafana documentation](https://grafana.com/docs/)
 - [Grafana Tutorials](https://grafana.com/tutorials/) - Grafana Tutorials are step-by-step guides that help you make the most of Grafana
 - [Grafana UI Library](https://developers.grafana.com/ui) - UI components to help you build interfaces using Grafana Design System
+
+
+## Setup
+1. Add data source
+![alt text](https://github.com/NubeDev/grafana-altera/blob/dev/grafana-altera-datasource/docs/Screenshot_1.png?raw=true)
+
+2. Select data source
+![alt text](https://github.com/NubeDev/grafana-altera/blob/dev/grafana-altera-datasource/docs/Screenshot_2.png?raw=true)
+
+3. Enter URL, Username and Password. Save
+![alt text](https://github.com/NubeDev/grafana-altera/blob/dev/grafana-altera-datasource/docs/Screenshot_3.png?raw=true)
