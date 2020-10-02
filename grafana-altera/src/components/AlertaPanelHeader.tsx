@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 import { ThemeContext } from 'shared/contexts/ThemeContext';
 import environmentService from 'services/api/environment.service';
 import config from 'shared/config/config.json';
 import { IEnvironment } from 'shared/models/model-data/environment.model';
+import { THEME } from 'shared/constants/theme.constants';
 
 interface IAlertaPanelHeaderProps {}
 
@@ -17,6 +22,67 @@ const state = {
     status: config.filter.status
   }
 };
+
+function EnvironmentTabs(props: any) {
+  // Theme
+  const color = props.theme === THEME.DARK_MODE ? 'white' : 'black';
+  const useStyles = makeStyles({
+    root: {
+      flexGrow: 1,
+      background: props.theme === THEME.DARK_MODE ? '#424242' : '#ffffff',
+      color,
+      boxShadow: 'unset'
+    },
+    accent: {
+      backgroundColor: '#ffa726',
+      borderColor: '#ffa726'
+    }
+  });
+  const classes = useStyles();
+
+  const [value, setValue] = React.useState(0);
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setValue(newValue);
+  };
+
+  const environments = () => {
+    const result = props.environments.map((e: any) => e.environment).sort();
+    return ['ALL'].concat(result);
+  };
+
+  const environmentCounts = () => {
+    return props.environments.reduce((group: any, e: any) => {
+      group[e.environment] = e.count;
+      group.ALL = group.ALL + e.count;
+      return group;
+    }, { ALL: 0 });
+  }
+
+  return (
+    <div className={classes.root}>
+      <Paper className={classes.root} square>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          variant="fullWidth"
+          classes={{
+            indicator: classes.accent
+          }}
+          TabIndicatorProps={{
+            style: {
+              backgroundColor: '#ffa726',
+              borderColor: '#ffa726'
+            }
+          }}
+        >
+          {environments().map((env, index) => env &&
+            <Tab label={`${ env } (${ environmentCounts()[env] || 0 })`} />
+          )}
+        </Tabs>
+      </Paper>
+    </div>
+  );
+}
 
 export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlertaPanelHeaderState> {
   constructor(props: IAlertaPanelHeaderProps) {
@@ -42,19 +108,6 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlert
       });
   };
 
-  environments(): string[] {
-    const result = this.state.environments.map(e => e.environment).sort();
-    return ['ALL'].concat(result);
-  }
-
-  environmentCounts() {
-    return this.state.environments.reduce((group: any, e) => {
-      group[e.environment] = e.count;
-      group.ALL = group.ALL + e.count;
-      return group;
-    }, { ALL: 0 });
-  }
-
   render() {
     const theme = this.context;
 
@@ -62,18 +115,7 @@ export class AlertaPanelHeader extends Component<IAlertaPanelHeaderProps, IAlert
       <div className={['v-tabs__bar', theme].join(' ')}>
         <div className="v-tabs__wrapper">
           <div className="v-tabs__container v-tabs__container--grow">
-            <div className="v-tabs__slider-wrapper" style={{ left: '0px', width: '597px' }}>
-              <div className="v-tabs__slider accent" />
-            </div>
-            {(this.state.environments && this.state.environments.length > 0) &&
-              this.environments().map((env) => env &&
-                <div className="v-tabs__div">
-                  <a href={'#tab-' + env} className="v-tabs__item v-tabs__item--active">
-                    { env }&nbsp;({ this.environmentCounts()[env] || 0 })
-                  </a>
-                </div>
-              )
-            }
+            {(this.state.environments && this.state.environments.length > 0) && <EnvironmentTabs theme={theme} environments={this.state.environments} />}
             <div className="spacer" />
             <button type="button" className={['v-btn v-btn--flat v-btn--icon filter-active', theme].join(' ')}>
               <div className="v-btn__content">

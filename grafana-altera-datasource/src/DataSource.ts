@@ -36,14 +36,24 @@ export class DataSource extends DataSourceApi<GrafanaQuery, GenericOptions> {
     }).then(response => {
       if (response.status === 200) {
         console.log('Success: ' + 'Data source is working');
-        return { status: 'success', message: 'Data source is working', title: 'Success' };
+        return {
+          status: 'success',
+          message: 'Data source is working',
+          title: 'Success'
+        };
+      } else {
+        console.log('Error: ' + `Data source is not working: ${response.message}`);
+        return {
+          status: 'failed',
+          message: `Data source is not working: ${response.message}`,
+          title: 'Error'
+        };
       }
-
-      console.log('Error: ' + `Data source is not working: ${response.message}`);
+    }).catch(error => {
       return {
-        status: 'error',
-        message: `Data source is not working: ${response.message}`,
-        title: 'Error',
+        status: 'failed',
+        message: `Data source is not working: ${error}`,
+        title: 'Error'
       };
     });
   }
