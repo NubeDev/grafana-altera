@@ -26,7 +26,7 @@ export class DataSource extends DataSourceApi<GrafanaQuery, GenericOptions> {
   query(options: QueryRequest): Promise<DataQueryResponse> {
     const promises = options.targets.map((query) =>
       this.doRequest({
-        url: `${this.url}/api/config`,
+        url: `${this.url}/api/environments`,
         method: 'GET'
       })
       .then(() => {
@@ -44,28 +44,26 @@ export class DataSource extends DataSourceApi<GrafanaQuery, GenericOptions> {
 
   testDatasource(): Promise<any> {
     return this.doRequest({
-      url: `${this.url}/api/config`,
+      url: `${this.url}/api/environments`,
       method: 'GET'
     }).then(response => {
       if (response.status === 200) {
-        console.log('Success: ' + 'Data source is working');
         return {
           status: 'success',
           message: 'Data source is working',
           title: 'Success'
         };
       } else {
-        console.log('Error: ' + `Data source is not working: ${response.message}`);
         return {
           status: 'failed',
-          message: `Data source is not working: ${response.message}`,
+          message: `Data source is not working: ${response.statusText}`,
           title: 'Error'
         };
       }
     }).catch(error => {
       return {
         status: 'failed',
-        message: `Data source is not working: ${error}`,
+        message: `Data source is not working: ${error.status} - ${error.data.message}`,
         title: 'Error'
       };
     });
