@@ -1,5 +1,6 @@
-import { DataQueryResponse, DataSourceApi, DataSourceInstanceSettings } from '@grafana/data';
+import { DataQueryResponse, DataSourceApi, DataSourceInstanceSettings, MutableDataFrame } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
+
 import { GenericOptions, GrafanaQuery, QueryRequest } from './types';
 
 export class DataSource extends DataSourceApi<GrafanaQuery, GenericOptions> {
@@ -23,16 +24,28 @@ export class DataSource extends DataSourceApi<GrafanaQuery, GenericOptions> {
   }
 
   query(options: QueryRequest): Promise<DataQueryResponse> {
-    return this.doRequest({
-      url: `${this.url}/api/config`,
-      method: 'GET',
-    });
+    const promises = options.targets.map((query) =>
+      this.doRequest({
+        url: `${this.url}/api/config`,
+        method: 'GET'
+      })
+      .then(() => {
+        const frame = new MutableDataFrame({
+          refId: query.refId,
+          fields: [],
+        });
+
+        return frame;
+      })
+    );
+
+    return Promise.all(promises).then((data) => ({ data }));
   }
 
   testDatasource(): Promise<any> {
     return this.doRequest({
       url: `${this.url}/api/config`,
-      method: 'GET',
+      method: 'GET'
     }).then(response => {
       if (response.status === 200) {
         console.log('Success: ' + 'Data source is working');

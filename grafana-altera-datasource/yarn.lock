@@ -958,7 +958,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@grafana/data@7.2.0", "@grafana/data@^7.1.5", "@grafana/data@next":
+"@grafana/data@7.2.0", "@grafana/data@next":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@grafana/data/-/data-7.2.0.tgz#29ae47a1c8a331d12fa269ef900922ade829c0aa"
   integrity sha512-m0QlXY8EIVE+RHeb4dUazqMB/VQy8gJWOioyizudGOXlH/C8hTk+Z/BeHEc8mbHGvINmmtcj7BPhPSUFP9jTdQ==
@@ -985,7 +985,7 @@
   resolved "https://registry.yarnpkg.com/@grafana/eslint-config/-/eslint-config-2.0.0.tgz#6e2b03e6d9f2afe3a0afa68560184be4e47abcd8"
   integrity sha512-AktBgoo/WzaPgjITkemP/ItcAc5E7Ga0mgjflP/fUGsHnx+d4C2Lxxxpf9BjhNgqj3G82Db8tjXDFHEqWW19hQ==
 
-"@grafana/runtime@^7.2.0":
+"@grafana/runtime@7.2.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@grafana/runtime/-/runtime-7.2.0.tgz#0978a4adcaf29e43109c59bfbd78ef650b4be118"
   integrity sha512-kUXKtZQyh2I4PQ0Btgj6rVGiN4GsFsHulpX0wnY9sDM3G5LoobNlv157I3lDA0BLmzLngrgm4vi8zhcZbCeVQQ==
@@ -1017,7 +1017,7 @@
     tiny-invariant "^1.0.1"
     tiny-warning "^0.0.3"
 
-"@grafana/toolkit@^7.1.5":
+"@grafana/toolkit@7.2.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@grafana/toolkit/-/toolkit-7.2.0.tgz#b90b6b1ed36bad7c4f59baabd28b6148a4e9234e"
   integrity sha512-bP0FeYxAQhj899exFWtOJLVFHxkLgJOMK0HNIfeYdDCtk2sn5XYeDxNhCSiEKip+1G7m+OEM1CdXMzNBjgkLtA==
@@ -1111,7 +1111,7 @@
   resolved "https://registry.yarnpkg.com/@grafana/tsconfig/-/tsconfig-1.0.0-rc1.tgz#d07ea16755a50cae21000113f30546b61647a200"
   integrity sha512-nucKPGyzlSKYSiJk5RA8GzMdVWhdYNdF+Hh65AXxjD9PlY69JKr5wANj8bVdQboag6dgg0BFKqgKPyY+YtV4Iw==
 
-"@grafana/ui@7.2.0", "@grafana/ui@^7.1.5", "@grafana/ui@next":
+"@grafana/ui@7.2.0", "@grafana/ui@next":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@grafana/ui/-/ui-7.2.0.tgz#a5ed28ab1ff5ce8dc5426b86e924afa564cf862b"
   integrity sha512-rVdHla4JACEkOo1Zxa9+MUbYAEeJ5P392QSRHpWeKiLQk9d6Poct0pw9pdKERbft0Y7n+q1Tqm32/jEwfqEMUw==

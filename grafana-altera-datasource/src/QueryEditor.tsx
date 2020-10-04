@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { QueryEditorProps } from '@grafana/data';
+
 import { DataSource } from './DataSource';
 import { GenericOptions, GrafanaQuery } from './types';
 
