@@ -42,8 +42,8 @@ export default {
     }
 
     // add server-side paging
-    params.append('page', state.pagination.page);
-    params.append('page-size', state.pagination.rowsPerPage);
+    state.pagination.page && params.append('page', state.pagination.page);
+    state.pagination.rowsPerPage && params.append('page-size', state.pagination.rowsPerPage);
 
     // apply any date/time filters
     // if (state.filter.dateRange[0] > 0) {
