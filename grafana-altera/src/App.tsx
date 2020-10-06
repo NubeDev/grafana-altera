@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import clsx from 'clsx';
 import { PanelProps } from '@grafana/data';
 import { config } from '@grafana/runtime';
 
@@ -26,7 +27,7 @@ export class AppComponent extends PureComponent<IProps, IState> {
   }
 
   render() {
-    const clazz = ['application', this.state.theme].join(' ');
+    const clazz = clsx('application', this.state.theme);
 
     return (
       <ThemeContext.Provider value={this.state.theme}>

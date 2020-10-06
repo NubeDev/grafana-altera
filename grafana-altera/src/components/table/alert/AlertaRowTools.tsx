@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import clsx from 'clsx';
 
 import config from '../../../shared/config/config.json';
 import { IAlert } from 'shared/models/model-data/alert.model';
@@ -23,9 +24,9 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
 
   // CSS class
   cellClass: string = 'text-no-wrap ' + this.textColor();
-  buttonClass: string = ['btn--plain pa-0 ma-0 v-btn v-btn--flat v-btn--icon v-btn--small', this.theme].join(' ');
+  buttonClass: string = clsx('btn--plain pa-0 ma-0 v-btn v-btn--flat v-btn--icon v-btn--small', this.theme);
   btnContentClass: string = 'v-btn__content';
-  iTagClass: string = ['v-icon material-icons', this.theme].join(' ');
+  iTagClass: string = clsx('v-icon material-icons', this.theme);
 
   username(): string {
     // return this.$store.getters['auth/getUsername'];

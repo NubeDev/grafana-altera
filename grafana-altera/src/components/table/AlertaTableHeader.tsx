@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import clsx from 'clsx';
 
 import { ThemeContext } from 'shared/contexts/ThemeContext';
 
@@ -14,13 +15,13 @@ export class AlertaTableHeader extends Component<IAlertaTableHeaderProps> {
       <thead>
         <tr>
           <th>
-            <div className={['v-input v-input--selection-controls v-input--checkbox v-input--hide-details', theme].join(' ')}>
+            <div className={clsx('v-input v-input--selection-controls v-input--checkbox v-input--hide-details', theme)}>
               <div className="v-input__control">
                 <div className="v-input__slot">
                   <div className="v-input--selection-controls__input">
                     <input aria-checked="false" role="checkbox" type="checkbox" value="" />
                     <div className="v-input--selection-controls__ripple" />
-                    <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')}>check_box_outline_blank</i>
+                    <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>check_box_outline_blank</i>
                   </div>
                 </div>
               </div>
