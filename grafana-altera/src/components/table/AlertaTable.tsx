@@ -136,6 +136,44 @@ function MainTable(props: any) {
         paddingTop: '4px',
         display: 'flex',
         flexWrap: 'wrap',
+      },
+      rootTextField: {
+        '& label.Mui-focused': {
+          color: '#3f51b5',
+        },
+        '& .MuiInput-underline:after': {
+          borderBottomColor: '#3f51b5',
+        },
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            border: theme === THEME.DARK_MODE ? '2px solid hsla(0,0%,100%,.7)' : '2px solid rgba(0,0,0,.54)'
+          },
+          '&:hover fieldset': {
+            border: theme === THEME.DARK_MODE ? '2px solid #fff' : '2px solid rgba(0,0,0,.87)'
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: '#3f51b5',
+          },
+        },
+      },
+      rootOutlinedInput: {
+        '& label.Mui-focused': {
+          color: '#3f51b5',
+        },
+        '& .MuiInput-underline:after': {
+          borderBottomColor: '#3f51b5',
+        },
+        '&.MuiOutlinedInput-root': {
+          '& fieldset': {
+            border: theme === THEME.DARK_MODE ? '2px solid hsla(0,0%,100%,.7)' : '2px solid rgba(0,0,0,.54)'
+          },
+          '&:hover fieldset': {
+            border: theme === THEME.DARK_MODE ? '2px solid #fff' : '2px solid rgba(0,0,0,.87)'
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: '#3f51b5',
+          },
+        },
       }
     })
   );
@@ -312,8 +350,9 @@ function MainTable(props: any) {
                               <InputAdornment position="start">
                                 <Search style={{ color: theme === THEME.DARK_MODE ? '#ffffff' : '#424242' }} />
                               </InputAdornment>
-                            ),
+                            )
                           }}
+                          className={classes.rootTextField}
                         />
                         <div className="v-text-field__details">
                           <div className={clsx('v-messages', theme)}>
@@ -337,7 +376,7 @@ function MainTable(props: any) {
                             multiple
                             value={statusFilter}
                             onChange={handleChangeStatus}
-                            input={<OutlinedInput />}
+                            input={<OutlinedInput className={classes.rootOutlinedInput} />}
                             renderValue={(selected) => (
                               <div className={classes.chips}>
                                 {(selected as string[]).map((val) => (
@@ -385,7 +424,7 @@ function MainTable(props: any) {
                             multiple
                             value={serviceFilter}
                             onChange={handleChangeService}
-                            input={<OutlinedInput />}
+                            input={<OutlinedInput className={classes.rootOutlinedInput} />}
                             renderValue={(selected) => (
                               <div className={classes.chips}>
                                 {(selected as string[]).map((val) => (
@@ -433,7 +472,7 @@ function MainTable(props: any) {
                             multiple
                             value={groupFilter}
                             onChange={handleChangeGroup}
-                            input={<OutlinedInput />}
+                            input={<OutlinedInput className={classes.rootOutlinedInput} />}
                             renderValue={(selected) => (
                               <div className={classes.chips}>
                                 {(selected as string[]).map((val) => (
