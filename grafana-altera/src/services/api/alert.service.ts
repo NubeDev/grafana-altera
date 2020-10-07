@@ -4,6 +4,7 @@ import axios from 'axios';
 import api from './index';
 import { IAlertResponse } from 'shared/models/model-responses/alert-response';
 import { SERVER_API } from 'shared/constants/server-api.constants';
+import { IServiceResponse } from 'shared/models/model-responses/service-response';
 
 let queryInProgress: any;
 
@@ -18,6 +19,12 @@ const actions = {
       cancelToken: queryInProgress.token
     };
     return api.get(SERVER_API.ALE_FETCH_ALERTS, config);
+  },
+  getServices(query: object) {
+    const config = {
+      params: query
+    }
+    return api.get(SERVER_API.ALE_FETCH_SERVICES, config);
   }
 }
 
@@ -79,5 +86,15 @@ export default {
       })
       // tslint:disable-next-line: no-console
       .catch(error => console.log(error));
-  }
+  },
+  getServices() {
+    return actions.getServices({})
+      .then((res: IServiceResponse) => {
+        return {
+          services: res.services
+        };
+      })
+      // tslint:disable-next-line: no-console
+      .catch(error => console.log(error));
+  },
 }

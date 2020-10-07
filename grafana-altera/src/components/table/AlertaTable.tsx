@@ -1,31 +1,22 @@
 import React, { Component } from 'react';
 import clsx from 'clsx';
 import TablePagination from '@material-ui/core/TablePagination';
-import { createStyles, makeStyles, withStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import SaveIcon from '@material-ui/icons/Save';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Search from '@material-ui/icons/Search';
-import { Formik, Form, Field } from 'formik';
-import { TextField } from 'formik-material-ui';
-import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
+import { Formik, Form, Field } from 'formik';
+import { TextField } from 'formik-material-ui';
 
 import './AlertaTable.scss';
 import { AlertaTableHeader } from './AlertaTableHeader';
@@ -37,8 +28,12 @@ import { IAlert } from 'shared/models/model-data/alert.model';
 import { IEnvironment } from 'shared/models/model-data/environment.model';
 import alertService from 'services/api/alert.service';
 import environmentService from 'services/api/environment.service';
+import groupService from 'services/api/group.service';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import { IService } from 'shared/models/model-data/service.model';
+import { IGroup } from 'shared/models/model-data/group.model';
 
 interface IAlertaTableProps {}
 
@@ -50,6 +45,8 @@ interface IAlertaDataTable {
 
 interface IAlertaTableState {
   environments: IEnvironment[];
+  services: IService[];
+  groups: IGroup[];
 }
 
 const { useEffect } = React;
@@ -84,186 +81,7 @@ async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAl
     });
 }
 
-interface ISettingsForm {
-  url: string;
-  username: string;
-  password: string;
-}
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-const statuses = [
-  'ack', 
-  'assign', 
-  'blackout', 
-  'closed', 
-  'expired', 
-  'open', 
-  'shelved', 
-  'unknown'
-];
-
-const SettingsForm = (props: any) => {
-  const CustomTextField = props.theme === THEME.DARK_MODE ? withStyles({
-    root: {
-      '& label.Mui-focused': {
-        color: '#3f51b5',
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: '#3f51b5',
-      },
-      '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-          borderColor: '#c1c1c1',
-        },
-        '&:hover fieldset': {
-          borderColor: '#fff',
-        },
-        '&.Mui-focused fieldset': {
-          borderColor: '#3f51b5',
-        }
-      }
-    },
-  })(TextField) : (TextField);
-
-  const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-      button: {
-        marginTop: theme.spacing(2)
-      },
-      typography: {
-        marginBottom: theme.spacing(2)
-      },
-      formControl: {
-        margin: theme.spacing(1)
-      },
-      chip: {
-        margin: 2,
-      },
-      chips: {
-        display: 'flex',
-        flexWrap: 'wrap',
-      }
-    })
-  );
-  const classes = useStyles();
-
-  const [statusFilter, setStatusFilter] = React.useState<string[]>([]);
-
-  const handleChangeStatus = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setStatusFilter(event.target.value as string[]);
-  };
-
-  return (
-    <Formik
-      initialValues={{
-        url: '',
-        username: '',
-        password: '',
-      }}
-      validate={(values) => {
-        const errors: Partial<ISettingsForm> = {};
-        if (!values.url) {
-          errors.url = 'Your URL is required.';
-        }
-        return errors;
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          setSubmitting(false);
-          console.log(JSON.stringify(values, null, 2));
-        }, 500);
-      }}
-    >
-      {({ submitForm, isSubmitting, touched, errors }) => (
-        <div className="settings">
-          <div className="v-tabs px-1">
-            <Container component="main" maxWidth="xs">
-              <div className="settings-paper">
-                <Typography className={[classes.typography, props.theme].join(' ')} component="h1" variant="h5">Settings</Typography>
-                <Form className="settings-form">
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} className={props.theme}>
-                      <Field
-                        component={CustomTextField}
-                        id="search"
-                        name="search"
-                        label="Search"
-                        type="text"
-                        variant="outlined"
-                        fullWidth
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Search style={{ color: props.theme === THEME.DARK_MODE ? '#ffffff' : '#424242' }} />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} className={props.theme}>
-                      <FormControl 
-                        fullWidth
-                        variant="outlined"
-                      >
-                        <InputLabel id="mutiple-status">Status</InputLabel>
-                        <Select
-                          labelId="mutiple-status"
-                          id="mutiple-status"
-                          variant="outlined"
-                          fullWidth
-                          multiple
-                          value={statusFilter}
-                          onChange={handleChangeStatus}
-                          input={<Input />}
-                          renderValue={(selected) => (
-                            <div className={classes.chips}>
-                              {(selected as string[]).map((value) => (
-                                <Chip key={value} label={value} className={classes.chip} />
-                              ))}
-                            </div>
-                          )}
-                          MenuProps={MenuProps}
-                        >
-                          {statuses.map((status) => (
-                            <MenuItem key={status} value={status}>
-                              <Checkbox checked={statusFilter.indexOf(status) > -1} />
-                              <ListItemText primary={status} />
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    className={classes.button}
-                    startIcon={<SaveIcon />}
-                    size="large"
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
-                    onClick={submitForm}
-                  >
-                    Save
-                  </Button>
-                </Form>
-              </div>
-            </Container>
-          </div>
-        </div>
-      )}
-    </Formik>
-  );
+interface IFilterForm {
 }
 
 /**
@@ -271,35 +89,56 @@ const SettingsForm = (props: any) => {
  * @param props
  */
 function MainTable(props: any) {
-  const { theme, environments } = props;
+  const { theme, environments, services, groups } = props;
 
   // Theme
   const color = theme === THEME.DARK_MODE ? 'white' : 'black';
   const background = theme === THEME.DARK_MODE ? '#424242' : '#ffffff';
-  const useStyles = makeStyles({
-    rootEnvTabs: {
-      flexGrow: 1,
-      background,
-      color,
-      boxShadow: 'unset'
-    },
-    accent: {
-      backgroundColor: '#ffa726',
-      borderColor: '#ffa726'
-    },
-    rootTable: {
-      color
-    },
-    selectIcon: {
-      color
-    },
-    rootDrawer: {
-      background,
-    },
-    list: {
-      width: 300,
-    }
-  });
+  const useStyles = makeStyles((themeDefault: Theme) =>
+    createStyles({
+      rootEnvTabs: {
+        flexGrow: 1,
+        background,
+        color,
+        boxShadow: 'unset'
+      },
+      accent: {
+        backgroundColor: '#ffa726',
+        borderColor: '#ffa726'
+      },
+      rootTable: {
+        color
+      },
+      selectIcon: {
+        color
+      },
+      rootDrawer: {
+        background,
+      },
+      list: {
+        width: 300,
+      },
+      button: {
+        marginTop: themeDefault.spacing(2)
+      },
+      typography: {
+        marginBottom: themeDefault.spacing(2)
+      },
+      formControl: {
+        margin: themeDefault.spacing(1)
+      },
+      chip: {
+        margin: 2,
+        background: theme === THEME.DARK_MODE ? '#555' : '#e0e0e0',
+        color: theme === THEME.DARK_MODE ? '#fff' : '#000000de'
+      },
+      chips: {
+        paddingTop: '4px',
+        display: 'flex',
+        flexWrap: 'wrap',
+      }
+    })
+  );
   const classes = useStyles();
 
   /* Use for data table */
@@ -388,12 +227,42 @@ function MainTable(props: any) {
     setFilterState({ ...filterState, [anchor]: open });
   };
 
-  const alertListFilter = (anchor: string) => (
-    <div
-      className={clsx(classes.list, 'v-card v-sheet v-sheet--tile', theme)}
-      role="presentation"
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
+  const [statusFilter, setStatusFilter] = React.useState<string[]>(config.filter.status);
+  const [serviceFilter, setServiceFilter] = React.useState<string[]>([]);
+  const [groupFilter, setGroupFilter] = React.useState<string[]>([]);
+
+  const handleChangeStatus = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setStatusFilter(event.target.value as string[]);
+  };
+
+  const handleChangeService = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setServiceFilter(event.target.value as string[]);
+  };
+
+  const handleChangeGroup = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setGroupFilter(event.target.value as string[]);
+  };
+
+  // Get status list
+  const statusList = () => {
+    const statusMap: any = config.alarm_model.status;
+    return Object.keys(statusMap).sort((a, b) => {
+      return statusMap[a].localeCompare(statusMap[b]);
+    });
+  };
+
+  // Get services list
+  const servicesList = () => {
+    return services.map((s: any) => s.service).sort();
+  };
+
+  // Get groups list
+  const groupsList = () => {
+    return groups.map((g: any) => g.group).sort();
+  };
+
+  const alertListEventFilter = (anchor: string) => (
+    <div className={clsx(classes.list, theme)} role="presentation">
       <div className="v-toolbar__content" style={{ height: '48px' }}>
         <div className="v-toolbar__title">Filters</div>
         <div className="spacer" />
@@ -408,47 +277,220 @@ function MainTable(props: any) {
           </div>
         </div>
       </div>
-      <div className="container fluid grid-list-xl">
-        <div className="layout align-center wrap">
-          <div className="flex pb-0 xs12">
-            <div className="v-input v-text-field v-text-field--enclosed v-text-field--outline theme--dark">
-              <div className="v-input__control">
-                <div className="v-input__slot">
-                  <div className="v-input__prepend-inner">
-                    <div className="v-input__icon v-input__icon--prepend-inner">
-                      <i aria-hidden="true" className="v-icon material-icons theme--dark">search</i>
-                    </div>
-                  </div>
-                  <div className="v-text-field__slot">
-                    <label aria-hidden="true" className="v-label theme--dark" style={{ left: '0px', right: 'auto', position: 'absolute' }}>Search</label>
-                    <input aria-label="Search" type="text" />
-                  </div>
-                  <div className="v-input__append-inner">
-                    <div className="v-input__icon v-input__icon--">
-                      <i aria-hidden="true" className="v-icon v-icon--link material-icons theme--dark" />
-                    </div>
-                  </div>
+      <Formik
+        initialValues={{
+        }}
+        validate={(values) => {
+          const errors: Partial<IFilterForm> = {};
+          return errors;
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            setSubmitting(false);
+            console.log(JSON.stringify(values, null, 2));
+          }, 500);
+        }}
+      >
+        {({ submitForm, isSubmitting, touched, errors }) => (
+          <div className="settings">
+            <div className="v-tabs px-1">
+              <Container component="main" maxWidth="xs">
+                <div className="settings-paper">
+                  <Form className="settings-form">
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} className={theme}>
+                        <Field
+                          component={TextField}
+                          id="search"
+                          name="search"
+                          label="Search"
+                          type="text"
+                          variant="outlined"
+                          fullWidth
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Search style={{ color: theme === THEME.DARK_MODE ? '#ffffff' : '#424242' }} />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                        <div className="v-text-field__details">
+                          <div className={clsx('v-messages', theme)}>
+                            <div className="v-messages__wrapper">
+                              <div className="v-messages__message">Filter results by text search</div>
+                            </div>
+                          </div>
+                        </div>
+                      </Grid>
+                      <Grid item xs={12} className={theme}>
+                        <FormControl 
+                          fullWidth
+                          variant="filled"
+                        >
+                          <InputLabel id="mutiple-status-label">Status</InputLabel>
+                          <Select
+                            variant="filled"
+                            labelId="mutiple-status-label"
+                            id="mutiple-status"
+                            fullWidth
+                            multiple
+                            value={statusFilter}
+                            onChange={handleChangeStatus}
+                            input={<OutlinedInput />}
+                            renderValue={(selected) => (
+                              <div className={classes.chips}>
+                                {(selected as string[]).map((val) => (
+                                  <Chip key={val} label={val} className={classes.chip} />
+                                ))}
+                              </div>
+                            )}
+                            MenuProps={{
+                              PaperProps: {
+                                style: {
+                                  maxHeight: 250,
+                                  width: 250,
+                                  marginTop: 155
+                                }
+                              }
+                            }}
+                          >
+                            {statusList().map((status) => (
+                              <MenuItem key={status} value={status}>
+                                <Checkbox checked={statusFilter.indexOf(status) > -1} color="primary" />
+                                <ListItemText primary={status} />
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          <div className="v-text-field__details">
+                            <div className={clsx('v-messages', theme)}>
+                              <div className="v-messages__wrapper">
+                                <div className="v-messages__message">Choose one or more status</div>
+                              </div>
+                            </div>
+                          </div>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12} className={theme}>
+                        <FormControl 
+                          fullWidth
+                          variant="filled"
+                        >
+                          <InputLabel id="mutiple-service-label">Service</InputLabel>
+                          <Select
+                            variant="filled"
+                            labelId="mutiple-service-label"
+                            id="mutiple-service"
+                            fullWidth
+                            multiple
+                            value={serviceFilter}
+                            onChange={handleChangeService}
+                            input={<OutlinedInput />}
+                            renderValue={(selected) => (
+                              <div className={classes.chips}>
+                                {(selected as string[]).map((val) => (
+                                  <Chip key={val} label={val} className={classes.chip} />
+                                ))}
+                              </div>
+                            )}
+                            MenuProps={{
+                              PaperProps: {
+                                style: {
+                                  maxHeight: 250,
+                                  width: 250,
+                                  marginTop: 258
+                                }
+                              }
+                            }}
+                          >
+                            {servicesList().map((service: any) => (
+                              <MenuItem key={service} value={service}>
+                                <Checkbox checked={serviceFilter.indexOf(service) > -1} color="primary" />
+                                <ListItemText primary={service} />
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          <div className="v-text-field__details">
+                            <div className={clsx('v-messages', theme)}>
+                              <div className="v-messages__wrapper">
+                                <div className="v-messages__message">Choose one or more service</div>
+                              </div>
+                            </div>
+                          </div>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12} className={theme}>
+                        <FormControl 
+                          fullWidth
+                          variant="filled"
+                        >
+                          <InputLabel id="mutiple-group-label">Group</InputLabel>
+                          <Select
+                            variant="filled"
+                            labelId="mutiple-group-label"
+                            id="mutiple-group"
+                            fullWidth
+                            multiple
+                            value={groupFilter}
+                            onChange={handleChangeGroup}
+                            input={<OutlinedInput />}
+                            renderValue={(selected) => (
+                              <div className={classes.chips}>
+                                {(selected as string[]).map((val) => (
+                                  <Chip key={val} label={val} className={classes.chip} />
+                                ))}
+                              </div>
+                            )}
+                            MenuProps={{
+                              PaperProps: {
+                                style: {
+                                  maxHeight: 250,
+                                  width: 250,
+                                  marginTop: 348
+                                }
+                              }
+                            }}
+                          >
+                            {groupsList().map((group: any) => (
+                              <MenuItem key={group} value={group}>
+                                <Checkbox checked={groupFilter.indexOf(group) > -1} color="primary" />
+                                <ListItemText primary={group} />
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          <div className="v-text-field__details">
+                            <div className={clsx('v-messages', theme)}>
+                              <div className="v-messages__wrapper">
+                                <div className="v-messages__message">Choose one or more group</div>
+                              </div>
+                            </div>
+                          </div>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </Form>
                 </div>
-                <div className="v-text-field__details">
-                  <div className="v-messages theme--dark">
-                    <div className="v-messages__wrapper">
-                      <div className="v-messages__message">Filter results by text search</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </Container>
             </div>
+          </div>
+        )}
+      </Formik>
+      <div className={clsx('v-card v-card--flat v-sheet', theme)}>
+        <div className="flex xs12">
+          <div className="v-card__actions">
+            <button type="button" className={clsx('v-btn', theme, 'primary')} style={{ display: 'none' }}>
+              <div className="v-btn__content">Apply</div>
+            </button>
+            <div className="spacer" />
+            <button type="button" className={clsx('v-btn v-btn--flat', theme, 'blue--text text--darken-1')}>
+              <div className="v-btn__content">
+                Reset
+              </div>
+            </button>
           </div>
         </div>
       </div>
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
+      <div className="v-navigation-drawer__border" />
     </div>
   );
 
@@ -499,7 +541,7 @@ function MainTable(props: any) {
                     paperAnchorRight: classes.rootDrawer
                   }}
                 >
-                  {alertListFilter('right')}
+                  {alertListEventFilter('right')}
                 </SwipeableDrawer>
               </React.Fragment>
             </div>
@@ -553,7 +595,9 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
   constructor(props: IAlertaTableProps) {
     super(props);
     this.state = {
-      environments: []
+      environments: [],
+      services: [],
+      groups: []
     };
   }
 
@@ -561,6 +605,8 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
 
   componentDidMount() {
     this.getEnvironments();
+    this.getServices();
+    this.getGroups();
     setInterval(this.getEnvironments, config.refresh_interval);
   }
 
@@ -573,14 +619,31 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
       });
   };
 
+  getServices = () => {
+    alertService.getServices()
+      .then(res => {
+        if (res) {
+          this.setState({ services: res.services });
+        }
+      });
+  };
+
+  getGroups = () => {
+    groupService.getGroups()
+      .then(res => {
+        if (res) {
+          this.setState({ groups: res.groups });
+        }
+      });
+  };
+
   render() {
     const theme = this.context;
 
-    const { environments } = this.state;
+    const { environments, services, groups } = this.state;
 
     return (
-      <SettingsForm theme={theme} />
-      // <MainTable theme={theme} environments={environments} />
+      <MainTable theme={theme} environments={environments} services={services} groups={groups} />
     );
   }
 }

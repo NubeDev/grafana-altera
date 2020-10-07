@@ -12,4 +12,9 @@ export const SERVER_API = {
   ALE_FETCH_ALERTS: '/api/alerts',
   // Get all environments
   ALE_FETCH_ENVIRONMENTS: '/api/environments',
+  // Get all services
+  ALE_FETCH_SERVICES: '/api/services',
+
+  // Get all services
+  ALE_FETCH_GROUPS: '/api/alerts/groups',
 };
