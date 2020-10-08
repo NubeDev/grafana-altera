@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import moment from 'moment';
+import moment from 'moment';
 
 import api from './index';
 import { IAlertResponse } from 'shared/models/model-responses/alert-response';
@@ -53,28 +53,28 @@ export default {
     state.pagination.rowsPerPage && params.append('page-size', state.pagination.rowsPerPage);
 
     // apply any date/time filters
-    // if (state.filter.dateRange[0] > 0) {
-    //   params.append(
-    //     'from-date',
-    //     moment.unix(state.filter.dateRange[0]).toISOString()
-    //   );
-    // } else if (state.filter.dateRange[0] < 0) {
-    //   params.append(
-    //     'from-date',
-    //     moment().utc().add(state.filter.dateRange[0], 'seconds').toISOString()
-    //   );
-    // }
-    // if (state.filter.dateRange[1] > 0) {
-    //   params.append(
-    //     'to-date',
-    //     moment.unix(state.filter.dateRange[1]).toISOString()
-    //   );
-    // } else if (state.filter.dateRange[1] < 0) {
-    //   params.append(
-    //     'to-date',
-    //     moment().utc().add(state.filter.dateRange[1], 'seconds').toISOString()
-    //   );
-    // }
+    if (state.filter.dateRange[0] > 0) {
+      params.append(
+        'from-date',
+        moment.unix(state.filter.dateRange[0]).toISOString()
+      );
+    } else if (state.filter.dateRange[0] < 0) {
+      params.append(
+        'from-date',
+        moment().utc().add(state.filter.dateRange[0], 'seconds').toISOString()
+      );
+    }
+    if (state.filter.dateRange[1] > 0) {
+      params.append(
+        'to-date',
+        moment.unix(state.filter.dateRange[1]).toISOString()
+      );
+    } else if (state.filter.dateRange[1] < 0) {
+      params.append(
+        'to-date',
+        moment().utc().add(state.filter.dateRange[1], 'seconds').toISOString()
+      );
+    }
 
     return actions.getAlerts(params)
       .then((res: IAlertResponse) => {

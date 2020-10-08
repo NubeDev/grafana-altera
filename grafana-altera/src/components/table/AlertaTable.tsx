@@ -11,10 +11,14 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Search from '@material-ui/icons/Search';
+import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
@@ -29,9 +33,6 @@ import { IEnvironment } from 'shared/models/model-data/environment.model';
 import alertService from 'services/api/alert.service';
 import environmentService from 'services/api/environment.service';
 import groupService from 'services/api/group.service';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { IService } from 'shared/models/model-data/service.model';
 import { IGroup } from 'shared/models/model-data/group.model';
 
@@ -55,7 +56,10 @@ const { useEffect } = React;
 const paramState = {
   filter: {
     status: config.filter.status,
-    environment: ''
+    environment: '',
+    service: [] as string[],
+    group: [] as string[],
+    dateRange: [] as any[]
   },
   pagination: {
     page: 1,
@@ -93,6 +97,7 @@ function MainTable(props: any) {
 
   // Theme
   const color = theme === THEME.DARK_MODE ? 'white' : 'black';
+  const color2 = theme === THEME.DARK_MODE ? '#fff' : '#000000de';
   const background = theme === THEME.DARK_MODE ? '#424242' : '#ffffff';
   const useStyles = makeStyles((themeDefault: Theme) =>
     createStyles({
@@ -130,12 +135,16 @@ function MainTable(props: any) {
       chip: {
         margin: 2,
         background: theme === THEME.DARK_MODE ? '#555' : '#e0e0e0',
-        color: theme === THEME.DARK_MODE ? '#fff' : '#000000de'
+        color: color2
       },
       chips: {
         paddingTop: '4px',
         display: 'flex',
         flexWrap: 'wrap',
+      },
+      oneSelect: {
+        marginTop: 8,
+        color: color2
       },
       rootTextField: {
         '& label.Mui-focused': {
@@ -220,9 +229,9 @@ function MainTable(props: any) {
   };
 
   /* Use for Environment tabs */
-  const [value, setValue] = React.useState(0);
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
+  const [environment, setValue] = React.useState(0);
+  const handleChangeEnvironment = (event: React.ChangeEvent<{}>, newEnvironment: number) => {
+    setValue(newEnvironment);
   };
 
   const mergeEnvironments = () => {
@@ -249,36 +258,69 @@ function MainTable(props: any) {
 
   /* Use for filter */
   const [filterState, setFilterState] = React.useState({ right: false });
-
-  const toggleDrawer = (anchor: string, open: boolean) => (
-    event: React.KeyboardEvent | React.MouseEvent,
-  ) => {
-    if (
-      event &&
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-
-    setFilterState({ ...filterState, [anchor]: open });
-  };
-
   const [statusFilter, setStatusFilter] = React.useState<string[]>(config.filter.status);
   const [serviceFilter, setServiceFilter] = React.useState<string[]>([]);
   const [groupFilter, setGroupFilter] = React.useState<string[]>([]);
+  const [dateTime, setDateTime] = React.useState('Latest');
+  const [showDateRange, setShowDateRange] = React.useState(false);
+
+  const toggleDrawer = (anchor: string, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if ( event && event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
+      return;
+    }
+    setFilterState({ ...filterState, [anchor]: open });
+  };
 
   const handleChangeStatus = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setStatusFilter(event.target.value as string[]);
+    const status= event.target.value as string[];
+    setStatusFilter(status);
+
+    // Update data when filter status
+    paramState.filter.status = status;
+    updateData(setAlertState);
   };
 
   const handleChangeService = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setServiceFilter(event.target.value as string[]);
+    const servicesFilter = event.target.value as string[];
+    setServiceFilter(servicesFilter);
+
+    // Update data when filter service
+    paramState.filter.service = servicesFilter;
+    updateData(setAlertState);
   };
 
   const handleChangeGroup = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setGroupFilter(event.target.value as string[]);
+    const groupsFilter = event.target.value as string[];
+    setGroupFilter(groupsFilter);
+
+    // Update data when filter group
+    paramState.filter.group = groupsFilter;
+    updateData(setAlertState);
+  };
+
+  const handleChangeDateTime = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const value = event.target.value as string;
+    setDateTime(value);
+
+    let range: any[];
+    if ('Latest' === value) {
+      range = [null, null];
+    } else if ('1 hour' === value) {
+      range = [-3600, null];
+    } else if ('6 hours' === value) {
+      range = [-3600 * 6, null];
+    } else if ('12 hours' === value) {
+      range = [-3600 * 12, null];
+    } else {
+      range = [0, 0];
+      setShowDateRange(true);
+    }
+
+    paramState.filter.dateRange = range;
+    console.log(paramState);
+    // Update data when filter datetime
+    updateData(setAlertState);
   };
 
   // Get status list
@@ -299,10 +341,44 @@ function MainTable(props: any) {
     return groups.map((g: any) => g.group).sort();
   };
 
+  // Render value from select
+  const renderValueSelect = (value: any) => {
+    return (
+      <div className={classes.oneSelect}>
+        <div className="valign-center">
+          <i aria-hidden="true" className={clsx('v-icon material-icons vertical-align-middle', theme)}>schedule</i>
+          <span className="p-l-4">{value}</span>
+        </div>
+      </div>
+    );
+  };
+
+  // Reset value all states
+  const reset = () => {
+    setStatusFilter(config.filter.status);
+    setServiceFilter([]);
+    setGroupFilter([]);
+    setDateTime('Latest');
+    setShowDateRange(false);
+
+    // Reset value param state and update data table
+    paramState.filter.status = config.filter.status;
+    paramState.filter.environment = '';
+    paramState.filter.service = [] as string[];
+    paramState.filter.group = [] as string[];
+    paramState.filter.dateRange = [] as any[];
+    updateData(setAlertState);
+  };
+
+  // Apply datetime filter
+  const setDateRange = () => {
+    console.log();
+  }
+
   const alertListEventFilter = (anchor: string) => (
     <div className={clsx(classes.list, theme)} role="presentation">
       <div className="v-toolbar__content" style={{ height: '48px' }}>
-        <div className="v-toolbar__title">Filters</div>
+        <div className="v-toolbar__title" style={{ color: color2 }}>Filters</div>
         <div className="spacer" />
         <div className="v-toolbar__items" />
         <div className="v-menu v-menu--inline">
@@ -363,10 +439,7 @@ function MainTable(props: any) {
                         </div>
                       </Grid>
                       <Grid item xs={12} className={theme}>
-                        <FormControl 
-                          fullWidth
-                          variant="filled"
-                        >
+                        <FormControl fullWidth variant="filled">
                           <InputLabel id="mutiple-status-label">Status</InputLabel>
                           <Select
                             variant="filled"
@@ -389,14 +462,21 @@ function MainTable(props: any) {
                                 style: {
                                   maxHeight: 250,
                                   width: 250,
-                                  marginTop: 155
+                                  // marginTop: 155,
+                                  background,
+                                  color
                                 }
                               }
                             }}
                           >
                             {statusList().map((status) => (
                               <MenuItem key={status} value={status}>
-                                <Checkbox checked={statusFilter.indexOf(status) > -1} color="primary" />
+                                <Checkbox
+                                  checked={statusFilter.indexOf(status) > -1}
+                                  style={{
+                                    color: color2
+                                  }}
+                                />
                                 <ListItemText primary={status} />
                               </MenuItem>
                             ))}
@@ -411,10 +491,7 @@ function MainTable(props: any) {
                         </FormControl>
                       </Grid>
                       <Grid item xs={12} className={theme}>
-                        <FormControl 
-                          fullWidth
-                          variant="filled"
-                        >
+                        <FormControl fullWidth variant="filled">
                           <InputLabel id="mutiple-service-label">Service</InputLabel>
                           <Select
                             variant="filled"
@@ -437,14 +514,21 @@ function MainTable(props: any) {
                                 style: {
                                   maxHeight: 250,
                                   width: 250,
-                                  marginTop: 258
+                                  // marginTop: 258,
+                                  background,
+                                  color
                                 }
                               }
                             }}
                           >
                             {servicesList().map((service: any) => (
                               <MenuItem key={service} value={service}>
-                                <Checkbox checked={serviceFilter.indexOf(service) > -1} color="primary" />
+                                <Checkbox
+                                  checked={serviceFilter.indexOf(service) > -1}
+                                  style={{
+                                    color: color2
+                                  }}
+                                />
                                 <ListItemText primary={service} />
                               </MenuItem>
                             ))}
@@ -459,10 +543,7 @@ function MainTable(props: any) {
                         </FormControl>
                       </Grid>
                       <Grid item xs={12} className={theme}>
-                        <FormControl 
-                          fullWidth
-                          variant="filled"
-                        >
+                        <FormControl fullWidth variant="filled">
                           <InputLabel id="mutiple-group-label">Group</InputLabel>
                           <Select
                             variant="filled"
@@ -485,14 +566,21 @@ function MainTable(props: any) {
                                 style: {
                                   maxHeight: 250,
                                   width: 250,
-                                  marginTop: 348
+                                  // marginTop: 348,
+                                  background,
+                                  color
                                 }
                               }
                             }}
                           >
                             {groupsList().map((group: any) => (
                               <MenuItem key={group} value={group}>
-                                <Checkbox checked={groupFilter.indexOf(group) > -1} color="primary" />
+                                <Checkbox
+                                  checked={groupFilter.indexOf(group) > -1}
+                                  style={{
+                                    color: color2
+                                  }}
+                                  />
                                 <ListItemText primary={group} />
                               </MenuItem>
                             ))}
@@ -506,6 +594,97 @@ function MainTable(props: any) {
                           </div>
                         </FormControl>
                       </Grid>
+                      <Grid item xs={12} className={theme}>
+                        <FormControl fullWidth variant="filled">
+                          <InputLabel id="date-time-label">Date/Time</InputLabel>
+                          <Select
+                            labelId="date-time-label"
+                            id="date-time"
+                            variant="filled"
+                            fullWidth
+                            value={dateTime}
+                            onChange={handleChangeDateTime}
+                            input={<OutlinedInput className={classes.rootOutlinedInput} />}
+                            renderValue={(dt) => renderValueSelect(dt)}
+                            MenuProps={{
+                              PaperProps: {
+                                style: {
+                                  maxHeight: 250,
+                                  width: 250,
+                                  // marginTop: 445,
+                                  background,
+                                  color
+                                }
+                              }
+                            }}
+                          >
+                            <MenuItem key={'Latest'} value={'Latest'}>Latest</MenuItem>
+                            <MenuItem key={'Hour'} value={'1 hour'}>1 hour</MenuItem>
+                            <MenuItem key={'SixHours'} value={'6 hours'}>6 hours</MenuItem>
+                            <MenuItem key={'TwelveHours'} value={'12 hours'} divider>12 hours</MenuItem>
+                            <MenuItem key={'SelectRange'} value={'Select Range'}>Select Range</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      {showDateRange && (
+                        <Grid item xs={12} className={theme}>
+                          <Field
+                            component={TextField}
+                            id="startDate"
+                            name="startDate"
+                            label="Start Date"
+                            type="datetime-local"
+                            variant="outlined"
+                            fullWidth
+                            InputLabelProps={{
+                              shrink: true
+                            }}
+                            className={classes.rootTextField}
+                          />
+                        </Grid>
+                      )}
+                      {showDateRange && (
+                        <Grid item xs={12} className={theme}>
+                          <Field
+                            component={TextField}
+                            id="endDate"
+                            name="endDate"
+                            label="End Date"
+                            type="datetime-local"
+                            variant="outlined"
+                            fullWidth
+                            InputLabelProps={{
+                              shrink: true
+                            }}
+                            className={classes.rootTextField}
+                          />
+                        </Grid>
+                      )}
+                      <Grid container item xs={12} className={theme} justify="space-between">
+                        {showDateRange && (
+                          <Button
+                            id="apply-btn"
+                            color="primary"
+                            variant="contained"
+                            size="medium"
+                            type="button"
+                            className={clsx(theme)}
+                            onClick={() => setDateRange()}
+                          >
+                            <div className="v-btn__content">Apply</div>
+                          </Button>
+                        )}
+                        <Button
+                          id="reset-btn"
+                          color="primary"
+                          size="medium"
+                          type="button"
+                          className={clsx(theme, 'blue--text text--darken-1')}
+                          onClick={() => reset()}
+                        >
+                          <div className="v-btn__content">Reset</div>
+                        </Button>
+                      </Grid>
                     </Grid>
                   </Form>
                 </div>
@@ -514,22 +693,6 @@ function MainTable(props: any) {
           </div>
         )}
       </Formik>
-      <div className={clsx('v-card v-card--flat v-sheet', theme)}>
-        <div className="flex xs12">
-          <div className="v-card__actions">
-            <button type="button" className={clsx('v-btn', theme, 'primary')} style={{ display: 'none' }}>
-              <div className="v-btn__content">Apply</div>
-            </button>
-            <div className="spacer" />
-            <button type="button" className={clsx('v-btn v-btn--flat', theme, 'blue--text text--darken-1')}>
-              <div className="v-btn__content">
-                Reset
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="v-navigation-drawer__border" />
     </div>
   );
 
@@ -542,8 +705,8 @@ function MainTable(props: any) {
               <div className={classes.rootEnvTabs}>
                 <Paper className={classes.rootEnvTabs} square>
                   <Tabs
-                    value={value}
-                    onChange={handleChange}
+                    value={environment}
+                    onChange={handleChangeEnvironment}
                     variant="fullWidth"
                     classes={{
                       indicator: classes.accent
@@ -565,11 +728,17 @@ function MainTable(props: any) {
             <div className="spacer" />
             <div className={theme}>
               <React.Fragment key="right">
-                <button type="button" onClick={toggleDrawer('right', true)} className={clsx('v-btn v-btn--flat v-btn--icon filter-active', theme)}>
-                  <div className="v-btn__content">
-                    <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>filter_list</i>
-                  </div>
-                </button>
+                <div className={clsx('v-btn v-btn--flat v-btn--icon filter-active', theme)}>
+                  <Button
+                    id="filter-list-btn"
+                    size="medium"
+                    onClick={toggleDrawer('right', true)}
+                  >
+                    <div className="v-btn__content">
+                      <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>filter_list</i>
+                    </div>
+                  </Button>
+                </div>
                 <SwipeableDrawer
                   anchor={'right'}
                   open={filterState['right']}

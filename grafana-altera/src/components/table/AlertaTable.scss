@@ -4,6 +4,15 @@
   input {
     color: #fff;
   }
+
+  .MuiButtonBase-root {
+    color: #fff;
+  }
+
+  #filter-list-btn:hover {
+    text-decoration: unset;
+    background-color: unset;
+  }
 }
 
 .v-text-field__details {
@@ -19,6 +28,20 @@
   margin-top: 24px;
 }
 
-.MuiPaper-root.MuiMenu-paper {
-  top: unset !important;
+// .MuiPaper-root.MuiMenu-paper {
+//   top: unset !important;
+// }
+
+.valign-center {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+}
+
+.p-l-4 {
+  padding-left: 4px;
+}
+
+#reset-btn:hover {
+  background-color: #3e4c57;
 }
