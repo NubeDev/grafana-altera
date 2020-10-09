@@ -54,26 +54,14 @@ export default {
 
     // apply any date/time filters
     if (state.filter.dateRange[0] > 0) {
-      params.append(
-        'from-date',
-        moment.unix(state.filter.dateRange[0]).toISOString()
-      );
+      params.append('from-date', moment.unix(state.filter.dateRange[0]).toISOString());
     } else if (state.filter.dateRange[0] < 0) {
-      params.append(
-        'from-date',
-        moment().utc().add(state.filter.dateRange[0], 'seconds').toISOString()
-      );
+      params.append('from-date', moment().utc().add(state.filter.dateRange[0], 'seconds').toISOString());
     }
     if (state.filter.dateRange[1] > 0) {
-      params.append(
-        'to-date',
-        moment.unix(state.filter.dateRange[1]).toISOString()
-      );
+      params.append('to-date', moment.unix(state.filter.dateRange[1]).toISOString());
     } else if (state.filter.dateRange[1] < 0) {
-      params.append(
-        'to-date',
-        moment().utc().add(state.filter.dateRange[1], 'seconds').toISOString()
-      );
+      params.append('to-date', moment().utc().add(state.filter.dateRange[1], 'seconds').toISOString());
     }
 
     return actions.getAlerts(params)
@@ -84,7 +72,6 @@ export default {
           pageSize: res.pageSize
         };
       })
-      // tslint:disable-next-line: no-console
       .catch(error => console.log(error));
   },
   getServices() {
@@ -94,7 +81,6 @@ export default {
           services: res.services
         };
       })
-      // tslint:disable-next-line: no-console
       .catch(error => console.log(error));
   },
 }

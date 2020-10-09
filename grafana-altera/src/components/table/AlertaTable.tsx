@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import clsx from 'clsx';
-import TablePagination from '@material-ui/core/TablePagination';
+import moment from 'moment';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -10,7 +11,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Search from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -19,6 +19,7 @@ import Chip from '@material-ui/core/Chip';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Search from '@material-ui/icons/Search';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
@@ -85,20 +86,22 @@ async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAl
     });
 }
 
-interface IFilterForm {
-}
+interface IFilterForm {}
 
 /**
  * Table
  * @param props
  */
 function MainTable(props: any) {
+  // Get value from props
   const { theme, environments, services, groups } = props;
 
   // Theme
   const color = theme === THEME.DARK_MODE ? 'white' : 'black';
   const color2 = theme === THEME.DARK_MODE ? '#fff' : '#000000de';
   const background = theme === THEME.DARK_MODE ? '#424242' : '#ffffff';
+  const border = theme === THEME.DARK_MODE ? '2px solid hsla(0,0%,100%,.7)' : '2px solid rgba(0,0,0,.54)';
+  const border2 = theme === THEME.DARK_MODE ? '2px solid #fff' : '2px solid rgba(0,0,0,.87)';
   const useStyles = makeStyles((themeDefault: Theme) =>
     createStyles({
       rootEnvTabs: {
@@ -111,10 +114,7 @@ function MainTable(props: any) {
         backgroundColor: '#ffa726',
         borderColor: '#ffa726'
       },
-      rootTable: {
-        color
-      },
-      selectIcon: {
+      rootColor: {
         color
       },
       rootDrawer: {
@@ -155,10 +155,10 @@ function MainTable(props: any) {
         },
         '& .MuiOutlinedInput-root': {
           '& fieldset': {
-            border: theme === THEME.DARK_MODE ? '2px solid hsla(0,0%,100%,.7)' : '2px solid rgba(0,0,0,.54)'
+            border
           },
           '&:hover fieldset': {
-            border: theme === THEME.DARK_MODE ? '2px solid #fff' : '2px solid rgba(0,0,0,.87)'
+            border: border2
           },
           '&.Mui-focused fieldset': {
             borderColor: '#3f51b5',
@@ -174,10 +174,10 @@ function MainTable(props: any) {
         },
         '&.MuiOutlinedInput-root': {
           '& fieldset': {
-            border: theme === THEME.DARK_MODE ? '2px solid hsla(0,0%,100%,.7)' : '2px solid rgba(0,0,0,.54)'
+            border
           },
           '&:hover fieldset': {
-            border: theme === THEME.DARK_MODE ? '2px solid #fff' : '2px solid rgba(0,0,0,.87)'
+            border: border2
           },
           '&.Mui-focused fieldset': {
             borderColor: '#3f51b5',
@@ -257,12 +257,28 @@ function MainTable(props: any) {
   }
 
   /* Use for filter */
+  // Set default value start date
+  const startDateDefaultValue = () => {
+    // 7 days ago
+    const startDate = moment().unix() - 7 * 24 * 3600;
+    return moment.unix(startDate).utc().format('YYYY-MM-DDTHH:mm');
+  };
+
+  // Set default value end date
+  const endDateDefaultValue = () => {
+    const endDate = moment().unix();
+    return moment.unix(endDate).utc().format('YYYY-MM-DDTHH:mm');
+  };
+  
   const [filterState, setFilterState] = React.useState({ right: false });
+  const [searchTextFilter, setSearchTextFilter] = React.useState('');
   const [statusFilter, setStatusFilter] = React.useState<string[]>(config.filter.status);
   const [serviceFilter, setServiceFilter] = React.useState<string[]>([]);
   const [groupFilter, setGroupFilter] = React.useState<string[]>([]);
   const [dateTime, setDateTime] = React.useState('Latest');
   const [showDateRange, setShowDateRange] = React.useState(false);
+  const [startDateFilter, setStartDateFilter] = React.useState(startDateDefaultValue());
+  const [endDateFilter, setEndDateFilter] = React.useState(endDateDefaultValue());
 
   const toggleDrawer = (anchor: string, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if ( event && event.type === 'keydown' &&
@@ -271,6 +287,28 @@ function MainTable(props: any) {
     }
     setFilterState({ ...filterState, [anchor]: open });
   };
+
+  // Get status list
+  const statusList = () => {
+    const statusMap: any = config.alarm_model.status;
+    return Object.keys(statusMap).sort((a, b) => {
+      return statusMap[a].localeCompare(statusMap[b]);
+    });
+  };
+
+  // Get services list
+  const servicesList = () => {
+    return services.map((s: any) => s.service).sort();
+  };
+
+  // Get groups list
+  const groupsList = () => {
+    return groups.map((g: any) => g.group).sort();
+  };
+
+  const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTextFilter(event.target.value);
+  }
 
   const handleChangeStatus = (event: React.ChangeEvent<{ value: unknown }>) => {
     const status= event.target.value as string[];
@@ -302,6 +340,7 @@ function MainTable(props: any) {
   const handleChangeDateTime = (event: React.ChangeEvent<{ value: unknown }>) => {
     const value = event.target.value as string;
     setDateTime(value);
+    setShowDateRange(false);
 
     let range: any[];
     if ('Latest' === value) {
@@ -317,31 +356,20 @@ function MainTable(props: any) {
       setShowDateRange(true);
     }
 
-    paramState.filter.dateRange = range;
-    console.log(paramState);
     // Update data when filter datetime
+    paramState.filter.dateRange = range;
     updateData(setAlertState);
   };
 
-  // Get status list
-  const statusList = () => {
-    const statusMap: any = config.alarm_model.status;
-    return Object.keys(statusMap).sort((a, b) => {
-      return statusMap[a].localeCompare(statusMap[b]);
-    });
-  };
+  const handleChangeStartDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStartDateFilter(event.target.value);
+  }
 
-  // Get services list
-  const servicesList = () => {
-    return services.map((s: any) => s.service).sort();
-  };
+  const handleChangeEndDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEndDateFilter(event.target.value);
+  }
 
-  // Get groups list
-  const groupsList = () => {
-    return groups.map((g: any) => g.group).sort();
-  };
-
-  // Render value from select
+  // Custom render value from select
   const renderValueSelect = (value: any) => {
     return (
       <div className={classes.oneSelect}>
@@ -354,12 +382,13 @@ function MainTable(props: any) {
   };
 
   // Reset value all states
-  const reset = () => {
+  const handleReset = () => {
     setStatusFilter(config.filter.status);
     setServiceFilter([]);
     setGroupFilter([]);
     setDateTime('Latest');
     setShowDateRange(false);
+    setSearchTextFilter('');
 
     // Reset value param state and update data table
     paramState.filter.status = config.filter.status;
@@ -371,10 +400,15 @@ function MainTable(props: any) {
   };
 
   // Apply datetime filter
-  const setDateRange = () => {
-    console.log();
+  const handleApply = () => {
+    const toEpoch = (dt: any) => {
+      return new Date(dt).getTime() / 1000
+    }
+    paramState.filter.dateRange = [toEpoch(startDateFilter), toEpoch(endDateFilter)];
+    updateData(setAlertState);
   }
 
+  // Drawer  filter UI
   const alertListEventFilter = (anchor: string) => (
     <div className={clsx(classes.list, theme)} role="presentation">
       <div className="v-toolbar__content" style={{ height: '48px' }}>
@@ -401,7 +435,6 @@ function MainTable(props: any) {
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             setSubmitting(false);
-            console.log(JSON.stringify(values, null, 2));
           }, 500);
         }}
       >
@@ -415,12 +448,14 @@ function MainTable(props: any) {
                       <Grid item xs={12} className={theme}>
                         <Field
                           component={TextField}
-                          id="search"
-                          name="search"
+                          id="searchText"
+                          name="searchText"
                           label="Search"
                           type="text"
                           variant="outlined"
                           fullWidth
+                          value={searchTextFilter}
+                          onChange={handleChangeSearchText}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
@@ -442,9 +477,9 @@ function MainTable(props: any) {
                         <FormControl fullWidth variant="filled">
                           <InputLabel id="mutiple-status-label">Status</InputLabel>
                           <Select
-                            variant="filled"
-                            labelId="mutiple-status-label"
                             id="mutiple-status"
+                            labelId="mutiple-status-label"
+                            variant="filled"
                             fullWidth
                             multiple
                             value={statusFilter}
@@ -494,9 +529,9 @@ function MainTable(props: any) {
                         <FormControl fullWidth variant="filled">
                           <InputLabel id="mutiple-service-label">Service</InputLabel>
                           <Select
-                            variant="filled"
-                            labelId="mutiple-service-label"
                             id="mutiple-service"
+                            labelId="mutiple-service-label"
+                            variant="filled"
                             fullWidth
                             multiple
                             value={serviceFilter}
@@ -546,9 +581,9 @@ function MainTable(props: any) {
                         <FormControl fullWidth variant="filled">
                           <InputLabel id="mutiple-group-label">Group</InputLabel>
                           <Select
-                            variant="filled"
-                            labelId="mutiple-group-label"
                             id="mutiple-group"
+                            labelId="mutiple-group-label"
+                            variant="filled"
                             fullWidth
                             multiple
                             value={groupFilter}
@@ -598,8 +633,8 @@ function MainTable(props: any) {
                         <FormControl fullWidth variant="filled">
                           <InputLabel id="date-time-label">Date/Time</InputLabel>
                           <Select
-                            labelId="date-time-label"
                             id="date-time"
+                            labelId="date-time-label"
                             variant="filled"
                             fullWidth
                             value={dateTime}
@@ -634,8 +669,11 @@ function MainTable(props: any) {
                             name="startDate"
                             label="Start Date"
                             type="datetime-local"
+                            value={startDateFilter}
+                            onChange={handleChangeStartDate}
                             variant="outlined"
                             fullWidth
+                            defa
                             InputLabelProps={{
                               shrink: true
                             }}
@@ -651,6 +689,8 @@ function MainTable(props: any) {
                             name="endDate"
                             label="End Date"
                             type="datetime-local"
+                            value={endDateFilter}
+                            onChange={handleChangeEndDate}
                             variant="outlined"
                             fullWidth
                             InputLabelProps={{
@@ -660,7 +700,7 @@ function MainTable(props: any) {
                           />
                         </Grid>
                       )}
-                      <Grid container item xs={12} className={theme} justify="space-between">
+                      <Grid container item xs={12} className={theme} justify={showDateRange ? 'space-between' : 'flex-end'}>
                         {showDateRange && (
                           <Button
                             id="apply-btn"
@@ -669,7 +709,7 @@ function MainTable(props: any) {
                             size="medium"
                             type="button"
                             className={clsx(theme)}
-                            onClick={() => setDateRange()}
+                            onClick={() => handleApply()}
                           >
                             <div className="v-btn__content">Apply</div>
                           </Button>
@@ -680,7 +720,7 @@ function MainTable(props: any) {
                           size="medium"
                           type="button"
                           className={clsx(theme, 'blue--text text--darken-1')}
-                          onClick={() => reset()}
+                          onClick={() => handleReset()}
                         >
                           <div className="v-btn__content">Reset</div>
                         </Button>
@@ -774,7 +814,7 @@ function MainTable(props: any) {
                 <div className="v-table__overflow">
                   <table className={clsx('v-datatable v-table v-datatable--select-all', theme)}>
                     <AlertaTableHeader />
-                    <AlertaTableBody alerts={alertState.alerts} />
+                    <AlertaTableBody alerts={alertState.alerts} searchText={searchTextFilter} />
                   </table>
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 20, 50, 100, 200]}
@@ -784,9 +824,9 @@ function MainTable(props: any) {
                     page={page}
                     onChangePage={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
-                    className={classes.rootTable}
+                    className={classes.rootColor}
                     classes={{
-                      selectIcon: classes.selectIcon
+                      selectIcon: classes.rootColor
                     }}
                   />
                 </div>
