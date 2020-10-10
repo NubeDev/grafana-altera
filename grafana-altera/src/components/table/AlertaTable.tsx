@@ -281,6 +281,7 @@ function MainTable(props: any) {
   const [startDateFilter, setStartDateFilter] = React.useState(startDateDefaultValue());
   const [endDateFilter, setEndDateFilter] = React.useState(endDateDefaultValue());
 
+  // Toggle Drawer event
   const toggleDrawer = (anchor: string, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (event && event.type === 'keydown' &&
       ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
@@ -395,6 +396,8 @@ function MainTable(props: any) {
     setGroupFilter([]);
     setDateTime('Latest');
     setShowDateRange(false);
+    setStartDateFilter(startDateDefaultValue());
+    setEndDateFilter(endDateDefaultValue());
     setSearchTextFilter('');
 
     // Reset value param state and update data table
@@ -409,7 +412,7 @@ function MainTable(props: any) {
   // Apply datetime filter
   const handleApply = () => {
     const toEpoch = (dt: any) => {
-      return new Date(dt).getTime() / 1000
+      return new Date(dt).getTime() / 1000;
     }
     paramState.filter.dateRange = [toEpoch(startDateFilter), toEpoch(endDateFilter)];
     updateData(setAlertState);
@@ -500,6 +503,7 @@ function MainTable(props: any) {
                               </div>
                             )}
                             MenuProps={{
+                              getContentAnchorEl: null,
                               PaperProps: {
                                 style: {
                                   maxHeight: 250,
@@ -552,6 +556,7 @@ function MainTable(props: any) {
                               </div>
                             )}
                             MenuProps={{
+                              getContentAnchorEl: null,
                               PaperProps: {
                                 style: {
                                   maxHeight: 250,
@@ -604,6 +609,7 @@ function MainTable(props: any) {
                               </div>
                             )}
                             MenuProps={{
+                              getContentAnchorEl: null,
                               PaperProps: {
                                 style: {
                                   maxHeight: 250,
@@ -649,6 +655,7 @@ function MainTable(props: any) {
                             input={<OutlinedInput className={classes.rootOutlinedInput} />}
                             renderValue={(dt) => renderValueSelect(dt)}
                             MenuProps={{
+                              getContentAnchorEl: null,
                               PaperProps: {
                                 style: {
                                   maxHeight: 250,
@@ -753,7 +760,6 @@ function MainTable(props: any) {
   const handleCloseFuncMenu = () => {
     setAnchorElFuncMenu(null);
   };
-
 
   return (
     <div className="v-tabs px-1">
