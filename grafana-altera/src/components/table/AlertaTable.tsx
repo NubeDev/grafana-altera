@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -37,7 +38,7 @@ import groupService from 'services/api/group.service';
 import { IService } from 'shared/models/model-data/service.model';
 import { IGroup } from 'shared/models/model-data/group.model';
 
-interface IAlertaTableProps {}
+interface IAlertaTableProps { }
 
 interface IAlertaDataTable {
   alerts: IAlert[];
@@ -86,7 +87,7 @@ async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAl
     });
 }
 
-interface IFilterForm {}
+interface IFilterForm { }
 
 /**
  * Table
@@ -269,7 +270,7 @@ function MainTable(props: any) {
     const endDate = moment().unix();
     return moment.unix(endDate).utc().format('YYYY-MM-DDTHH:mm');
   };
-  
+
   const [filterState, setFilterState] = React.useState({ right: false });
   const [searchTextFilter, setSearchTextFilter] = React.useState('');
   const [statusFilter, setStatusFilter] = React.useState<string[]>(config.filter.status);
@@ -281,7 +282,7 @@ function MainTable(props: any) {
   const [endDateFilter, setEndDateFilter] = React.useState(endDateDefaultValue());
 
   const toggleDrawer = (anchor: string, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if ( event && event.type === 'keydown' &&
+    if (event && event.type === 'keydown' &&
       ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
       return;
     }
@@ -298,12 +299,18 @@ function MainTable(props: any) {
 
   // Get services list
   const servicesList = () => {
-    return services.map((s: any) => s.service).sort();
+    const serviceArr = services.map((s: any) => s.service).sort();
+    // Remove duplicate elements
+    const uniqueSet = new Set(serviceArr);
+    return [...uniqueSet];
   };
 
   // Get groups list
   const groupsList = () => {
-    return groups.map((g: any) => g.group).sort();
+    const groupArr = groups.map((g: any) => g.group).sort();
+    // Remove duplicate elements
+    const uniqueSet = new Set(groupArr);
+    return [...uniqueSet];
   };
 
   const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -311,7 +318,7 @@ function MainTable(props: any) {
   }
 
   const handleChangeStatus = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const status= event.target.value as string[];
+    const status = event.target.value as string[];
     setStatusFilter(status);
 
     // Update data when filter status
@@ -615,7 +622,7 @@ function MainTable(props: any) {
                                   style={{
                                     color: color2
                                   }}
-                                  />
+                                />
                                 <ListItemText primary={group} />
                               </MenuItem>
                             ))}
@@ -736,6 +743,18 @@ function MainTable(props: any) {
     </div>
   );
 
+  /* Use for table function menu */
+  const [anchorElFuncMenu, setAnchorElFuncMenu] = React.useState<null | HTMLElement>(null);
+
+  const handleOpenFuncMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElFuncMenu(event.currentTarget);
+  };
+
+  const handleCloseFuncMenu = () => {
+    setAnchorElFuncMenu(null);
+  };
+
+
   return (
     <div className="v-tabs px-1">
       <div className={clsx('v-tabs__bar', theme)}>
@@ -759,7 +778,7 @@ function MainTable(props: any) {
                     }}
                   >
                     {mergeEnvironments().map((env) => env &&
-                      <Tab label={`${ env } (${ environmentCounts()[env] || 0 })`} onClick={() => handleEnvTabChange(env)} />
+                      <Tab label={`${env} (${environmentCounts()[env] || 0})`} onClick={() => handleEnvTabChange(env)} />
                     )}
                   </Tabs>
                 </Paper>
@@ -795,11 +814,37 @@ function MainTable(props: any) {
             </div>
             <div className="v-menu v-menu--inline">
               <div className="v-menu__activator">
-                <button type="button" className={clsx('v-btn v-btn--flat v-btn--icon', theme)}>
-                  <div className="v-btn__content">
-                    <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>more_vert</i>
-                  </div>
-                </button>
+                <div className={clsx('v-btn v-btn--flat v-btn--icon', theme)}>
+                  <Button
+                    id="table-func-menu-btn"
+                    size="medium"
+                    aria-controls="table-func-menu"
+                    aria-haspopup="true"
+                    onClick={handleOpenFuncMenu}
+                  >
+                    <div className="v-btn__content">
+                      <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>more_vert</i>
+                    </div>
+                  </Button>
+                  <Menu
+                    id="table-func-menu"
+                    anchorEl={anchorElFuncMenu}
+                    keepMounted
+                    open={Boolean(anchorElFuncMenu)}
+                    onClose={handleCloseFuncMenu}
+                    PaperProps={{
+                      style: {
+                        background,
+                        color
+                      }
+                    }}
+                    className={theme}
+                  >
+                    <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Show Panel</MenuItem>
+                    <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Display density</MenuItem>
+                    <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Download as CSV</MenuItem>
+                  </Menu>
+                </div>
               </div>
             </div>
             <span className="pr-2" />

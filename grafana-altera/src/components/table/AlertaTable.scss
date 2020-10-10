@@ -9,10 +9,23 @@
     color: #fff;
   }
 
-  #filter-list-btn:hover {
-    text-decoration: unset;
-    background-color: unset;
+  #reset-btn:hover {
+    background-color: #3e4c57;
   }
+
+  .menu-item:hover {
+    background-color: #555 !important;
+  }
+}
+
+#filter-list-btn:hover {
+  text-decoration: unset;
+  background-color: unset;
+}
+
+#table-func-menu-btn:hover {
+  text-decoration: unset;
+  background-color: unset;
 }
 
 .v-text-field__details {
@@ -42,6 +55,6 @@
   padding-left: 4px;
 }
 
-#reset-btn:hover {
-  background-color: #3e4c57;
+#table-func-menu .MuiPaper-root.MuiMenu-paper {
+  left: 1730px !important;
 }
