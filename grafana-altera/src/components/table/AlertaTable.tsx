@@ -38,6 +38,8 @@ import groupService from 'services/api/group.service';
 import { IService } from 'shared/models/model-data/service.model';
 import { IGroup } from 'shared/models/model-data/group.model';
 
+const { useEffect } = React;
+
 interface IAlertaTableProps { }
 
 interface IAlertaDataTable {
@@ -52,7 +54,14 @@ interface IAlertaTableState {
   groups: IGroup[];
 }
 
-const { useEffect } = React;
+interface IMainTableProps {
+  theme: any;
+  environments: IEnvironment[];
+  services: IService[];
+  groups: IGroup[];
+}
+
+interface IFilterForm { }
 
 // Init state param request
 const paramState = {
@@ -66,7 +75,8 @@ const paramState = {
   pagination: {
     page: 1,
     rowsPerPage: 20,
-    sortBy: config.sort_by
+    sortBy: config.sort_by as any,
+    descending: 'asc'
   }
 };
 
@@ -87,13 +97,11 @@ async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAl
     });
 }
 
-interface IFilterForm { }
-
 /**
- * Table
+ * Alerta main Table.
  * @param props
  */
-function MainTable(props: any) {
+function MainTable(props: IMainTableProps) {
   // Get value from props
   const { theme, environments, services, groups } = props;
 
@@ -189,6 +197,38 @@ function MainTable(props: any) {
   );
   const classes = useStyles();
 
+  /* Use for table header */
+  // Sort table
+  const [order, setOrder] = React.useState('');
+  const [orderBy, setOrderBy] = React.useState('');
+
+  const handleTableSort = (column: string) => {
+    let orderByValue: any;
+    let descendingValue: any;
+    let sortByValue: any;
+    if (order === '' || order === 'asc') {
+      const isAsc = orderBy === column && order === 'asc';
+      const descending = isAsc ? 'desc' : 'asc';
+
+      orderByValue = column;
+      descendingValue = descending;
+      sortByValue = column;
+    } else {
+      // Reset defaul sort when click 3 times
+      orderByValue = '';
+      descendingValue = '';
+      sortByValue = config.sort_by;
+    }
+
+    setOrder(descendingValue);
+    setOrderBy(orderByValue);
+
+    // Update data
+    paramState.pagination.descending = descendingValue;
+    paramState.pagination.sortBy = sortByValue;
+    updateData(setAlertState);
+  };
+
   /* Use for data table */
   // Set default value page, rowsPerPage
   const [page, setPage] = React.useState(0);
@@ -254,6 +294,7 @@ function MainTable(props: any) {
     } else {
       paramState.filter.environment = '';
     }
+    // Update data
     updateData(setAlertState);
   }
 
@@ -508,7 +549,6 @@ function MainTable(props: any) {
                                 style: {
                                   maxHeight: 250,
                                   width: 250,
-                                  // marginTop: 155,
                                   background,
                                   color
                                 }
@@ -561,7 +601,6 @@ function MainTable(props: any) {
                                 style: {
                                   maxHeight: 250,
                                   width: 250,
-                                  // marginTop: 258,
                                   background,
                                   color
                                 }
@@ -614,7 +653,6 @@ function MainTable(props: any) {
                                 style: {
                                   maxHeight: 250,
                                   width: 250,
-                                  // marginTop: 348,
                                   background,
                                   color
                                 }
@@ -660,7 +698,6 @@ function MainTable(props: any) {
                                 style: {
                                   maxHeight: 250,
                                   width: 250,
-                                  // marginTop: 445,
                                   background,
                                   color
                                 }
@@ -864,7 +901,12 @@ function MainTable(props: any) {
               <div className="alert-table comfortable">
                 <div className="v-table__overflow">
                   <table className={clsx('v-datatable v-table v-datatable--select-all', theme)}>
-                    <AlertaTableHeader />
+                    <AlertaTableHeader
+                      theme={theme}
+                      order={order}
+                      orderBy={orderBy}
+                      handleTableSort={handleTableSort}
+                    />
                     <AlertaTableBody alerts={alertState.alerts} searchText={searchTextFilter} />
                   </table>
                   <TablePagination

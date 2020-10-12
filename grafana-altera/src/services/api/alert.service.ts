@@ -43,7 +43,7 @@ export default {
     // add server-side sorting
     const sortBy = state.pagination.sortBy;
     if (typeof sortBy === 'string') {
-      params.append('sort-by', (state.pagination.descending ? '-' : '') + sortBy);
+      params.append('sort-by', (state.pagination.descending === 'desc' ? '-' : '') + sortBy);
     } else {
       sortBy.map((sb: any) => params.append('sort-by', sb));
     }

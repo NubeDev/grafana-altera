@@ -1,15 +1,39 @@
 import React, { Component } from 'react';
 import clsx from 'clsx';
 
-import { ThemeContext } from 'shared/contexts/ThemeContext';
+import config from 'shared/config/config.json';
 
-interface IAlertaTableHeaderProps {}
+interface IAlertaTableHeaderProps {
+  theme: any;
+  order: string;
+  orderBy: string;
+  handleTableSort: (column: string) => void;
+}
 
 export class AlertaTableHeader extends Component<IAlertaTableHeaderProps> {
-  static contextType = ThemeContext;
+
+  customHeaders = () => {
+    const headersMap: any = {
+      severity: { text: 'Severity', value: 'severity' },
+      status: { text: 'Status', value: 'status' },
+      lastReceiveTime: { text: 'Last Receive Time', value: 'lastReceiveTime' },
+      timeoutLeft: { text: 'Timeout', value: 'timeoutLeft' },
+      duplicateCount: { text: 'Dupl.', value: 'duplicateCount' },
+      customer: { text: 'Customer', value: 'customer' },
+      environment: { text: 'Environment', value: 'environment' },
+      service: { text: 'Service', value: 'service' },
+      resource: { text: 'Resource', value: 'resource' },
+      event: { text: 'Event', value: 'event' },
+      value: { text: 'Value', value: 'value' },
+      text: { text: 'Description', value: 'text' },
+    };
+    return config.columns.map(c =>
+      headersMap[c]
+    );
+  };
 
   render() {
-    const theme = this.context;
+    const { theme, order, orderBy, handleTableSort } = this.props;
 
     return (
       <thead>
@@ -27,18 +51,17 @@ export class AlertaTableHeader extends Component<IAlertaTableHeaderProps> {
               </div>
             </div>
           </th>
-          <th>Severity</th>
-          <th>Status</th>
-          <th>Last Receive Time</th>
-          <th>Timeout</th>
-          <th>Dupl.</th>
-          <th>Customer</th>
-          <th>Environment</th>
-          <th>Service</th>
-          <th>Resource</th>
-          <th>Event</th>
-          <th>Value</th>
-          <th>Description</th>
+          {this.customHeaders().map((header) => header &&
+            <th
+              role="columnheader"
+              scope="col"
+              className={clsx('column sortable text-xs-left', orderBy === header.value ? 'active' : '', order)}
+              onClick={() => handleTableSort(header.value)}
+            >
+              {header.text}
+              <i aria-hidden="true" className="v-icon material-icons theme--dark" style={{ fontSize: '16px' }}>arrow_drop_down</i>
+            </th>
+          )}
         </tr>
         <tr className="v-datatable__progress">
           <th colSpan={13} className="column" />
