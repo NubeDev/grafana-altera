@@ -54,3 +54,14 @@
 #table-func-menu .MuiPaper-root.MuiMenu-paper {
   left: 1730px !important;
 }
+
+.alerta-toolbars-darkmode {
+  height: 64px;
+  background-color: rgb(142, 142, 142) !important;
+  border-color: rgb(142, 142, 142) !important;
+}
+
+.MuiIconButton-label input[type=checkbox] {
+  width: 100% !important;
+  max-height: unset !important;
+}

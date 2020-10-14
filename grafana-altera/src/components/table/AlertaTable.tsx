@@ -20,13 +20,13 @@ import Chip from '@material-ui/core/Chip';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import Search from '@material-ui/icons/Search';
+import SearchIcon from '@material-ui/icons/Search';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
 import './AlertaTable.scss';
-import { AlertaTableHeader } from './AlertaTableHeader';
-import { AlertaTableBody } from './AlertaTableBody';
+import { AlertaTableToolbar } from './AlertaTableToolbar';
+import { AlertaTableContent } from './AlertaTableContent';
 import { ThemeContext } from 'shared/contexts/ThemeContext';
 import { THEME } from 'shared/constants/theme.constants';
 import config from 'shared/config/config.json';
@@ -201,6 +201,7 @@ function MainTable(props: IMainTableProps) {
   // Sort table
   const [order, setOrder] = React.useState('');
   const [orderBy, setOrderBy] = React.useState('');
+  const [rowSelected, setRowSelected] = React.useState<string[]>([]);
 
   const handleTableSort = (column: string) => {
     let orderByValue: any;
@@ -227,6 +228,32 @@ function MainTable(props: IMainTableProps) {
     paramState.pagination.descending = descendingValue;
     paramState.pagination.sortBy = sortByValue;
     updateData(setAlertState);
+  };
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>, filteredData: IAlert[]) => {
+    if (event.target.checked) {
+      const newRowSelecteds: string[] = filteredData.map(alert => alert.id);
+      setRowSelected(newRowSelecteds);
+      return;
+    }
+    setRowSelected([]);
+  };
+
+  const handleSelectRowClick = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const selectedIndex = rowSelected.indexOf(id);
+    let newRowSelected: string[] = [];
+
+    if (selectedIndex === -1) {
+      newRowSelected = newRowSelected.concat(rowSelected, id);
+    } else if (selectedIndex === 0) {
+      newRowSelected = newRowSelected.concat(rowSelected.slice(1));
+    } else if (selectedIndex === rowSelected.length - 1) {
+      newRowSelected = newRowSelected.concat(rowSelected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newRowSelected = newRowSelected.concat(rowSelected.slice(0, selectedIndex), rowSelected.slice(selectedIndex + 1));
+    }
+
+    setRowSelected(newRowSelected);
   };
 
   /* Use for data table */
@@ -510,9 +537,10 @@ function MainTable(props: IMainTableProps) {
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
-                                <Search style={{ color: theme === THEME.DARK_MODE ? '#ffffff' : '#424242' }} />
+                                <SearchIcon style={{ color: theme === THEME.DARK_MODE ? '#ffffff' : '#424242' }} />
                               </InputAdornment>
-                            )
+                            ),
+                            autoComplete: "off"
                           }}
                           className={classes.rootTextField}
                         />
@@ -800,6 +828,10 @@ function MainTable(props: IMainTableProps) {
 
   return (
     <div className="v-tabs px-1">
+      <AlertaTableToolbar
+        theme={theme}
+        numSelected={rowSelected.length}
+      />
       <div className={clsx('v-tabs__bar', theme)}>
         <div className="v-tabs__wrapper">
           <div className="v-tabs__container v-tabs__container--grow">
@@ -901,13 +933,18 @@ function MainTable(props: IMainTableProps) {
               <div className="alert-table comfortable">
                 <div className="v-table__overflow">
                   <table className={clsx('v-datatable v-table v-datatable--select-all', theme)}>
-                    <AlertaTableHeader
+                    <AlertaTableContent
                       theme={theme}
                       order={order}
                       orderBy={orderBy}
                       handleTableSort={handleTableSort}
+                      rowSelected={rowSelected}
+                      numSelected={rowSelected.length}
+                      handleSelectAllClick={handleSelectAllClick}
+                      handleSelectRowClick={handleSelectRowClick}
+                      alerts={alertState.alerts}
+                      searchText={searchTextFilter}
                     />
-                    <AlertaTableBody alerts={alertState.alerts} searchText={searchTextFilter} />
                   </table>
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 20, 50, 100, 200]}
