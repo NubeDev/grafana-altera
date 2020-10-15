@@ -1,5 +1,17 @@
 import React, { Component } from 'react';
+import { DebouncedFunc } from 'lodash';
 import clsx from 'clsx';
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import CheckIcon from '@material-ui/icons/Check';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import DeleteIcon from '@material-ui/icons/Delete';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import UndoIcon from '@material-ui/icons/Undo';
+import RestoreIcon from '@material-ui/icons/Restore';
 
 import config from '../../../shared/config/config.json';
 import { IAlert } from 'shared/models/model-data/alert.model';
@@ -11,9 +23,21 @@ const textColors: any = config.alarm_model.colors.text;
 
 interface IAlertaRowToolsProps {
   alert: IAlert;
+  basicAuthUser: string;
+  handleWatchAlert: DebouncedFunc<(username: string, alertId: string) => void>;
+  handleUnWatchAlert: DebouncedFunc<(username: string, alertId: string) => void>;
+  handleAckAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
+  handleShelveAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
+  handleDeleteAlert: DebouncedFunc<(alertId: string) => void>;
 }
 
 export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
+  constructor(props: IAlertaRowToolsProps) {
+    super(props);
+    this.state = {
+      ackTimeout: 0
+    };
+  }
   static contextType = ThemeContext;
 
   theme: any = this.context;
@@ -28,11 +52,6 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
   btnContentClass: string = 'v-btn__content';
   iTagClass: string = clsx('v-icon material-icons', this.theme);
 
-  username(): string {
-    // return this.$store.getters['auth/getUsername'];
-    return 'alice';
-  }
-
   severityColor(severity: string): string {
     return severityColors[severity] || 'white';
   }
@@ -45,8 +64,8 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
     return status === Status.ack || status === Status.ACKED;
   }
 
-  isWatched(tags: string[]): boolean {
-    return tags ? tags.indexOf(`watch:${this.username()}`) > -1 : false;
+  isWatched(tags: string[], username: string): boolean {
+    return tags ? tags.indexOf(`watch:${username}`) > -1 : false;
   }
 
   isShelved(status: string): boolean {
@@ -58,80 +77,126 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
   }
 
   render() {
-    const { alert } = this.props;
+    const { alert, basicAuthUser,
+      handleWatchAlert,
+      handleUnWatchAlert,
+      handleAckAlert,
+      handleShelveAlert,
+      handleDeleteAlert
+    } = this.props;
 
     return (
       <td className={this.cellClass}>
-        <div className="action-buttons" style={{ backgroundColor: this.severityColor(alert.severity) }}>
+        <div className="action-buttons row-tools" style={{ backgroundColor: this.severityColor(alert.severity) }}>
           ...&nbsp;
           {(this.isAcked(alert.status) || this.isClosed(alert.status)) && (
-            <button type="button" className={this.buttonClass}>
-              <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>refresh</i>
-              </div>
-            </button>
+            <IconButton
+              className={this.buttonClass}
+              color="default"
+              size="medium"
+              component="span"
+              // onClick={handleTakeAction(props.item.id, 'open')}
+            >
+              <RefreshIcon />
+            </IconButton>
           )}
-          {!this.isWatched(alert.tags) && (
-            <button type="button" className={this.buttonClass}>
-              <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>visibility</i>
-              </div>
-            </button>
+          {!this.isWatched(alert.tags, basicAuthUser) && (
+            <IconButton
+              className={this.buttonClass}
+              color="default"
+              size="medium"
+              component="span"
+              onClick={() => handleWatchAlert(basicAuthUser, alert.id)}
+            >
+              <VisibilityIcon />
+            </IconButton>
           )}
-          {this.isWatched(alert.tags) && (
-            <button type="button" className={this.buttonClass}>
-              <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>visibility_off</i>
-              </div>
-            </button>
+          {this.isWatched(alert.tags, basicAuthUser) && (
+            <IconButton
+              className={this.buttonClass}
+              color="default"
+              size="medium"
+              component="span"
+              onClick={() => handleUnWatchAlert(basicAuthUser, alert.id)}
+            >
+              <VisibilityOffIcon />
+            </IconButton>
           )}
           {this.isOpen(alert.status) && (
-            <button type="button" className={this.buttonClass}>
-              <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>check</i>
-              </div>
-            </button>
+            <IconButton
+              className={this.buttonClass}
+              color="default"
+              size="medium"
+              component="span"
+              onClick={() => handleAckAlert(alert.id, 'ack', '')}
+            >
+              <CheckIcon />
+            </IconButton>
           )}
           {this.isAcked(alert.status) && (
-            <button type="button" className={this.buttonClass}>
-              <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>undo</i>
-              </div>
-            </button>
+            <IconButton
+              className={this.buttonClass}
+              color="default"
+              size="medium"
+              component="span"
+              // onClick={handleTakeAction(props.item.id, 'unack')}
+            >
+              <UndoIcon />
+            </IconButton>
           )}
           {(this.isOpen(alert.status) || this.isAcked(alert.status)) && (
-            <button type="button" className={this.buttonClass}>
-              <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>schedule</i>
-              </div>
-            </button>
+            <IconButton
+              className={this.buttonClass}
+              color="default"
+              size="medium"
+              component="span"
+              onClick={() => handleShelveAlert(alert.id, 'shelve', '')}
+            >
+              <ScheduleIcon />
+            </IconButton>
           )}
           {this.isShelved(alert.status) && (
-            <button type="button" className={this.buttonClass}>
-              <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: '20px'}}>restore</i>
-              </div>
-            </button>
+            <IconButton
+              className={this.buttonClass}
+              color="default"
+              size="medium"
+              component="span"
+              // onClick={handleTakeAction(props.item.id, 'unshelve')}
+            >
+              <RestoreIcon />
+            </IconButton>
           )}
           {!this.isClosed(alert.status) && (
-            <button type="button" className={this.buttonClass}>
-              <div className={this.btnContentClass}>
-                <i aria-hidden="true" className={this.iTagClass} style={{fontSize: '20px'}}>highlight_off</i>
-              </div>
-            </button>
+            <IconButton
+              className={this.buttonClass}
+              color="default"
+              size="medium"
+              component="span"
+              // onClick={handleTakeAction(props.item.id, 'close')}
+            >
+              <HighlightOffIcon />
+            </IconButton>
           )}
-          <button type="button" className={this.buttonClass}>
-            <div className={this.btnContentClass}>
-              <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '20px' }}>delete</i>
-            </div>
-          </button>
+          <IconButton
+            className={this.buttonClass}
+            color="default"
+            size="medium"
+            component="span"
+            onClick={() => handleDeleteAlert(alert.id)}
+          >
+            <DeleteIcon />
+          </IconButton>
           <div className="v-menu v-menu--inline">
             <div className="v-menu__activator">
-              <button type="button" className={this.buttonClass}>
-                <div className={this.btnContentClass}>
-                  <i aria-hidden="true" className={this.iTagClass} style={{ fontSize: '16px' }}>more_vert</i>
-                </div>
-              </button>
+              <IconButton
+                className={this.buttonClass}
+                color="default"
+                size="medium"
+                component="span"
+                // onClick={handleTakeAction}
+              >
+                <MoreVertIcon />
+              </IconButton>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import debounce from 'lodash/debounce'
 import clsx from 'clsx';
 import moment from 'moment';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -35,6 +36,8 @@ import { IEnvironment } from 'shared/models/model-data/environment.model';
 import alertService from 'services/api/alert.service';
 import environmentService from 'services/api/environment.service';
 import groupService from 'services/api/group.service';
+import authService from 'services/api/auth.service';
+import userService from 'services/api/user.service';
 import { IService } from 'shared/models/model-data/service.model';
 import { IGroup } from 'shared/models/model-data/group.model';
 
@@ -52,6 +55,9 @@ interface IAlertaTableState {
   environments: IEnvironment[];
   services: IService[];
   groups: IGroup[];
+  basicAuthUser: string;
+  ackTimeout: number;
+  shelveTimeout: number;
 }
 
 interface IMainTableProps {
@@ -59,6 +65,9 @@ interface IMainTableProps {
   environments: IEnvironment[];
   services: IService[];
   groups: IGroup[];
+  basicAuthUser: string;
+  ackTimeout: number;
+  shelveTimeout: number;
 }
 
 interface IFilterForm { }
@@ -103,7 +112,7 @@ async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAl
  */
 function MainTable(props: IMainTableProps) {
   // Get value from props
-  const { theme, environments, services, groups } = props;
+  const { theme, environments, services, groups, basicAuthUser, ackTimeout, shelveTimeout } = props;
 
   // Theme
   const color = theme === THEME.DARK_MODE ? 'white' : 'black';
@@ -826,11 +835,44 @@ function MainTable(props: IMainTableProps) {
     setAnchorElFuncMenu(null);
   };
 
+  /* Use for table toolbar */
+  const handleClearSelected = () => {
+    setRowSelected([]);
+  };
+
+  /* Use for function buttons of each row */
+  const handleWatchAlert = debounce((username: string, alertId: string) => {
+    alertService.watchAlert(username, alertId)
+      .then(() => updateData(setAlertState));
+  }, 200, { leading: true, trailing: false });
+
+  const handleUnWatchAlert = debounce((username: string, alertId: string) => {
+    alertService.unWatchAlert(username, alertId)
+      .then(() => updateData(setAlertState));
+  }, 200, { leading: true, trailing: false });
+
+  const handleAckAlert = debounce((alertId: string, action: string, text: string) => {
+    alertService.takeAction(alertId, action, text, ackTimeout)
+      .then(() => updateData(setAlertState));
+  }, 200, { leading: true, trailing: false });
+
+  const handleShelveAlert = debounce((alertId: string, action: string, text: string) => {
+    alertService.takeAction(alertId, action, text, shelveTimeout)
+      .then(() => updateData(setAlertState));
+  }, 200, { leading: true, trailing: false });
+
+  const handleDeleteAlert = debounce((alertId: string) => {
+    confirm('Are you sure you want to delete this item?') &&
+    alertService.deleteAlert(alertId)
+      .then(() => updateData(setAlertState));
+  }, 200, { leading: true, trailing: false });
+
   return (
     <div className="v-tabs px-1">
       <AlertaTableToolbar
         theme={theme}
         numSelected={rowSelected.length}
+        handleClearSelected={handleClearSelected}
       />
       <div className={clsx('v-tabs__bar', theme)}>
         <div className="v-tabs__wrapper">
@@ -853,7 +895,7 @@ function MainTable(props: IMainTableProps) {
                     }}
                   >
                     {mergeEnvironments().map((env) => env &&
-                      <Tab label={`${env} (${environmentCounts()[env] || 0})`} onClick={() => handleEnvTabChange(env)} />
+                      <Tab id={env} label={`${env} (${environmentCounts()[env] || 0})`} onClick={() => handleEnvTabChange(env)} />
                     )}
                   </Tabs>
                 </Paper>
@@ -944,6 +986,12 @@ function MainTable(props: IMainTableProps) {
                       handleSelectRowClick={handleSelectRowClick}
                       alerts={alertState.alerts}
                       searchText={searchTextFilter}
+                      basicAuthUser={basicAuthUser}
+                      handleWatchAlert={handleWatchAlert}
+                      handleUnWatchAlert={handleUnWatchAlert}
+                      handleAckAlert={handleAckAlert}
+                      handleShelveAlert={handleShelveAlert}
+                      handleDeleteAlert={handleDeleteAlert}
                     />
                   </table>
                   <TablePagination
@@ -975,7 +1023,10 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
     this.state = {
       environments: [],
       services: [],
-      groups: []
+      groups: [],
+      basicAuthUser: '',
+      ackTimeout: config.timeouts.ack,
+      shelveTimeout: config.timeouts.shelve
     };
   }
 
@@ -985,6 +1036,8 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
     this.getEnvironments();
     this.getServices();
     this.getGroups();
+    this.getUsername();
+    this.getTimeout();
     setInterval(this.getEnvironments, config.refresh_interval);
   }
 
@@ -1015,13 +1068,43 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
       });
   };
 
+  getUsername = () => {
+    authService.getUsername()
+      .then(res => {
+        if (res) {
+          this.setState({ basicAuthUser: res.basicAuthUser });
+        }
+      });
+  };
+
+  getTimeout = () => {
+    userService.getUserPrefs()
+      .then(res => {
+        if (res && res.attributes.prefs) {
+          if (res.attributes.prefs.ackTimeout) {
+            this.setState({ ackTimeout: res.attributes.prefs.ackTimeout });
+          }
+          if (res.attributes.prefs.shelveTimeout) {
+            this.setState({ shelveTimeout: res.attributes.prefs.shelveTimeout });
+          }
+        }
+      });
+  }
+
   render() {
     const theme = this.context;
 
-    const { environments, services, groups } = this.state;
-
+    const { environments, services, groups, basicAuthUser, ackTimeout, shelveTimeout } = this.state;
     return (
-      <MainTable theme={theme} environments={environments} services={services} groups={groups} />
+      <MainTable
+        theme={theme}
+        environments={environments}
+        services={services}
+        groups={groups}
+        basicAuthUser={basicAuthUser}
+        ackTimeout={ackTimeout}
+        shelveTimeout={shelveTimeout}
+      />
     );
   }
 }

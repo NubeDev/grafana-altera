@@ -55,13 +55,38 @@
   left: 1730px !important;
 }
 
-.alerta-toolbars-darkmode {
-  height: 64px;
-  background-color: rgb(142, 142, 142) !important;
-  border-color: rgb(142, 142, 142) !important;
+.alerta-toolbars {
+
+  &.alerta-toolbars-darkmode {
+    height: 64px;
+    background-color: rgb(142, 142, 142) !important;
+    border-color: rgb(142, 142, 142) !important;
+  }
+
+  .MuiSvgIcon-root {
+    font-size: 24px;
+  }
 }
+
 
 .MuiIconButton-label input[type=checkbox] {
   width: 100% !important;
   max-height: unset !important;
+}
+
+.action-buttons {
+
+  &.row-tools {
+    .MuiSvgIcon-root {
+      font-size: 20px;
+    }
+  }
+}
+
+.MuiTooltip-tooltip {
+  font-size: 12px !important;
+}
+
+#alert-dialog-title h2 {
+  color: #000000de !important;
 }

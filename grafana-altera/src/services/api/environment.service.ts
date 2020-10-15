@@ -1,15 +1,14 @@
-// import moment from 'moment';
+import moment from 'moment';
 
 import api from './index';
 import { IEnvironmentResponse } from 'shared/models/model-responses/environment-response';
-import { SERVER_API } from 'shared/constants/server-api.constants';
 
 const actions = {
   getEnvironments(query: object) {
     const config = {
       params: query
     };
-    return api.get(SERVER_API.ALE_FETCH_ENVIRONMENTS, config);
+    return api.get('/api/environments', config);
   }
 }
 
@@ -25,28 +24,16 @@ export default {
     state.filter.group && state.filter.group.map((g: any) => params.append('group', g));
 
     // apply any date/time filters
-    // if (state.filter.dateRange[0] > 0) {
-    //   params.append(
-    //     'from-date',
-    //     moment.unix(state.filter.dateRange[0]).toISOString()
-    //   );
-    // } else if (state.filter.dateRange[0] < 0) {
-    //   params.append(
-    //     'from-date',
-    //     moment().utc().add(state.filter.dateRange[0], 'seconds').toISOString()
-    //   );
-    // }
-    // if (state.filter.dateRange[1] > 0) {
-    //   params.append(
-    //     'to-date',
-    //     moment.unix(state.filter.dateRange[1]).toISOString()
-    //   );
-    // } else if (state.filter.dateRange[1] < 0) {
-    //   params.append(
-    //     'to-date',
-    //     moment().utc().add(state.filter.dateRange[1], 'seconds').toISOString()
-    //   );
-    // }
+    if (state.filter.dateRange[0] > 0) {
+      params.append('from-date', moment.unix(state.filter.dateRange[0]).toISOString());
+    } else if (state.filter.dateRange[0] < 0) {
+      params.append('from-date', moment().utc().add(state.filter.dateRange[0], 'seconds').toISOString());
+    }
+    if (state.filter.dateRange[1] > 0) {
+      params.append('to-date', moment.unix(state.filter.dateRange[1]).toISOString());
+    } else if (state.filter.dateRange[1] < 0) {
+      params.append('to-date', moment().utc().add(state.filter.dateRange[1], 'seconds').toISOString());
+    }
 
     return actions.getEnvironments(params)
       .then((res: IEnvironmentResponse) => {
@@ -54,7 +41,6 @@ export default {
           environments: res.environments
         };
       })
-      // tslint:disable-next-line: no-console
       .catch(error => console.log(error));
   }
 }

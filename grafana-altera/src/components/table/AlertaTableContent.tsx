@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { DebouncedFunc } from 'lodash';
 import clsx from 'clsx';
 import moment from 'moment';
 import TableRow from '@material-ui/core/TableRow';
@@ -17,6 +18,7 @@ import { AlertaDataCell } from './alert/AlertaDataCell';
 import { AlertaTruncateCell } from './alert/AlertaTruncateCell';
 import { TrendIndication } from 'shared/constants/trend-indication.enum';
 
+
 const severityColors: any = config.alarm_model.colors.severity;
 
 interface IAlertaTableContentProps {
@@ -30,6 +32,12 @@ interface IAlertaTableContentProps {
   handleSelectRowClick: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
   alerts: IAlert[];
   searchText: string;
+  basicAuthUser: string;
+  handleWatchAlert: DebouncedFunc<(username: string, alertId: string) => void>;
+  handleUnWatchAlert: DebouncedFunc<(username: string, alertId: string) => void>;
+  handleAckAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
+  handleShelveAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
+  handleDeleteAlert: DebouncedFunc<(alertId: string) => void>;
 }
 
 export class AlertaTableContent extends Component<IAlertaTableContentProps> {
@@ -111,7 +119,12 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
   }
 
   render() {
-    const { theme, order, orderBy, handleTableSort, rowSelected, numSelected, handleSelectAllClick, handleSelectRowClick, alerts, searchText } = this.props;
+    const {
+      theme, order, orderBy, handleTableSort,
+      rowSelected, numSelected, handleSelectAllClick, handleSelectRowClick,
+      alerts, searchText, basicAuthUser,
+      handleWatchAlert, handleUnWatchAlert, handleAckAlert, handleShelveAlert, handleDeleteAlert
+    } = this.props;
 
     const filteredData = alerts && alerts.filter(alert => {
       return (
@@ -198,7 +211,15 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
                 <AlertaDataCell cellClass="" textClass="" text={alert.value} />
                 <AlertaTruncateCell cellClass="" textClass="" text={alert.text} />
 
-                <AlertaRowTools alert={alert} />
+                <AlertaRowTools
+                  alert={alert}
+                  basicAuthUser={basicAuthUser}
+                  handleWatchAlert={handleWatchAlert}
+                  handleUnWatchAlert={handleUnWatchAlert}
+                  handleAckAlert={handleAckAlert}
+                  handleShelveAlert={handleShelveAlert}
+                  handleDeleteAlert={handleDeleteAlert}
+                />
               </TableRow>
             );
           })}

@@ -3,7 +3,6 @@ import moment from 'moment';
 
 import api from './index';
 import { IAlertResponse } from 'shared/models/model-responses/alert-response';
-import { SERVER_API } from 'shared/constants/server-api.constants';
 import { IServiceResponse } from 'shared/models/model-responses/service-response';
 
 let queryInProgress: any;
@@ -18,14 +17,23 @@ const actions = {
       params: query,
       cancelToken: queryInProgress.token
     };
-    return api.get(SERVER_API.ALE_FETCH_ALERTS, config);
+    return api.get('/api/alerts', config);
   },
-  getServices(query: object) {
-    const config = {
-      params: query
-    }
-    return api.get(SERVER_API.ALE_FETCH_SERVICES, config);
-  }
+  getServices() {
+    return api.get('/api/services');
+  },
+  tagAlert(alertId: string, data: object) {
+    return api.put(`/api/alert/${alertId}/tag`, data);
+  },
+  unTagAlert(alertId: string, data: object) {
+    return api.put(`/api/alert/${alertId}/untag`, data);
+  },
+  actionAlert(alertId: string, data: object) {
+    return api.put(`/api/alert/${alertId}/action`, data);
+  },
+  deleteAlert(alertId: string) {
+    return api.delete(`/api/alert/${alertId}`);
+  },
 }
 
 export default {
@@ -75,7 +83,7 @@ export default {
       .catch(error => console.log(error));
   },
   getServices() {
-    return actions.getServices({})
+    return actions.getServices()
       .then((res: IServiceResponse) => {
         return {
           services: res.services
@@ -83,4 +91,22 @@ export default {
       })
       .catch(error => console.log(error));
   },
+  watchAlert(username: string, alertId: string) {
+    const tag = `watch:${username}`;
+    return actions.tagAlert(alertId, { tags: [tag] });
+  },
+  unWatchAlert(username: string, alertId: string) {
+    const tag = `watch:${username}`;
+    return actions.unTagAlert(alertId, { tags: [tag] });
+  },
+  takeAction(alertId: string, action: string, text: string, timeout: number) {
+    return actions.actionAlert(alertId, {
+      action,
+      text,
+      timeout
+    });
+  },
+  deleteAlert(alertId: string) {
+    return actions.deleteAlert(alertId);
+  }
 }
