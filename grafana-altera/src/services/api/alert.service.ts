@@ -99,7 +99,7 @@ export default {
     const tag = `watch:${username}`;
     return actions.unTagAlert(alertId, { tags: [tag] });
   },
-  takeAction(alertId: string, action: string, text: string, timeout: number) {
+  takeAction(alertId: string, action: string, text: string, timeout?: number) {
     return actions.actionAlert(alertId, {
       action,
       text,

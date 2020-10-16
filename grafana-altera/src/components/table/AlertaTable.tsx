@@ -58,6 +58,7 @@ interface IAlertaTableState {
   basicAuthUser: string;
   ackTimeout: number;
   shelveTimeout: number;
+  refreshInterval: number;
 }
 
 interface IMainTableProps {
@@ -68,6 +69,7 @@ interface IMainTableProps {
   basicAuthUser: string;
   ackTimeout: number;
   shelveTimeout: number;
+  refreshInterval: number;
 }
 
 interface IFilterForm { }
@@ -112,7 +114,7 @@ async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAl
  */
 function MainTable(props: IMainTableProps) {
   // Get value from props
-  const { theme, environments, services, groups, basicAuthUser, ackTimeout, shelveTimeout } = props;
+  const { theme, environments, services, groups, basicAuthUser, ackTimeout, shelveTimeout, refreshInterval } = props;
 
   // Theme
   const color = theme === THEME.DARK_MODE ? 'white' : 'black';
@@ -210,7 +212,7 @@ function MainTable(props: IMainTableProps) {
   // Sort table
   const [order, setOrder] = React.useState('');
   const [orderBy, setOrderBy] = React.useState('');
-  const [rowSelected, setRowSelected] = React.useState<string[]>([]);
+  const [rowSelected, setRowSelected] = React.useState<IAlert[]>([]);
 
   const handleTableSort = (column: string) => {
     let orderByValue: any;
@@ -241,19 +243,18 @@ function MainTable(props: IMainTableProps) {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>, filteredData: IAlert[]) => {
     if (event.target.checked) {
-      const newRowSelecteds: string[] = filteredData.map(alert => alert.id);
-      setRowSelected(newRowSelecteds);
+      setRowSelected(filteredData);
       return;
     }
     setRowSelected([]);
   };
 
-  const handleSelectRowClick = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
-    const selectedIndex = rowSelected.indexOf(id);
-    let newRowSelected: string[] = [];
+  const handleSelectRowClick = (event: React.ChangeEvent<HTMLInputElement>, alert: IAlert) => {
+    const selectedIndex = rowSelected.map(a => a.id).indexOf(alert.id);
+    let newRowSelected: IAlert[] = [];
 
     if (selectedIndex === -1) {
-      newRowSelected = newRowSelected.concat(rowSelected, id);
+      newRowSelected = newRowSelected.concat(rowSelected, alert);
     } else if (selectedIndex === 0) {
       newRowSelected = newRowSelected.concat(rowSelected.slice(1));
     } else if (selectedIndex === rowSelected.length - 1) {
@@ -282,7 +283,7 @@ function MainTable(props: IMainTableProps) {
     updateData(setAlertState);
     setInterval(() => {
       updateData(setAlertState);
-    }, config.refresh_interval);
+    }, refreshInterval);
   }, []);
 
   // Handle change page
@@ -840,6 +841,66 @@ function MainTable(props: IMainTableProps) {
     setRowSelected([]);
   };
 
+  const handleToggleWatch = () => {
+    const isWatched = (tags: string[]) => {
+      const tag = `watch:${basicAuthUser}`;
+      return tags ? tags.indexOf(tag) > -1 : false;
+    }
+    const watchAlert = (alertId: string) => {
+      alertService.watchAlert(basicAuthUser, alertId);
+    }
+    const unwatchAlert = (alertId: string) => {
+      alertService.unWatchAlert(basicAuthUser, alertId);
+    }
+
+    let map;
+    if (rowSelected.some(a => !isWatched(a.tags))) {
+      map = rowSelected.map(a => watchAlert(a.id));
+    } else {
+      map = rowSelected.map(a => unwatchAlert(a.id));
+    }
+
+    Promise.all(map).then(() => {
+      handleClearSelected();
+      updateData(setAlertState);
+    })
+  };
+
+  const handleBulkAckAlert = () => {
+    rowSelected.map(alert => {
+      alertService.takeAction(alert.id, 'ack', '', ackTimeout)
+        .then(() => updateData(setAlertState));
+    }).reduce(() => handleClearSelected());
+  };
+
+  const handleBulkShelveAlert = () => {
+    Promise
+      .all(rowSelected.map(alert => alertService.takeAction(alert.id, 'shelve', '', shelveTimeout)))
+      .then(() => {
+        handleClearSelected();
+        updateData(setAlertState);
+      });
+  };
+
+  const handleTakeBulkAction = (action: string) => {
+    Promise
+      .all(rowSelected.map(alert => alertService.takeAction(alert.id, action, '')))
+      .then(() => {
+        handleClearSelected();
+        updateData(setAlertState);
+      });
+  };
+
+  const handleBulkDeleteAlert = () => {
+    confirm('Are you sure you want to delete this item?') &&
+      Promise
+        .all(rowSelected.map(alert => alertService.deleteAlert(alert.id)))
+        .then(() => {
+          handleClearSelected();
+          updateData(setAlertState);
+        })
+  };
+
   /* Use for function buttons of each row */
   const handleWatchAlert = debounce((username: string, alertId: string) => {
     alertService.watchAlert(username, alertId)
@@ -863,7 +924,12 @@ function MainTable(props: IMainTableProps) {
 
   const handleDeleteAlert = debounce((alertId: string) => {
     confirm('Are you sure you want to delete this item?') &&
-    alertService.deleteAlert(alertId)
+      alertService.deleteAlert(alertId)
+        .then(() => updateData(setAlertState));
+  }, 200, { leading: true, trailing: false });
+
+  const handleTakeAction = debounce((alertId: string, action: string, text: string) => {
+    alertService.takeAction(alertId, action, text)
       .then(() => updateData(setAlertState));
   }, 200, { leading: true, trailing: false });
 
@@ -873,6 +939,11 @@ function MainTable(props: IMainTableProps) {
         theme={theme}
         numSelected={rowSelected.length}
         handleClearSelected={handleClearSelected}
+        handleToggleWatch={handleToggleWatch}
+        handleBulkAckAlert={handleBulkAckAlert}
+        handleBulkShelveAlert={handleBulkShelveAlert}
+        handleTakeBulkAction={handleTakeBulkAction}
+        handleBulkDeleteAlert={handleBulkDeleteAlert}
       />
       <div className={clsx('v-tabs__bar', theme)}>
         <div className="v-tabs__wrapper">
@@ -937,7 +1008,7 @@ function MainTable(props: IMainTableProps) {
                     size="medium"
                     aria-controls="table-func-menu"
                     aria-haspopup="true"
-                    onClick={handleOpenFuncMenu}
+                    // onClick={handleOpenFuncMenu}
                   >
                     <div className="v-btn__content">
                       <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>more_vert</i>
@@ -992,6 +1063,7 @@ function MainTable(props: IMainTableProps) {
                       handleAckAlert={handleAckAlert}
                       handleShelveAlert={handleShelveAlert}
                       handleDeleteAlert={handleDeleteAlert}
+                      handleTakeAction={handleTakeAction}
                     />
                   </table>
                   <TablePagination
@@ -1026,18 +1098,19 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
       groups: [],
       basicAuthUser: '',
       ackTimeout: config.timeouts.ack,
-      shelveTimeout: config.timeouts.shelve
+      shelveTimeout: config.timeouts.shelve,
+      refreshInterval: config.refresh_interval
     };
   }
 
   static contextType = ThemeContext;
 
   componentDidMount() {
+    this.getTimeout();
     this.getEnvironments();
     this.getServices();
     this.getGroups();
     this.getUsername();
-    this.getTimeout();
     setInterval(this.getEnvironments, config.refresh_interval);
   }
 
@@ -1087,6 +1160,9 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
           if (res.attributes.prefs.shelveTimeout) {
             this.setState({ shelveTimeout: res.attributes.prefs.shelveTimeout });
           }
+          if (res.attributes.prefs.refreshInterval) {
+            this.setState({ refreshInterval: res.attributes.prefs.refreshInterval });
+          }
         }
       });
   }
@@ -1094,7 +1170,7 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
   render() {
     const theme = this.context;
 
-    const { environments, services, groups, basicAuthUser, ackTimeout, shelveTimeout } = this.state;
+    const { environments, services, groups, basicAuthUser, ackTimeout, shelveTimeout, refreshInterval } = this.state;
     return (
       <MainTable
         theme={theme}
@@ -1104,6 +1180,7 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
         basicAuthUser={basicAuthUser}
         ackTimeout={ackTimeout}
         shelveTimeout={shelveTimeout}
+        refreshInterval={refreshInterval}
       />
     );
   }

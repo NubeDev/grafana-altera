@@ -14,12 +14,19 @@ interface IAlertaTableToolbarProps {
   theme: any;
   numSelected: number;
   handleClearSelected: () => void;
+  handleToggleWatch: () => void;
+  handleBulkAckAlert: () => void;
+  handleBulkShelveAlert: () => void;
+  handleTakeBulkAction: (action: string) => void;
+  handleBulkDeleteAlert: () => void;
 }
 
 export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
 
   render() {
-    const { theme, numSelected, handleClearSelected } = this.props;
+    const { theme, numSelected, handleClearSelected, handleToggleWatch, handleBulkAckAlert,
+      handleBulkShelveAlert, handleTakeBulkAction, handleBulkDeleteAlert
+    } = this.props;
 
     return (
       <div>
@@ -50,7 +57,7 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
                     color="default"
                     size="medium"
                     component="span"
-                  // onClick={handleClearSelected}
+                    onClick={handleToggleWatch}
                   >
                     <VisibilityIcon fontSize="large" />
                   </IconButton>
@@ -66,7 +73,7 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
                     color="default"
                     size="medium"
                     component="span"
-                  // onClick={handleClearSelected}
+                    onClick={handleBulkAckAlert}
                   >
                     <CheckIcon fontSize="large" />
                   </IconButton>
@@ -82,7 +89,7 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
                     color="default"
                     size="medium"
                     component="span"
-                  // onClick={handleClearSelected}
+                    onClick={handleBulkShelveAlert}
                   >
                     <ScheduleIcon fontSize="large" />
                   </IconButton>
@@ -98,7 +105,7 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
                     color="default"
                     size="medium"
                     component="span"
-                  // onClick={handleClearSelected}
+                    onClick={() => handleTakeBulkAction('close')}
                   >
                     <HighlightOffIcon fontSize="large" />
                   </IconButton>
@@ -114,7 +121,7 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
                     color="default"
                     size="medium"
                     component="span"
-                  // onClick={handleClearSelected}
+                    onClick={handleBulkDeleteAlert}
                   >
                     <DeleteIcon fontSize="large" />
                   </IconButton>

@@ -26,10 +26,10 @@ interface IAlertaTableContentProps {
   order: string;
   orderBy: string;
   handleTableSort: (column: string) => void;
-  rowSelected: string[];
+  rowSelected: IAlert[];
   numSelected: number;
   handleSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, filteredData: IAlert[]) => void;
-  handleSelectRowClick: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  handleSelectRowClick: (event: React.ChangeEvent<HTMLInputElement>, alert: IAlert) => void;
   alerts: IAlert[];
   searchText: string;
   basicAuthUser: string;
@@ -38,6 +38,7 @@ interface IAlertaTableContentProps {
   handleAckAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
   handleShelveAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
   handleDeleteAlert: DebouncedFunc<(alertId: string) => void>;
+  handleTakeAction: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
 }
 
 export class AlertaTableContent extends Component<IAlertaTableContentProps> {
@@ -103,7 +104,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
     return status === Status.shelved || status === Status.SHLVD;
   }
 
-  renderIcon(trendIndication: string, rowSelected: string[]) {
+  renderIcon(trendIndication: string, rowSelected: IAlert[]) {
     let icon;
     if (rowSelected && rowSelected.length > 0) {
       icon = <CheckBoxOutlineBlankIcon />;
@@ -123,7 +124,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
       theme, order, orderBy, handleTableSort,
       rowSelected, numSelected, handleSelectAllClick, handleSelectRowClick,
       alerts, searchText, basicAuthUser,
-      handleWatchAlert, handleUnWatchAlert, handleAckAlert, handleShelveAlert, handleDeleteAlert
+      handleWatchAlert, handleUnWatchAlert, handleAckAlert, handleShelveAlert, handleDeleteAlert, handleTakeAction
     } = this.props;
 
     const filteredData = alerts && alerts.filter(alert => {
@@ -141,7 +142,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
       );
     })
 
-    const isSelected = (id: string) => rowSelected.indexOf(id) !== -1;
+    const isSelected = (id: string) => rowSelected.map(alert => alert.id).indexOf(id) !== -1;
 
     return (
       <>
@@ -192,7 +193,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
                       color="default"
                       checked={isRowSelected}
                       inputProps={{ 'aria-labelledby': labelId }}
-                      onChange={(event) => handleSelectRowClick(event, alert.id)}
+                      onChange={(event) => handleSelectRowClick(event, alert)}
                       icon={this.renderIcon(alert.trendIndication, rowSelected)}
                       checkedIcon={<CheckBoxIcon />} />
                   </div>
@@ -219,6 +220,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
                   handleAckAlert={handleAckAlert}
                   handleShelveAlert={handleShelveAlert}
                   handleDeleteAlert={handleDeleteAlert}
+                  handleTakeAction={handleTakeAction}
                 />
               </TableRow>
             );

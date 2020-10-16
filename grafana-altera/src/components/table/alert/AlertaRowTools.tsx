@@ -12,6 +12,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import UndoIcon from '@material-ui/icons/Undo';
 import RestoreIcon from '@material-ui/icons/Restore';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import config from '../../../shared/config/config.json';
 import { IAlert } from 'shared/models/model-data/alert.model';
@@ -29,6 +30,7 @@ interface IAlertaRowToolsProps {
   handleAckAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
   handleShelveAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
   handleDeleteAlert: DebouncedFunc<(alertId: string) => void>;
+  handleTakeAction: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
 }
 
 export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
@@ -82,7 +84,8 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
       handleUnWatchAlert,
       handleAckAlert,
       handleShelveAlert,
-      handleDeleteAlert
+      handleDeleteAlert,
+      handleTakeAction
     } = this.props;
 
     return (
@@ -90,113 +93,133 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
         <div className="action-buttons row-tools" style={{ backgroundColor: this.severityColor(alert.severity) }}>
           ...&nbsp;
           {(this.isAcked(alert.status) || this.isClosed(alert.status)) && (
-            <IconButton
-              className={this.buttonClass}
-              color="default"
-              size="medium"
-              component="span"
-              // onClick={handleTakeAction(props.item.id, 'open')}
-            >
-              <RefreshIcon />
-            </IconButton>
-          )}
-          {!this.isWatched(alert.tags, basicAuthUser) && (
-            <IconButton
-              className={this.buttonClass}
-              color="default"
-              size="medium"
-              component="span"
-              onClick={() => handleWatchAlert(basicAuthUser, alert.id)}
-            >
-              <VisibilityIcon />
-            </IconButton>
-          )}
-          {this.isWatched(alert.tags, basicAuthUser) && (
-            <IconButton
-              className={this.buttonClass}
-              color="default"
-              size="medium"
-              component="span"
-              onClick={() => handleUnWatchAlert(basicAuthUser, alert.id)}
-            >
-              <VisibilityOffIcon />
-            </IconButton>
-          )}
-          {this.isOpen(alert.status) && (
-            <IconButton
-              className={this.buttonClass}
-              color="default"
-              size="medium"
-              component="span"
-              onClick={() => handleAckAlert(alert.id, 'ack', '')}
-            >
-              <CheckIcon />
-            </IconButton>
-          )}
-          {this.isAcked(alert.status) && (
-            <IconButton
-              className={this.buttonClass}
-              color="default"
-              size="medium"
-              component="span"
-              // onClick={handleTakeAction(props.item.id, 'unack')}
-            >
-              <UndoIcon />
-            </IconButton>
-          )}
-          {(this.isOpen(alert.status) || this.isAcked(alert.status)) && (
-            <IconButton
-              className={this.buttonClass}
-              color="default"
-              size="medium"
-              component="span"
-              onClick={() => handleShelveAlert(alert.id, 'shelve', '')}
-            >
-              <ScheduleIcon />
-            </IconButton>
-          )}
-          {this.isShelved(alert.status) && (
-            <IconButton
-              className={this.buttonClass}
-              color="default"
-              size="medium"
-              component="span"
-              // onClick={handleTakeAction(props.item.id, 'unshelve')}
-            >
-              <RestoreIcon />
-            </IconButton>
-          )}
-          {!this.isClosed(alert.status) && (
-            <IconButton
-              className={this.buttonClass}
-              color="default"
-              size="medium"
-              component="span"
-              // onClick={handleTakeAction(props.item.id, 'close')}
-            >
-              <HighlightOffIcon />
-            </IconButton>
-          )}
-          <IconButton
-            className={this.buttonClass}
-            color="default"
-            size="medium"
-            component="span"
-            onClick={() => handleDeleteAlert(alert.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
-          <div className="v-menu v-menu--inline">
-            <div className="v-menu__activator">
+            <Tooltip title="Open">
               <IconButton
                 className={this.buttonClass}
                 color="default"
                 size="medium"
                 component="span"
-                // onClick={handleTakeAction}
+                onClick={() => handleTakeAction(alert.id, 'open', '')}
               >
-                <MoreVertIcon />
+                <RefreshIcon />
               </IconButton>
+            </Tooltip>
+          )}
+          {!this.isWatched(alert.tags, basicAuthUser) && (
+            <Tooltip title="Watch">
+              <IconButton
+                className={this.buttonClass}
+                color="default"
+                size="medium"
+                component="span"
+                onClick={() => handleWatchAlert(basicAuthUser, alert.id)}
+              >
+                <VisibilityIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {this.isWatched(alert.tags, basicAuthUser) && (
+            <Tooltip title="UnWatch">
+              <IconButton
+                className={this.buttonClass}
+                color="default"
+                size="medium"
+                component="span"
+                onClick={() => handleUnWatchAlert(basicAuthUser, alert.id)}
+              >
+                <VisibilityOffIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {this.isOpen(alert.status) && (
+            <Tooltip title="Ack">
+              <IconButton
+                className={this.buttonClass}
+                color="default"
+                size="medium"
+                component="span"
+                onClick={() => handleAckAlert(alert.id, 'ack', '')}
+              >
+                <CheckIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {this.isAcked(alert.status) && (
+            <Tooltip title="UnAck">
+              <IconButton
+                className={this.buttonClass}
+                color="default"
+                size="medium"
+                component="span"
+                onClick={() => handleTakeAction(alert.id, 'unack', '')}
+              >
+                <UndoIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {(this.isOpen(alert.status) || this.isAcked(alert.status)) && (
+            <Tooltip title="Shelve">
+              <IconButton
+                className={this.buttonClass}
+                color="default"
+                size="medium"
+                component="span"
+                onClick={() => handleShelveAlert(alert.id, 'shelve', '')}
+              >
+                <ScheduleIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {this.isShelved(alert.status) && (
+            <Tooltip title="UnShelve">
+              <IconButton
+                className={this.buttonClass}
+                color="default"
+                size="medium"
+                component="span"
+                onClick={() => handleTakeAction(alert.id, 'unshelve', '')}
+              >
+                <RestoreIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!this.isClosed(alert.status) && (
+            <Tooltip title="Close">
+              <IconButton
+                className={this.buttonClass}
+                color="default"
+                size="medium"
+                component="span"
+                onClick={() => handleTakeAction(alert.id, 'close', '')}
+              >
+                <HighlightOffIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          <Tooltip title="Delete">
+            <IconButton
+              className={this.buttonClass}
+              color="default"
+              size="medium"
+              component="span"
+              onClick={() => handleDeleteAlert(alert.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+          <div className="v-menu v-menu--inline">
+            <div className="v-menu__activator">
+              <Tooltip title="More">
+                <IconButton
+                  className={this.buttonClass}
+                  color="default"
+                  size="medium"
+                  component="span"
+                  // onClick={handleTakeAction}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
         </div>
