@@ -31,7 +31,7 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
     return (
       <div>
         {numSelected > 0 ? (
-          <div className={clsx('mb-1 v-toolbar', theme, 'v-toolbar__content alerta-toolbars alerta-toolbars-darkmode')}>
+          <div className={clsx('mb-1 v-toolbar alerta-toolbars', theme, 'v-toolbar__content')}>
             <Tooltip title="Back">
               <IconButton
                 className={clsx('v-btn v-btn--icon', theme)}
@@ -48,22 +48,18 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
             <div className="spacer" />
             <span className="subheading">{numSelected}<span className="hidden-xs-only"> Selected</span></span>
             <div className="spacer" />
-            <span className="v-tooltip v-tooltip--bottom">
-              <span>
-                <Tooltip title="Watch">
-                  <IconButton
-                    className={clsx('btn--plain v-btn v-btn--icon', theme)}
-                    aria-label="watch"
-                    color="default"
-                    size="medium"
-                    component="span"
-                    onClick={handleToggleWatch}
-                  >
-                    <VisibilityIcon fontSize="large" />
-                  </IconButton>
-                </Tooltip>
-              </span>
-            </span>
+            <Tooltip title="Watch">
+              <IconButton
+                className={clsx('btn--plain v-btn v-btn--icon', theme)}
+                aria-label="watch"
+                color="default"
+                size="medium"
+                component="span"
+                onClick={handleToggleWatch}
+              >
+                <VisibilityIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
             <span className="v-tooltip v-tooltip--bottom">
               <span>
                 <Tooltip title="Ack">
@@ -137,7 +133,7 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
                     color="default"
                     size="medium"
                     component="span"
-                  // onClick={handleClearSelected}
+                    // onClick={handleClearSelected}
                   >
                     <MoreVertIcon fontSize="large" />
                   </IconButton>

@@ -40,6 +40,7 @@ import authService from 'services/api/auth.service';
 import userService from 'services/api/user.service';
 import { IService } from 'shared/models/model-data/service.model';
 import { IGroup } from 'shared/models/model-data/group.model';
+import { AlertDetail } from 'components/alert-detail/AlertDetail';
 
 const { useEffect } = React;
 
@@ -249,7 +250,8 @@ function MainTable(props: IMainTableProps) {
     setRowSelected([]);
   };
 
-  const handleSelectRowClick = (event: React.ChangeEvent<HTMLInputElement>, alert: IAlert) => {
+  const handleSelectRowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, alert: IAlert) => {
+    event.stopPropagation();
     const selectedIndex = rowSelected.map(a => a.id).indexOf(alert.id);
     let newRowSelected: IAlert[] = [];
 
@@ -933,159 +935,182 @@ function MainTable(props: IMainTableProps) {
       .then(() => updateData(setAlertState));
   }, 200, { leading: true, trailing: false });
 
+  /* Use for Alert details */
+  const [showAlertDetail, setShowAlertDetail] = React.useState(false)
+  const [alertDetail, setAlertDetail] = React.useState({})
+
+  const handleShowAlertDetails = (alert: IAlert) => {
+    setShowAlertDetail(true);
+    setAlertDetail(alert);
+  };
+
+  const handleHiddenAlertDetails = () => {
+    setShowAlertDetail(false);
+    setAlertDetail({});
+  };
+
   return (
-    <div className="v-tabs px-1">
-      <AlertaTableToolbar
-        theme={theme}
-        numSelected={rowSelected.length}
-        handleClearSelected={handleClearSelected}
-        handleToggleWatch={handleToggleWatch}
-        handleBulkAckAlert={handleBulkAckAlert}
-        handleBulkShelveAlert={handleBulkShelveAlert}
-        handleTakeBulkAction={handleTakeBulkAction}
-        handleBulkDeleteAlert={handleBulkDeleteAlert}
-      />
-      <div className={clsx('v-tabs__bar', theme)}>
-        <div className="v-tabs__wrapper">
-          <div className="v-tabs__container v-tabs__container--grow">
-            {(environments && environments.length > 0) && (
-              <div className={classes.rootEnvTabs}>
-                <Paper className={classes.rootEnvTabs} square>
-                  <Tabs
-                    value={environment}
-                    onChange={handleChangeEnvironment}
-                    variant="fullWidth"
-                    classes={{
-                      indicator: classes.accent
-                    }}
-                    TabIndicatorProps={{
-                      style: {
-                        backgroundColor: '#ffa726',
-                        borderColor: '#ffa726'
-                      }
-                    }}
-                  >
-                    {mergeEnvironments().map((env) => env &&
-                      <Tab id={env} label={`${env} (${environmentCounts()[env] || 0})`} onClick={() => handleEnvTabChange(env)} />
-                    )}
-                  </Tabs>
-                </Paper>
-              </div>
-            )}
-            <div className="spacer" />
-            <div className={theme}>
-              <React.Fragment key="right">
-                <div className={clsx('v-btn v-btn--flat v-btn--icon filter-active', theme)}>
-                  <Button
-                    id="filter-list-btn"
-                    size="medium"
-                    onClick={toggleDrawer('right', true)}
-                  >
-                    <div className="v-btn__content">
-                      <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>filter_list</i>
+    <>
+      {showAlertDetail === false ? (
+        <div className="v-tabs px-1">
+          <AlertaTableToolbar
+            theme={theme}
+            numSelected={rowSelected.length}
+            handleClearSelected={handleClearSelected}
+            handleToggleWatch={handleToggleWatch}
+            handleBulkAckAlert={handleBulkAckAlert}
+            handleBulkShelveAlert={handleBulkShelveAlert}
+            handleTakeBulkAction={handleTakeBulkAction}
+            handleBulkDeleteAlert={handleBulkDeleteAlert}
+          />
+          <div className={clsx('v-tabs__bar', theme)}>
+            <div className="v-tabs__wrapper">
+              <div className="v-tabs__container v-tabs__container--grow">
+                {(environments && environments.length > 0) && (
+                  <div className={classes.rootEnvTabs}>
+                    <Paper className={classes.rootEnvTabs} square>
+                      <Tabs
+                        value={environment}
+                        onChange={handleChangeEnvironment}
+                        variant="fullWidth"
+                        classes={{
+                          indicator: classes.accent
+                        }}
+                        TabIndicatorProps={{
+                          style: {
+                            backgroundColor: '#ffa726',
+                            borderColor: '#ffa726'
+                          }
+                        }}
+                      >
+                        {mergeEnvironments().map((env) => env &&
+                          <Tab id={env} label={`${env} (${environmentCounts()[env] || 0})`} onClick={() => handleEnvTabChange(env)} />
+                        )}
+                      </Tabs>
+                    </Paper>
+                  </div>
+                )}
+                <div className="spacer" />
+                <div className={theme}>
+                  <React.Fragment key="right">
+                    <div className={clsx('v-btn v-btn--flat v-btn--icon filter-active', theme)}>
+                      <Button
+                        id="filter-list-btn"
+                        size="medium"
+                        onClick={toggleDrawer('right', true)}
+                      >
+                        <div className="v-btn__content">
+                          <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>filter_list</i>
+                        </div>
+                      </Button>
                     </div>
-                  </Button>
+                    <SwipeableDrawer
+                      anchor={'right'}
+                      open={filterState['right']}
+                      // onClose = true -> stop close when click
+                      onClose={toggleDrawer('right', true)}
+                      onOpen={toggleDrawer('right', true)}
+                      classes={{
+                        paperAnchorRight: classes.rootDrawer
+                      }}
+                    >
+                      {alertListEventFilter('right')}
+                    </SwipeableDrawer>
+                  </React.Fragment>
                 </div>
-                <SwipeableDrawer
-                  anchor={'right'}
-                  open={filterState['right']}
-                  // onClose = true -> stop close when click
-                  onClose={toggleDrawer('right', true)}
-                  onOpen={toggleDrawer('right', true)}
-                  classes={{
-                    paperAnchorRight: classes.rootDrawer
-                  }}
-                >
-                  {alertListEventFilter('right')}
-                </SwipeableDrawer>
-              </React.Fragment>
-            </div>
-            <div className="v-menu v-menu--inline">
-              <div className="v-menu__activator">
-                <div className={clsx('v-btn v-btn--flat v-btn--icon', theme)}>
-                  <Button
-                    id="table-func-menu-btn"
-                    size="medium"
-                    aria-controls="table-func-menu"
-                    aria-haspopup="true"
-                    // onClick={handleOpenFuncMenu}
-                  >
-                    <div className="v-btn__content">
-                      <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>more_vert</i>
+                <div className="v-menu v-menu--inline">
+                  <div className="v-menu__activator">
+                    <div className={clsx('v-btn v-btn--flat v-btn--icon', theme)}>
+                      <Button
+                        id="table-func-menu-btn"
+                        size="medium"
+                        aria-controls="table-func-menu"
+                        aria-haspopup="true"
+                        onClick={handleOpenFuncMenu}
+                      >
+                        <div className="v-btn__content">
+                          <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>more_vert</i>
+                        </div>
+                      </Button>
+                      <Menu
+                        id="table-func-menu"
+                        anchorEl={anchorElFuncMenu}
+                        keepMounted
+                        open={Boolean(anchorElFuncMenu)}
+                        onClose={handleCloseFuncMenu}
+                        PaperProps={{
+                          style: {
+                            background,
+                            color
+                          }
+                        }}
+                        className={theme}
+                      >
+                        <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Show Panel</MenuItem>
+                        <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Display density</MenuItem>
+                        <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Download as CSV</MenuItem>
+                      </Menu>
                     </div>
-                  </Button>
-                  <Menu
-                    id="table-func-menu"
-                    anchorEl={anchorElFuncMenu}
-                    keepMounted
-                    open={Boolean(anchorElFuncMenu)}
-                    onClose={handleCloseFuncMenu}
-                    PaperProps={{
-                      style: {
-                        background,
-                        color
-                      }
-                    }}
-                    className={theme}
-                  >
-                    <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Show Panel</MenuItem>
-                    <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Display density</MenuItem>
-                    <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Download as CSV</MenuItem>
-                  </Menu>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <span className="pr-2" />
-          </div>
-        </div>
-      </div>
-      <div className="v-window">
-        <div className="v-window__container">
-          <div className="v-window-item v-enter-to">
-            <div>
-              <div className="alert-table comfortable">
-                <div className="v-table__overflow">
-                  <table className={clsx('v-datatable v-table v-datatable--select-all', theme)}>
-                    <AlertaTableContent
-                      theme={theme}
-                      order={order}
-                      orderBy={orderBy}
-                      handleTableSort={handleTableSort}
-                      rowSelected={rowSelected}
-                      numSelected={rowSelected.length}
-                      handleSelectAllClick={handleSelectAllClick}
-                      handleSelectRowClick={handleSelectRowClick}
-                      alerts={alertState.alerts}
-                      searchText={searchTextFilter}
-                      basicAuthUser={basicAuthUser}
-                      handleWatchAlert={handleWatchAlert}
-                      handleUnWatchAlert={handleUnWatchAlert}
-                      handleAckAlert={handleAckAlert}
-                      handleShelveAlert={handleShelveAlert}
-                      handleDeleteAlert={handleDeleteAlert}
-                      handleTakeAction={handleTakeAction}
-                    />
-                  </table>
-                  <TablePagination
-                    rowsPerPageOptions={[5, 10, 20, 50, 100, 200]}
-                    component="div"
-                    count={alertState.total}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                    className={classes.rootColor}
-                    classes={{
-                      selectIcon: classes.rootColor
-                    }}
-                  />
-                </div>
+                <span className="pr-2" />
               </div>
             </div>
           </div>
+          <div className="v-window">
+            <div className="v-window__container">
+              <div className="v-window-item v-enter-to">
+                <div>
+                  <div className="alert-table comfortable">
+                    <div className="v-table__overflow">
+                      <table className={clsx('v-datatable v-table v-datatable--select-all', theme)}>
+                        <AlertaTableContent
+                          theme={theme}
+                          order={order}
+                          orderBy={orderBy}
+                          handleTableSort={handleTableSort}
+                          rowSelected={rowSelected}
+                          numSelected={rowSelected.length}
+                          handleSelectAllClick={handleSelectAllClick}
+                          handleSelectRowClick={handleSelectRowClick}
+                          alerts={alertState.alerts}
+                          searchText={searchTextFilter}
+                          basicAuthUser={basicAuthUser}
+                          handleWatchAlert={handleWatchAlert}
+                          handleUnWatchAlert={handleUnWatchAlert}
+                          handleAckAlert={handleAckAlert}
+                          handleShelveAlert={handleShelveAlert}
+                          handleDeleteAlert={handleDeleteAlert}
+                          handleTakeAction={handleTakeAction}
+                          handleShowAlertDetails={handleShowAlertDetails}
+                        />
+                      </table>
+                      <TablePagination
+                        rowsPerPageOptions={[5, 10, 20, 50, 100, 200]}
+                        component="div"
+                        count={alertState.total}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                        className={classes.rootColor}
+                        classes={{
+                          selectIcon: classes.rootColor
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <AlertDetail
+          handleHiddenAlertDetails={handleHiddenAlertDetails}
+        />
+      )}
+    </>
   );
 }
 

@@ -1,0 +1,35 @@
+.pre-c {
+  font-family: Consolas, Liberation Mono, Menlo, monospace;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.nav-style {
+  margin-top: 0px;
+  padding-right: 0px;
+  padding-left: 0px;
+  transform: translateY(0px);
+  background-color: rgb(238, 238, 238);
+  border-color: rgb(238, 238, 238);
+}
+
+.alerta-toolbars-details {
+
+  &.theme--dark {
+    background-color: rgb(97, 97, 97) !important;
+    border-color: rgb(97, 97, 97) !important;
+  }
+
+  &.theme-light {
+    background-color: rgb(238, 238, 238) !important;
+    border-color: rgb(238, 238, 238) !important;
+  }
+
+  .MuiSvgIcon-root {
+    font-size: 24px;
+  }
+}
+
+.h-48 {
+  height: 48px !important;
+}

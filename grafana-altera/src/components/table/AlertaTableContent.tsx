@@ -29,7 +29,7 @@ interface IAlertaTableContentProps {
   rowSelected: IAlert[];
   numSelected: number;
   handleSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, filteredData: IAlert[]) => void;
-  handleSelectRowClick: (event: React.ChangeEvent<HTMLInputElement>, alert: IAlert) => void;
+  handleSelectRowClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, alert: IAlert) => void
   alerts: IAlert[];
   searchText: string;
   basicAuthUser: string;
@@ -39,6 +39,7 @@ interface IAlertaTableContentProps {
   handleShelveAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
   handleDeleteAlert: DebouncedFunc<(alertId: string) => void>;
   handleTakeAction: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
+  handleShowAlertDetails: (alert: IAlert) => void
 }
 
 export class AlertaTableContent extends Component<IAlertaTableContentProps> {
@@ -124,7 +125,8 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
       theme, order, orderBy, handleTableSort,
       rowSelected, numSelected, handleSelectAllClick, handleSelectRowClick,
       alerts, searchText, basicAuthUser,
-      handleWatchAlert, handleUnWatchAlert, handleAckAlert, handleShelveAlert, handleDeleteAlert, handleTakeAction
+      handleWatchAlert, handleUnWatchAlert, handleAckAlert, handleShelveAlert, handleDeleteAlert, handleTakeAction,
+      handleShowAlertDetails
     } = this.props;
 
     const filteredData = alerts && alerts.filter(alert => {
@@ -185,6 +187,9 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
                 className="hover-lighten"
                 style={{ backgroundColor: this.severityColor(alert.severity) }}
                 key={alert.id}
+                tabIndex={-1}
+                role="checkbox"
+                onClick={() => handleShowAlertDetails(alert)}
               >
                 <td className="text-no-wrap">
                   <div className={clsx('v-input v-input--selection-controls v-input--checkbox v-input--hide-details', theme)}>
@@ -193,7 +198,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
                       color="default"
                       checked={isRowSelected}
                       inputProps={{ 'aria-labelledby': labelId }}
-                      onChange={(event) => handleSelectRowClick(event, alert)}
+                      onClick={(event) => handleSelectRowClick(event, alert)}
                       icon={this.renderIcon(alert.trendIndication, rowSelected)}
                       checkedIcon={<CheckBoxIcon />} />
                   </div>

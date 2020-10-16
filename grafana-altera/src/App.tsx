@@ -5,10 +5,9 @@ import { config } from '@grafana/runtime';
 
 import './App.scss';
 import { IGrafanaAlertaOptions } from './types';
-import { AlertaPanel } from './components/AlertaPanel';
+import { AlertaTable } from 'components/table/AlertaTable';
 import { THEME } from 'shared/constants/theme.constants';
 import { ThemeContext } from 'shared/contexts/ThemeContext';
-// import { AlertDetail } from 'components/alerts/alert-detail/AlertDetail';
 
 const isDarkMode = config.theme.isDark;
 
@@ -32,8 +31,11 @@ export class AppComponent extends PureComponent<IProps, IState> {
     return (
       <ThemeContext.Provider value={this.state.theme}>
         <div className={clazz}>
-          <AlertaPanel />
-          {/* <AlertDetail /> */}
+          <div className="alerts" style={{ width: '100%' }}>
+            <div className="v-tabs px-1">
+              <AlertaTable />
+            </div>
+          </div>
         </div>
       </ThemeContext.Provider>
     );

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
-import { ThemeContext } from 'shared/contexts/ThemeContext';
-
 import './AlertDetail.scss';
+import { ThemeContext } from 'shared/contexts/ThemeContext';
+import { AlertaDetailToolbar } from './AlertaDetailToolbar';
 
-interface IAlertDetailProps {}
+interface IAlertDetailProps {
+  handleHiddenAlertDetails: () => void;
+}
 
 export class AlertDetail extends Component<IAlertDetailProps, any> {
   static contextType = ThemeContext;
@@ -24,110 +26,9 @@ export class AlertDetail extends Component<IAlertDetailProps, any> {
           <div className="alert-detail">
             <div className={['v-card v-card--flat v-sheet', theme].join(' ')}>
               <div className={['v-card v-card--flat v-sheet v-sheet--tile', theme].join(' ')}>
-                <nav className={['v-toolbar v-toolbar--dense nav-style', theme].join(' ')} data-booted="true">
-                  <div className="v-toolbar__content" style={{ height: '48px' }}>
-                    <button type="button" className={['v-btn v-btn--icon', theme].join(' ')}>
-                      <div className="v-btn__content">
-                        <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')}>arrow_back</i>
-                      </div>
-                    </button>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <button disabled={true} type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--disabled v-btn--icon', theme].join(' ')}>
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')} style={{ fontSize: '20px' }}>refresh</i>
-                          </div>
-                        </button>
-                      </span>
-                    </span>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <button type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--icon', theme].join(' ')}>
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')} style={{ fontSize: '20px' }}>visibility</i>
-                          </div>
-                        </button>
-                      </span>
-                    </span>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <button type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--icon', theme].join(' ')} style={{ display: 'none' }}>
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')} style={{ fontSize: '20px' }}>visibility_off</i>
-                          </div>
-                        </button>
-                      </span>
-                    </span>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <button type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--icon', theme].join(' ')}>
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')} style={{ fontSize: '20px' }}>check</i>
-                          </div>
-                        </button>
-                      </span>
-                    </span>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <button type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--icon', theme].join(' ')} style={{ display: 'none' }}>
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')}
-                              style={{ fontSize: '20px' }}>undo</i>
-                          </div>
-                        </button>
-                      </span>
-                    </span>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <button type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--icon', theme].join(' ')}>
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')} style={{ fontSize: '20px' }}>schedule</i>
-                          </div>
-                        </button>
-                      </span>
-                    </span>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <button type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--icon', theme].join(' ')} style={{ display: 'none' }}>
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')} style={{ fontSize: '20px' }}>restore</i>
-                          </div>
-                        </button>
-                      </span>
-                    </span>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <button type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--icon', theme].join(' ')}>
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')} style={{ fontSize: '20px' }}>highlight_off</i>
-                          </div>
-                        </button>
-                      </span>
-                    </span>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <button type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--icon', theme].join(' ')}>
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')} style={{ fontSize: '20px' }}>delete</i>
-                          </div>
-                        </button>
-                      </span>
-                    </span>
-                    <span className="v-tooltip v-tooltip--bottom">
-                      <span>
-                        <div className="v-menu v-menu--inline">
-                          <div className="v-menu__activator">
-                            <button type="button" className={['btn--plain px-1 mx-0 v-btn v-btn--icon', theme].join(' ')}>
-                              <div className="v-btn__content">
-                                <i aria-hidden="true" className={['v-icon material-icons', theme].join(' ')}>more_vert</i>
-                              </div>
-                            </button>
-                          </div>
-                        </div>
-                      </span>
-                    </span>
-                  </div>
-                </nav>
+                <AlertaDetailToolbar
+                  theme={theme}
+                />
                 <div className={['v-card v-card--flat v-sheet', theme].join(' ')}>
                   <div className="v-tabs" data-booted="true">
                     <div className={['v-tabs__bar', theme].join(' ')}>
