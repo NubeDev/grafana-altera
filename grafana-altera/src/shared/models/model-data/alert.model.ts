@@ -3,7 +3,7 @@ import { IHistory } from './history.model';
 
 export interface IAlert {
   attributes: IAttributes;
-  correlate: any[];
+  correlate: string[];
   createTime: string;
   customer: any;
   duplicateCount: number;

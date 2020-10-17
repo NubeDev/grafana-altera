@@ -26,10 +26,17 @@
   }
 
   .MuiSvgIcon-root {
-    font-size: 24px;
+    font-size: 22px;
   }
 }
 
 .h-48 {
   height: 48px !important;
+}
+
+.v-tabs__container--grow {
+  .MuiTab-wrapper {
+    flex-direction: unset !important;
+    align-items: unset !important;
+  }
 }

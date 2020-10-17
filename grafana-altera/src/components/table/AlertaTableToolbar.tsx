@@ -60,70 +60,54 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
                 <VisibilityIcon fontSize="large" />
               </IconButton>
             </Tooltip>
-            <span className="v-tooltip v-tooltip--bottom">
-              <span>
-                <Tooltip title="Ack">
-                  <IconButton
-                    className={clsx('btn--plain v-btn v-btn--icon', theme)}
-                    aria-label="ack"
-                    color="default"
-                    size="medium"
-                    component="span"
-                    onClick={handleBulkAckAlert}
-                  >
-                    <CheckIcon fontSize="large" />
-                  </IconButton>
-                </Tooltip>
-              </span>
-            </span>
-            <span className="v-tooltip v-tooltip--bottom">
-              <span>
-                <Tooltip title="Shelve">
-                  <IconButton
-                    className={clsx('btn--plain v-btn v-btn--icon', theme)}
-                    aria-label="shelve"
-                    color="default"
-                    size="medium"
-                    component="span"
-                    onClick={handleBulkShelveAlert}
-                  >
-                    <ScheduleIcon fontSize="large" />
-                  </IconButton>
-                </Tooltip>
-              </span>
-            </span>
-            <span className="v-tooltip v-tooltip--bottom">
-              <span>
-                <Tooltip title="Close">
-                  <IconButton
-                    className={clsx('btn--plain v-btn v-btn--icon', theme)}
-                    aria-label="close"
-                    color="default"
-                    size="medium"
-                    component="span"
-                    onClick={() => handleTakeBulkAction('close')}
-                  >
-                    <HighlightOffIcon fontSize="large" />
-                  </IconButton>
-                </Tooltip>
-              </span>
-            </span>
-            <span className="v-tooltip v-tooltip--bottom">
-              <span>
-                <Tooltip title="Delete">
-                  <IconButton
-                    className={clsx('btn--plain v-btn v-btn--icon', theme)}
-                    aria-label="delete"
-                    color="default"
-                    size="medium"
-                    component="span"
-                    onClick={handleBulkDeleteAlert}
-                  >
-                    <DeleteIcon fontSize="large" />
-                  </IconButton>
-                </Tooltip>
-              </span>
-            </span>
+            <Tooltip title="Ack">
+              <IconButton
+                className={clsx('btn--plain v-btn v-btn--icon', theme)}
+                aria-label="ack"
+                color="default"
+                size="medium"
+                component="span"
+                onClick={handleBulkAckAlert}
+              >
+                <CheckIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Shelve">
+              <IconButton
+                className={clsx('btn--plain v-btn v-btn--icon', theme)}
+                aria-label="shelve"
+                color="default"
+                size="medium"
+                component="span"
+                onClick={handleBulkShelveAlert}
+              >
+                <ScheduleIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Close">
+              <IconButton
+                className={clsx('btn--plain v-btn v-btn--icon', theme)}
+                aria-label="close"
+                color="default"
+                size="medium"
+                component="span"
+                onClick={() => handleTakeBulkAction('close')}
+              >
+                <HighlightOffIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete">
+              <IconButton
+                className={clsx('btn--plain v-btn v-btn--icon', theme)}
+                aria-label="delete"
+                color="default"
+                size="medium"
+                component="span"
+                onClick={handleBulkDeleteAlert}
+              >
+                <DeleteIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
             <div className="v-menu v-menu--inline">
               <div className="v-menu__activator">
                 <Tooltip title="More">

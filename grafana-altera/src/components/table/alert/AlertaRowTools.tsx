@@ -119,7 +119,7 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
             </Tooltip>
           )}
           {this.isWatched(alert.tags, basicAuthUser) && (
-            <Tooltip title="UnWatch">
+            <Tooltip title="Unwatch">
               <IconButton
                 className={this.buttonClass}
                 color="default"
@@ -145,7 +145,7 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
             </Tooltip>
           )}
           {this.isAcked(alert.status) && (
-            <Tooltip title="UnAck">
+            <Tooltip title="Unack">
               <IconButton
                 className={this.buttonClass}
                 color="default"
@@ -171,7 +171,7 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
             </Tooltip>
           )}
           {this.isShelved(alert.status) && (
-            <Tooltip title="UnShelve">
+            <Tooltip title="Unshelve">
               <IconButton
                 className={this.buttonClass}
                 color="default"

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce';
 import clsx from 'clsx';
 import moment from 'moment';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -251,6 +251,7 @@ function MainTable(props: IMainTableProps) {
   };
 
   const handleSelectRowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, alert: IAlert) => {
+    // Stop TableRow click event & checkbox click event conflict
     event.stopPropagation();
     const selectedIndex = rowSelected.map(a => a.id).indexOf(alert.id);
     let newRowSelected: IAlert[] = [];
@@ -937,7 +938,43 @@ function MainTable(props: IMainTableProps) {
 
   /* Use for Alert details */
   const [showAlertDetail, setShowAlertDetail] = React.useState(false)
-  const [alertDetail, setAlertDetail] = React.useState({})
+
+  const initAlertDetail: IAlert = {
+    attributes: {
+      isOutOfHours: false,
+      region: '',
+      runBookUrl: ''
+    },
+    correlate: [],
+    createTime: '',
+    customer: null,
+    duplicateCount: 0,
+    environment: '',
+    event: '',
+    group: '',
+    history: [],
+    href: '',
+    id: '',
+    lastReceiveId: '',
+    lastReceiveTime: '',
+    origin: '',
+    previousSeverity: '',
+    rawData: null,
+    receiveTime: '',
+    repeat: false,
+    resource: '',
+    service: [],
+    severity: '',
+    status: '',
+    tags: [],
+    text: '',
+    timeout: 0,
+    trendIndication: '',
+    type: '',
+    updateTime: '',
+    value: '',
+  };
+  const [alertDetail, setAlertDetail] = React.useState(initAlertDetail)
 
   const handleShowAlertDetails = (alert: IAlert) => {
     setShowAlertDetail(true);
@@ -946,8 +983,17 @@ function MainTable(props: IMainTableProps) {
 
   const handleHiddenAlertDetails = () => {
     setShowAlertDetail(false);
-    setAlertDetail({});
+    setAlertDetail(initAlertDetail);
   };
+
+  const handleDeleteAlertDetails = debounce((alertId: string) => {
+    confirm('Are you sure you want to delete this item?') &&
+      alertService.deleteAlert(alertId)
+        .then(() => {
+          updateData(setAlertState);
+          handleHiddenAlertDetails();
+        });
+  }, 200, { leading: true, trailing: false });
 
   return (
     <>
@@ -1107,7 +1153,11 @@ function MainTable(props: IMainTableProps) {
         </div>
       ) : (
         <AlertDetail
+          theme={theme}
+          basicAuthUser={basicAuthUser}
           handleHiddenAlertDetails={handleHiddenAlertDetails}
+          alertDetail={alertDetail}
+          handleDeleteAlertDetails={handleDeleteAlertDetails}
         />
       )}
     </>
