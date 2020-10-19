@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import config from '../../../shared/config/config.json';
 
@@ -6,6 +7,7 @@ interface IAlertaDataCellProps {
   cellClass: any;
   textClass: any;
   text: any;
+  tooltip: string;
 }
 
 export class AlertaDataCell extends Component<IAlertaDataCellProps> {
@@ -25,12 +27,22 @@ export class AlertaDataCell extends Component<IAlertaDataCellProps> {
   }
 
   render() {
-    const { textClass, text } = this.props;
+    const { textClass, text, tooltip } = this.props;
 
     return (
-      <td className={this.cellClass}>
-        <span className={textClass}>{text}</span>
-      </td>
+      <>
+        {tooltip !== '' ? (
+          <Tooltip title={tooltip} placement="top">
+            <td className={this.cellClass}>
+              <span className={textClass}>{text}</span>
+            </td>
+          </Tooltip>
+        ) : (
+          <td className={this.cellClass}>
+            <span className={textClass}>{text}</span>
+          </td>
+        )}
+      </>
     );
   }
 }

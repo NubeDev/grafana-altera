@@ -18,7 +18,6 @@ import { AlertaDataCell } from './alert/AlertaDataCell';
 import { AlertaTruncateCell } from './alert/AlertaTruncateCell';
 import { TrendIndication } from 'shared/constants/trend-indication.enum';
 
-
 const severityColors: any = config.alarm_model.colors.severity;
 
 interface IAlertaTableContentProps {
@@ -86,6 +85,8 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
         const hours = Math.floor(duration.as('h'));
         return `${hours}:${minutes}:${seconds}`;
       }
+    } else if (type === 'tooltip') {
+      return moment(dateTime).utcOffset('+00:00').format('YYYY/MM/DD HH:mm:ss.SSS +00:00');
     }
     return dateTime;
   }
@@ -204,17 +205,17 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
                   </div>
                 </td>
 
-                <AlertaDataCell cellClass="" textClass={`label ${'label-' + alert.severity.toLowerCase()} text-capitalize`} text={alert.severity} />
-                <AlertaDataCell cellClass="" textClass="label text-capitalize" text={alert.status} />
-                <AlertaDataCell cellClass="" textClass="" text={this.formatDateTime('mediumDate', alert.lastReceiveTime)} />
-                <AlertaDataCell cellClass="" textClass="text-xs-right" text={this.formatDateTime('hhmmss', this.timeoutLeft(alert))} />
-                <AlertaDataCell cellClass="" textClass="" text={alert.duplicateCount} />
-                <AlertaDataCell cellClass="" textClass="" text={alert.customer} />
-                <AlertaDataCell cellClass="" textClass="" text={alert.environment} />
-                <AlertaDataCell cellClass="" textClass="" text={alert.service.join(', ')} />
-                <AlertaDataCell cellClass="" textClass="" text={alert.resource} />
-                <AlertaDataCell cellClass="" textClass="" text={alert.event} />
-                <AlertaDataCell cellClass="" textClass="" text={alert.value} />
+                <AlertaDataCell tooltip="" cellClass="" textClass={`label ${'label-' + alert.severity.toLowerCase()} text-capitalize`} text={alert.severity} />
+                <AlertaDataCell tooltip="" cellClass="" textClass="label text-capitalize" text={alert.status} />
+                <AlertaDataCell tooltip={this.formatDateTime('tooltip', alert.lastReceiveTime)} cellClass="" textClass="" text={this.formatDateTime('mediumDate', alert.lastReceiveTime)} />
+                <AlertaDataCell tooltip="" cellClass="" textClass="text-xs-right" text={this.formatDateTime('hhmmss', this.timeoutLeft(alert))} />
+                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.duplicateCount} />
+                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.customer} />
+                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.environment} />
+                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.service && alert.service.join(', ')} />
+                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.resource} />
+                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.event} />
+                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.value} />
                 <AlertaTruncateCell cellClass="" textClass="" text={alert.text} />
 
                 <AlertaRowTools

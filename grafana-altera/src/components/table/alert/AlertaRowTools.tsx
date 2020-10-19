@@ -99,7 +99,10 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
                 color="default"
                 size="medium"
                 component="span"
-                onClick={() => handleTakeAction(alert.id, 'open', '')}
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  event.stopPropagation();
+                  handleTakeAction(alert.id, 'open', '');
+                }}
               >
                 <RefreshIcon />
               </IconButton>
@@ -112,7 +115,10 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
                 color="default"
                 size="medium"
                 component="span"
-                onClick={() => handleWatchAlert(basicAuthUser, alert.id)}
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  event.stopPropagation();
+                  handleWatchAlert(basicAuthUser, alert.id);
+                }}
               >
                 <VisibilityIcon />
               </IconButton>
@@ -125,7 +131,10 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
                 color="default"
                 size="medium"
                 component="span"
-                onClick={() => handleUnWatchAlert(basicAuthUser, alert.id)}
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  event.stopPropagation();
+                  handleUnWatchAlert(basicAuthUser, alert.id);
+                }}
               >
                 <VisibilityOffIcon />
               </IconButton>
@@ -138,7 +147,10 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
                 color="default"
                 size="medium"
                 component="span"
-                onClick={() => handleAckAlert(alert.id, 'ack', '')}
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  event.stopPropagation();
+                  handleAckAlert(alert.id, 'ack', '');
+                }}
               >
                 <CheckIcon />
               </IconButton>
@@ -151,7 +163,10 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
                 color="default"
                 size="medium"
                 component="span"
-                onClick={() => handleTakeAction(alert.id, 'unack', '')}
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  event.stopPropagation();
+                  handleTakeAction(alert.id, 'unack', '');
+                }}
               >
                 <UndoIcon />
               </IconButton>
@@ -164,7 +179,10 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
                 color="default"
                 size="medium"
                 component="span"
-                onClick={() => handleShelveAlert(alert.id, 'shelve', '')}
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  event.stopPropagation();
+                  handleShelveAlert(alert.id, 'shelve', '');
+                }}
               >
                 <ScheduleIcon />
               </IconButton>
@@ -177,7 +195,10 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
                 color="default"
                 size="medium"
                 component="span"
-                onClick={() => handleTakeAction(alert.id, 'unshelve', '')}
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  event.stopPropagation();
+                  handleTakeAction(alert.id, 'unshelve', '');
+                }}
               >
                 <RestoreIcon />
               </IconButton>
@@ -190,7 +211,10 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
                 color="default"
                 size="medium"
                 component="span"
-                onClick={() => handleTakeAction(alert.id, 'close', '')}
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  event.stopPropagation();
+                  handleTakeAction(alert.id, 'close', '');
+                }}
               >
                 <HighlightOffIcon />
               </IconButton>
@@ -202,7 +226,10 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
               color="default"
               size="medium"
               component="span"
-              onClick={() => handleDeleteAlert(alert.id)}
+              onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                event.stopPropagation();
+                handleDeleteAlert(alert.id);
+              }}
             >
               <DeleteIcon />
             </IconButton>

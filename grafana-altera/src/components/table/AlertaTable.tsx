@@ -938,52 +938,16 @@ function MainTable(props: IMainTableProps) {
 
   /* Use for Alert details */
   const [showAlertDetail, setShowAlertDetail] = React.useState(false)
-
-  const initAlertDetail: IAlert = {
-    attributes: {
-      isOutOfHours: false,
-      region: '',
-      runBookUrl: ''
-    },
-    correlate: [],
-    createTime: '',
-    customer: null,
-    duplicateCount: 0,
-    environment: '',
-    event: '',
-    group: '',
-    history: [],
-    href: '',
-    id: '',
-    lastReceiveId: '',
-    lastReceiveTime: '',
-    origin: '',
-    previousSeverity: '',
-    rawData: null,
-    receiveTime: '',
-    repeat: false,
-    resource: '',
-    service: [],
-    severity: '',
-    status: '',
-    tags: [],
-    text: '',
-    timeout: 0,
-    trendIndication: '',
-    type: '',
-    updateTime: '',
-    value: '',
-  };
-  const [alertDetail, setAlertDetail] = React.useState(initAlertDetail)
+  const [alertDetailId, setAlertDetailId] = React.useState('');
 
   const handleShowAlertDetails = (alert: IAlert) => {
     setShowAlertDetail(true);
-    setAlertDetail(alert);
+    setAlertDetailId(alert.id);
   };
 
   const handleHiddenAlertDetails = () => {
     setShowAlertDetail(false);
-    setAlertDetail(initAlertDetail);
+    setAlertDetailId('');
   };
 
   const handleDeleteAlertDetails = debounce((alertId: string) => {
@@ -1156,7 +1120,7 @@ function MainTable(props: IMainTableProps) {
           theme={theme}
           basicAuthUser={basicAuthUser}
           handleHiddenAlertDetails={handleHiddenAlertDetails}
-          alertDetail={alertDetail}
+          alertDetailId={alertDetailId}
           handleDeleteAlertDetails={handleDeleteAlertDetails}
         />
       )}

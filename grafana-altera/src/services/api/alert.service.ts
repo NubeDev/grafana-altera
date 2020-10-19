@@ -34,6 +34,9 @@ const actions = {
   deleteAlert(alertId: string) {
     return api.delete(`/api/alert/${alertId}`);
   },
+  getAlert(alertId: string) {
+    return api.get(`/api/alert/${alertId}`);
+  }
 }
 
 export default {
@@ -108,5 +111,12 @@ export default {
   },
   deleteAlert(alertId: string) {
     return actions.deleteAlert(alertId);
-  }
+  },
+  getAlert(alertId: string) {
+    return actions.getAlert(alertId)
+      .then(({ alert }) => {
+        return alert;
+      })
+      .catch(error => console.log(error));
+  },
 }

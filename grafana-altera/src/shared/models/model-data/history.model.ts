@@ -4,6 +4,7 @@ export interface IHistory {
   id: string;
   severity: string;
   status: string;
+  timeout: any;
   text: any;
   type: string;
   updateTime: string;

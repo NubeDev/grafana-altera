@@ -24,6 +24,7 @@ interface IAlertaDetailToolbarProps {
   handleHiddenAlertDetails: () => void;
   alertDetail: IAlert;
   handleDeleteAlertDetails: DebouncedFunc<(alertId: string) => void>;
+  handleWatchAlert: DebouncedFunc<(username: string, alertId: string) => void>;
 }
 
 export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
@@ -55,6 +56,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
       alertDetail,
       handleHiddenAlertDetails,
       handleDeleteAlertDetails,
+      handleWatchAlert,
     } = this.props;
 
     return (
@@ -93,7 +95,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
                 color="default"
                 size="medium"
                 component="span"
-              // onClick={handleWatchAlert(item.id)}
+                onClick={() => handleWatchAlert(basicAuthUser, alertDetail.id)}
               >
                 <VisibilityIcon />
               </IconButton>

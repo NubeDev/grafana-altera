@@ -35,8 +35,17 @@
 }
 
 .v-tabs__container--grow {
-  .MuiTab-wrapper {
-    flex-direction: unset !important;
-    align-items: unset !important;
+  &.height-unset {
+    height: unset !important;
+  }
+}
+
+.v-table {
+  &.theme--dark {
+    border-bottom: 1px solid hsla(0, 0%, 100%, .12) !important;
+  }
+
+  &.theme-light {
+    border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
   }
 }
