@@ -40,6 +40,12 @@ interface IAlertDetailContentProps {
   handleDeleteAlertDetails: DebouncedFunc<(alertId: string) => void>;
 }
 
+interface IAlertDataCellProps {
+  label: string;
+  value: any;
+  clazz: string;
+}
+
 interface ITabPanelProps {
   children?: React.ReactNode;
   index: any;
@@ -67,6 +73,25 @@ function TabPanel(props: ITabPanelProps) {
       {...other}
     >
       {value === index && (children)}
+    </div>
+  );
+}
+
+function AlertDataCell(props: IAlertDataCellProps) {
+  const { clazz, label, value } = props;
+
+  return (
+    <div className="flex xs12 ma-1">
+      <div className="d-flex align-top">
+        <div className="flex xs3 text-xs-left">
+          <div className="grey--text">{label}</div>
+        </div>
+        <div className="flex xs6 text-xs-left">
+          <div>
+            <span className={clazz}>{value}</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -318,34 +343,8 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                       <div className="v-window-item">
                         <div className={clsx('v-card v-card--flat v-sheet', theme)}>
                           <div className="v-card__text">
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">
-                                    Alert ID
-                                  </div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>
-                                    <span className="pre-c">{alertDetail.id}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">
-                                    Last Receive Alert ID
-                                  </div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>
-                                    <span className="pre-c">{alertDetail.lastReceiveId}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <AlertDataCell label="Alert ID" value={alertDetail.id} clazz="pre-c" />
+                            <AlertDataCell label="Last Receive Alert ID" value={alertDetail.lastReceiveId} clazz="pre-c" />
                             <div className="flex xs12 ma-1">
                               <div className="d-flex align-top">
                                 <div className="flex xs3 text-xs-left">
@@ -397,66 +396,12 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                                 </div>
                               </div>
                             </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Service</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.service && alertDetail.service.join(', ')}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Environment</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.environment}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Resource</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.resource}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Event</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.event}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Correlate</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.correlate && alertDetail.correlate.join(', ')}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Group</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.group}</div>
-                                </div>
-                              </div>
-                            </div>
+                            <AlertDataCell label="Service" value={alertDetail.service && alertDetail.service.join(', ')} clazz="" />
+                            <AlertDataCell label="Environment" value={alertDetail.environment} clazz="" />
+                            <AlertDataCell label="Resource" value={alertDetail.resource} clazz="" />
+                            <AlertDataCell label="Event" value={alertDetail.event} clazz="" />
+                            <AlertDataCell label="Correlate" value={alertDetail.correlate && alertDetail.correlate.join(', ')} clazz="" />
+                            <AlertDataCell label="Group" value={alertDetail.group} clazz="" />
                             <div className="flex xs12 ma-1">
                               <div className="d-flex align-top">
                                 <div className="flex xs3 text-xs-left">
@@ -504,94 +449,14 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                                 </div>
                               </div>
                             )}
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Value</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.value}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Text</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>
-                                    <span>{alertDetail.text}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Trend Indication</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>
-                                    <span className="label">{splitCaps(alertDetail.trendIndication)}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Timeout</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.timeout}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Type</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>
-                                    <span className="label">{splitCaps(alertDetail.type)}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Duplicate count</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.duplicateCount}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Repeat</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>
-                                    <span className="label">{capitalize(alertDetail.repeat)}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Origin</div>
-                                </div>
-                                <div className="flex xs6 text-xs-left">
-                                  <div>{alertDetail.origin}</div>
-                                </div>
-                              </div>
-                            </div>
+                            <AlertDataCell label="Value" value={alertDetail.value} clazz="" />
+                            <AlertDataCell label="Text" value={alertDetail.text} clazz="" />
+                            <AlertDataCell label="Trend Indication" value={splitCaps(alertDetail.trendIndication)} clazz="label" />
+                            <AlertDataCell label="Timeout" value={alertDetail.timeout} clazz="" />
+                            <AlertDataCell label="Type" value={splitCaps(alertDetail.type)} clazz="label" />
+                            <AlertDataCell label="Duplicate count" value={alertDetail.duplicateCount} clazz="" />
+                            <AlertDataCell label="Repeat" value={capitalize(alertDetail.repeat)} clazz="label" />
+                            <AlertDataCell label="Origin" value={alertDetail.origin} clazz="" />
                             <div className="flex xs12 ma-1">
                               <div className="d-flex align-top">
                                 <div className="flex xs3 text-xs-left">
@@ -615,16 +480,7 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                             <div>
                               {Object.entries(alertDetail.attributes).map(([key, value]) => {
                                 return (
-                                  <div className="flex xs12 ma-1" key={key}>
-                                    <div className="d-flex align-top">
-                                      <div className="flex xs3 text-xs-left">
-                                        <div className="grey--text">{splitCaps(key)}</div>
-                                      </div>
-                                      <div className="flex xs6 text-xs-left">
-                                        <div>{`${value}`}</div>
-                                      </div>
-                                    </div>
-                                  </div>
+                                  <AlertDataCell key={key} label={splitCaps(key)} value={`${value}`} clazz="" />
                                 );
                               })}
                             </div>
