@@ -1118,6 +1118,8 @@ function MainTable(props: IMainTableProps) {
       ) : (
         <AlertDetail
           theme={theme}
+          ackTimeout={ackTimeout}
+          shelveTimeout={shelveTimeout}
           basicAuthUser={basicAuthUser}
           handleHiddenAlertDetails={handleHiddenAlertDetails}
           alertDetailId={alertDetailId}

@@ -25,6 +25,10 @@ interface IAlertaDetailToolbarProps {
   alertDetail: IAlert;
   handleDeleteAlertDetails: DebouncedFunc<(alertId: string) => void>;
   handleWatchAlert: DebouncedFunc<(username: string, alertId: string) => void>;
+  handleUnwatchAlert: DebouncedFunc<(username: string, alertId: string) => void>;
+  handleAckAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
+  handleShelveAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
+  handleTakeAction: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
 }
 
 export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
@@ -57,6 +61,10 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
       handleHiddenAlertDetails,
       handleDeleteAlertDetails,
       handleWatchAlert,
+      handleUnwatchAlert,
+      handleAckAlert,
+      handleShelveAlert,
+      handleTakeAction
     } = this.props;
 
     return (
@@ -82,7 +90,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
               size="medium"
               component="span"
               disabled={!this.isAcked(alertDetail.status) && !this.isClosed(alertDetail.status)}
-            // onClick={handleTakeAction(item.id, 'open')}
+              onClick={() => handleTakeAction(alertDetail.id, 'open', '')}
             >
               <RefreshIcon />
             </IconButton>
@@ -109,7 +117,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
                 color="default"
                 size="medium"
                 component="span"
-              // onClick={handleUnwatchAlert(item.id)}
+                onClick={() => handleUnwatchAlert(basicAuthUser, alertDetail.id)}
               >
                 <VisibilityOffIcon />
               </IconButton>
@@ -123,7 +131,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
                 color="default"
                 size="medium"
                 component="span"
-                // onClick={handleAckAlert(item.id)}
+                onClick={() => handleAckAlert(alertDetail.id, 'ack', '')}
                 disabled={!this.isOpen(alertDetail.status)}
               >
                 <CheckIcon />
@@ -138,7 +146,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
                 color="default"
                 size="medium"
                 component="span"
-              // onClick={handleTakeAction(item.id, 'unack')}
+                onClick={() => handleTakeAction(alertDetail.id, 'unack', '')}
               >
                 <UndoIcon />
               </IconButton>
@@ -152,7 +160,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
                 color="default"
                 size="medium"
                 component="span"
-                // onClick={handleShelveAlert(item.id)}
+                onClick={() => handleShelveAlert(alertDetail.id, 'shelve', '')}
                 disabled={!this.isOpen(alertDetail.status) && !this.isAcked(alertDetail.status)}
               >
                 <ScheduleIcon />
@@ -167,7 +175,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
                 color="default"
                 size="medium"
                 component="span"
-              // onClick={handleTakeAction(item.id, 'unshelve')}
+                onClick={() => handleTakeAction(alertDetail.id, 'unshelve', '')}
               >
                 <RestoreIcon />
               </IconButton>
@@ -180,7 +188,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
               color="default"
               size="medium"
               component="span"
-              // onClick={handleTakeAction(item.id, 'close')}
+              onClick={() => handleTakeAction(alertDetail.id, 'close', '')}
               disabled={this.isClosed(alertDetail.status)}
             >
               <HighlightOffIcon />

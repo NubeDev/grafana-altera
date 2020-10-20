@@ -23,6 +23,8 @@ import alertService from 'services/api/alert.service';
 interface IAlertDetailProps {
   theme: any;
   basicAuthUser: string;
+  ackTimeout: number;
+  shelveTimeout: number;
   handleHiddenAlertDetails: () => void;
   alertDetailId: string;
   handleDeleteAlertDetails: DebouncedFunc<(alertId: string) => void>;
@@ -31,6 +33,8 @@ interface IAlertDetailProps {
 interface IAlertDetailContentProps {
   theme: any;
   basicAuthUser: string;
+  ackTimeout: number;
+  shelveTimeout: number;
   handleHiddenAlertDetails: () => void;
   alertDetailId: string;
   handleDeleteAlertDetails: DebouncedFunc<(alertId: string) => void>;
@@ -71,6 +75,8 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
   // Get value from props
   const { theme,
     basicAuthUser,
+    ackTimeout,
+    shelveTimeout,
     alertDetailId,
     handleHiddenAlertDetails,
     handleDeleteAlertDetails,
@@ -215,6 +221,26 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
       .then(() => updateData(alertId, setAlertDetail));
   }, 200, { leading: true, trailing: false });
 
+  const handleUnwatchAlert = debounce((username: string, alertId: string) => {
+    alertService.unWatchAlert(username, alertId)
+      .then(() => updateData(alertId, setAlertDetail));
+  }, 200, { leading: true, trailing: false });
+
+  const handleAckAlert = debounce((alertId: string, action: string, text: string) => {
+    alertService.takeAction(alertId, action, text, ackTimeout)
+      .then(() => updateData(alertId, setAlertDetail));
+  }, 200, { leading: true, trailing: false });
+
+  const handleShelveAlert = debounce((alertId: string, action: string, text: string) => {
+    alertService.takeAction(alertId, action, text, shelveTimeout)
+      .then(() => updateData(alertId, setAlertDetail));
+  }, 200, { leading: true, trailing: false });
+
+  const handleTakeAction = debounce((alertId: string, action: string, text: string) => {
+    alertService.takeAction(alertId, action, text)
+      .then(() => updateData(alertId, setAlertDetail));
+  }, 200, { leading: true, trailing: false });
+
   return (
     <>
       {alertDetail.id === '' ? '' : (
@@ -227,8 +253,12 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
               handleHiddenAlertDetails={handleHiddenAlertDetails}
               handleDeleteAlertDetails={handleDeleteAlertDetails}
               handleWatchAlert={handleWatchAlert}
+              handleUnwatchAlert={handleUnwatchAlert}
+              handleAckAlert={handleAckAlert}
+              handleShelveAlert={handleShelveAlert}
+              handleTakeAction={handleTakeAction}
             />
-            <div className={clsx('v-card v-card--flat v-sheet', theme)}>
+            <div className={clsx('v-card v-card--flat v-sheet v-sheet-cus', theme)}>
               <div className="v-tabs" data-booted="true">
                 <div className={clsx('v-tabs__bar', theme)}>
                   <div className="v-tabs__wrapper">
@@ -611,6 +641,7 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                     <TabPanel value={tabValue} index={2}>
                       <AlertData
                         theme={theme}
+                        alertDetail={alertDetail}
                       />
                     </TabPanel>
                   </div>
@@ -657,6 +688,8 @@ export class AlertDetail extends Component<IAlertDetailProps, any> {
   render() {
     const { theme,
       basicAuthUser,
+      ackTimeout,
+      shelveTimeout,
       alertDetailId,
       handleHiddenAlertDetails,
       handleDeleteAlertDetails,
@@ -675,6 +708,8 @@ export class AlertDetail extends Component<IAlertDetailProps, any> {
             <AlertDetailContent
               theme={theme}
               basicAuthUser={basicAuthUser}
+              ackTimeout={ackTimeout}
+              shelveTimeout={shelveTimeout}
               alertDetailId={alertDetailId}
               handleHiddenAlertDetails={handleHiddenAlertDetails}
               handleDeleteAlertDetails={handleDeleteAlertDetails}
