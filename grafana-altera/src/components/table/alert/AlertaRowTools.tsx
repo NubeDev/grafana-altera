@@ -242,7 +242,6 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
                   color="default"
                   size="medium"
                   component="span"
-                  // onClick={handleTakeAction}
                 >
                   <MoreVertIcon />
                 </IconButton>

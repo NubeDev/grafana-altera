@@ -24,8 +24,13 @@ interface IAlertaTableToolbarProps {
 export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
 
   render() {
-    const { theme, numSelected, handleClearSelected, handleToggleWatch, handleBulkAckAlert,
-      handleBulkShelveAlert, handleTakeBulkAction, handleBulkDeleteAlert
+    const { theme, numSelected,
+      handleClearSelected,
+      handleToggleWatch,
+      handleBulkAckAlert,
+      handleBulkShelveAlert,
+      handleTakeBulkAction,
+      handleBulkDeleteAlert
     } = this.props;
 
     return (
@@ -117,7 +122,6 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
                     color="default"
                     size="medium"
                     component="span"
-                    // onClick={handleClearSelected}
                   >
                     <MoreVertIcon fontSize="large" />
                   </IconButton>
@@ -127,8 +131,8 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
             <div className="spacer" />
           </div>
         ) : (
-            ''
-          )}
+          ''
+        )}
       </div>
     );
   }
