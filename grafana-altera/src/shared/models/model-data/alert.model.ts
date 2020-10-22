@@ -4,7 +4,7 @@ import { IHistory } from './history.model';
 export interface IAlert {
   attributes: IAttributes;
   correlate: string[];
-  createTime: string;
+  createTime: any;
   customer: any;
   duplicateCount: number;
   environment: string;
@@ -29,6 +29,6 @@ export interface IAlert {
   timeout: number;
   trendIndication: string;
   type: string;
-  updateTime: string;
+  updateTime: any;
   value: string;
 }

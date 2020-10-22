@@ -15,10 +15,13 @@ import './AlertDetail.scss';
 import config from '../../shared/config/config.json';
 import { AlertaDetailToolbar } from './AlertaDetailToolbar';
 import { IAlert } from 'shared/models/model-data/alert.model';
+import { INote } from 'shared/models/model-data/note.model';
 import { AlertHistory } from './alert-history/AlertHistory';
 import { AlertData } from './alert-data/AlertData';
+import { AlertaDetailActions } from './AlertaDetailActions';
 import { THEME } from 'shared/constants/theme.constants';
 import alertService from 'services/api/alert.service';
+import { Status } from 'shared/constants/status.enum';
 
 interface IAlertDetailProps {
   theme: any;
@@ -43,7 +46,16 @@ interface IAlertDetailContentProps {
 interface IAlertDataCellProps {
   label: string;
   value: any;
-  clazz: string;
+  timeAgo?: any;
+  clazz?: string;
+}
+
+interface IAlertNoteProps {
+  theme: any;
+  type: string;
+  icon: string;
+  note: INote;
+  onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
 }
 
 interface ITabPanelProps {
@@ -52,11 +64,20 @@ interface ITabPanelProps {
   value: any;
 }
 
-function updateData(alertId: string, setAlertDetail: React.Dispatch<React.SetStateAction<IAlert>>) {
+function getAlert(alertId: string, setAlertDetail: React.Dispatch<React.SetStateAction<IAlert>>) {
   alertService.getAlert(alertId)
     .then(res => {
       if (res) {
         setAlertDetail(res);
+      }
+    });
+}
+
+function getNotes(alertId: string, setNotes: React.Dispatch<React.SetStateAction<INote[]>>) {
+  alertService.getNotes(alertId)
+    .then(res => {
+      if (res) {
+        setNotes(res);
       }
     });
 }
@@ -77,6 +98,38 @@ function TabPanel(props: ITabPanelProps) {
   );
 }
 
+function AlertNote(props: IAlertNoteProps) {
+  const { theme, type, icon, note, onClick } = props;
+
+  return (
+    <div className={clsx('v-alert ma-1', type)}>
+      <i aria-hidden="true" className={clsx('v-icon material-icons', theme, 'v-alert__icon')}>{icon}</i>
+      <div>
+        <b>{note.user || 'Anonymous'}</b> added note on
+        {note.updateTime ? (
+          <span>
+            <b>
+              <span className="text-no-wrap"> {moment(note.updateTime).format(config.dates.longDate)}</span>
+            </b> ({moment(String(note.updateTime)).fromNow()})
+            <br />
+          </span>
+        ) : (
+          <span>
+            <b>
+              <span className="text-no-wrap"> {moment(note.createTime).format(config.dates.longDate)}</span>
+            </b> ({moment(String(note.createTime)).fromNow()})
+            <br />
+          </span>
+          )}
+        <i>{note.text}</i>
+      </div>
+      <button className="v-alert__dismissible" onClick={onClick}>
+        <i aria-hidden="true" className={clsx('v-icon v-icon--right material-icons', theme)}>cancel</i>
+      </button>
+    </div>
+  );
+}
+
 function AlertDataCell(props: IAlertDataCellProps) {
   const { clazz, label, value } = props;
 
@@ -89,6 +142,30 @@ function AlertDataCell(props: IAlertDataCellProps) {
         <div className="flex xs6 text-xs-left">
           <div>
             <span className={clazz}>{value}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AlertDataCellForTime(props: IAlertDataCellProps) {
+  const { label, value, timeAgo } = props;
+
+  return (
+    <div className="flex xs12 ma-1">
+      <div className="d-flex align-top">
+        <div className="flex xs3 text-xs-left">
+          <div className="grey--text">{label}</div>
+        </div>
+        <div className="flex xs9 text-xs-left">
+          <div>
+            <span className="v-tooltip v-tooltip--top">
+              <span>
+                <span className="text-no-wrap">{value} </span>
+              </span>
+            </span>
+            ({timeAgo})
           </div>
         </div>
       </div>
@@ -234,37 +311,71 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
     updateTime: '',
     value: '',
   };
-  const [alertDetail, setAlertDetail] = React.useState(initAlertDetail);
+  const [alertDetail, setAlertDetail] = React.useState<IAlert>(initAlertDetail);
+
+  const [notes, setNotes] = React.useState([] as INote[]);
 
   useEffect(() => {
-    // Update data
-    updateData(alertDetailId, setAlertDetail);
+    // Init data
+    getAlert(alertDetailId, setAlertDetail);
+    getNotes(alertDetailId, setNotes);
   }, []);
 
   const handleWatchAlert = debounce((username: string, alertId: string) => {
     alertService.watchAlert(username, alertId)
-      .then(() => updateData(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail));
   }, 200, { leading: true, trailing: false });
 
   const handleUnwatchAlert = debounce((username: string, alertId: string) => {
     alertService.unWatchAlert(username, alertId)
-      .then(() => updateData(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail));
   }, 200, { leading: true, trailing: false });
 
   const handleAckAlert = debounce((alertId: string, action: string, text: string) => {
     alertService.takeAction(alertId, action, text, ackTimeout)
-      .then(() => updateData(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail));
   }, 200, { leading: true, trailing: false });
 
   const handleShelveAlert = debounce((alertId: string, action: string, text: string) => {
     alertService.takeAction(alertId, action, text, shelveTimeout)
-      .then(() => updateData(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail));
   }, 200, { leading: true, trailing: false });
 
   const handleTakeAction = debounce((alertId: string, action: string, text: string) => {
     alertService.takeAction(alertId, action, text)
-      .then(() => updateData(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail));
   }, 200, { leading: true, trailing: false });
+
+  const handleAddNote = debounce((alertId: string, text: string) => {
+    alertService.addNote(alertId, text)
+      .then(() => getNotes(alertId, setNotes));
+  }, 200, { leading: true, trailing: false });
+
+  const handleDeleteNote = debounce((alertId: string, noteId: string) => {
+    alertService.deleteNote(alertId, noteId)
+      .then(() => getNotes(alertId, setNotes));
+  }, 200, { leading: true, trailing: false });
+
+  const isOpen = (status: string) => {
+    return status === Status.open || status === Status.NORM;
+  };
+
+  const isAcked = (status: string) => {
+    return status === Status.ack || status === Status.ACKED;
+  };
+
+  const isClosed = (status: string) => {
+    return status === Status.closed;
+  };
+
+  const isWatched = (tags: string[], username: string) => {
+    const tag = `watch:${username}`;
+    return tags ? tags.indexOf(tag) > -1 : false;
+  };
+
+  const isShelved = (status: string) => {
+    return status === Status.shelved || status === Status.SHLVD;
+  };
 
   return (
     <>
@@ -282,6 +393,11 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
               handleAckAlert={handleAckAlert}
               handleShelveAlert={handleShelveAlert}
               handleTakeAction={handleTakeAction}
+              isOpen={isOpen(alertDetail.status)}
+              isClosed={isClosed(alertDetail.status)}
+              isWatched={isWatched(alertDetail.tags, basicAuthUser)}
+              isAcked={isAcked(alertDetail.status)}
+              isShelved={isShelved(alertDetail.status)}
             />
             <div className={clsx('v-card v-card--flat v-sheet v-sheet-cus', theme)}>
               <div className="v-tabs" data-booted="true">
@@ -342,66 +458,40 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                     <TabPanel value={tabValue} index={0}>
                       <div className="v-window-item">
                         <div className={clsx('v-card v-card--flat v-sheet', theme)}>
+                          {notes.map(note => (
+                            <AlertNote
+                              key={note.id}
+                              theme={theme}
+                              type="info"
+                              icon="info"
+                              note={note}
+                              onClick={() => handleDeleteNote(alertDetail.id, note.id)}
+                            />
+                          ))}
                           <div className="v-card__text">
                             <AlertDataCell label="Alert ID" value={alertDetail.id} clazz="pre-c" />
                             <AlertDataCell label="Last Receive Alert ID" value={alertDetail.lastReceiveId} clazz="pre-c" />
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Create Time</div>
-                                </div>
-                                <div className="flex xs9 text-xs-left">
-                                  <div>
-                                    <span className="v-tooltip v-tooltip--top">
-                                      <span>
-                                        <span className="text-no-wrap">{formatDateTime('longDate', alertDetail.createTime)} </span>
-                                      </span>
-                                    </span>
-                                    ({getTimeAgo(alertDetail.createTime)})
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Receive Time</div>
-                                </div>
-                                <div className="flex xs9 text-xs-left">
-                                  <div>
-                                    <span className="v-tooltip v-tooltip--top">
-                                      <span>
-                                        <span className="text-no-wrap">{formatDateTime('longDate', alertDetail.receiveTime)} </span>
-                                      </span>
-                                    </span>
-                                    ({getTimeAgo(alertDetail.receiveTime)})
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex xs12 ma-1">
-                              <div className="d-flex align-top">
-                                <div className="flex xs3 text-xs-left">
-                                  <div className="grey--text">Last Receive Time</div>
-                                </div>
-                                <div className="flex xs9 text-xs-left">
-                                  <div>
-                                    <span className="v-tooltip v-tooltip--top">
-                                      <span>
-                                        <span className="text-no-wrap">{formatDateTime('longDate', alertDetail.lastReceiveTime)} </span>
-                                      </span>
-                                    </span>
-                                    ({getTimeAgo(alertDetail.lastReceiveTime)})
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <AlertDataCell label="Service" value={alertDetail.service && alertDetail.service.join(', ')} clazz="" />
-                            <AlertDataCell label="Environment" value={alertDetail.environment} clazz="" />
-                            <AlertDataCell label="Resource" value={alertDetail.resource} clazz="" />
-                            <AlertDataCell label="Event" value={alertDetail.event} clazz="" />
-                            <AlertDataCell label="Correlate" value={alertDetail.correlate && alertDetail.correlate.join(', ')} clazz="" />
-                            <AlertDataCell label="Group" value={alertDetail.group} clazz="" />
+                            <AlertDataCellForTime
+                              label="Create Time"
+                              value={formatDateTime('longDate', alertDetail.createTime)}
+                              timeAgo={getTimeAgo(alertDetail.createTime)}
+                            />
+                            <AlertDataCellForTime
+                              label="Receive Time"
+                              value={formatDateTime('longDate', alertDetail.receiveTime)}
+                              timeAgo={getTimeAgo(alertDetail.receiveTime)}
+                            />
+                            <AlertDataCellForTime
+                              label="Last Receive Time"
+                              value={formatDateTime('longDate', alertDetail.lastReceiveTime)}
+                              timeAgo={getTimeAgo(alertDetail.lastReceiveTime)}
+                            />
+                            <AlertDataCell label="Service" value={alertDetail.service && alertDetail.service.join(', ')} />
+                            <AlertDataCell label="Environment" value={alertDetail.environment} />
+                            <AlertDataCell label="Resource" value={alertDetail.resource} />
+                            <AlertDataCell label="Event" value={alertDetail.event} />
+                            <AlertDataCell label="Correlate" value={alertDetail.correlate && alertDetail.correlate.join(', ')} />
+                            <AlertDataCell label="Group" value={alertDetail.group} />
                             <div className="flex xs12 ma-1">
                               <div className="d-flex align-top">
                                 <div className="flex xs3 text-xs-left">
@@ -449,14 +539,14 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                                 </div>
                               </div>
                             )}
-                            <AlertDataCell label="Value" value={alertDetail.value} clazz="" />
-                            <AlertDataCell label="Text" value={alertDetail.text} clazz="" />
+                            <AlertDataCell label="Value" value={alertDetail.value} />
+                            <AlertDataCell label="Text" value={alertDetail.text} />
                             <AlertDataCell label="Trend Indication" value={splitCaps(alertDetail.trendIndication)} clazz="label" />
-                            <AlertDataCell label="Timeout" value={alertDetail.timeout} clazz="" />
+                            <AlertDataCell label="Timeout" value={alertDetail.timeout} />
                             <AlertDataCell label="Type" value={splitCaps(alertDetail.type)} clazz="label" />
-                            <AlertDataCell label="Duplicate count" value={alertDetail.duplicateCount} clazz="" />
+                            <AlertDataCell label="Duplicate count" value={alertDetail.duplicateCount} />
                             <AlertDataCell label="Repeat" value={capitalize(alertDetail.repeat)} clazz="label" />
-                            <AlertDataCell label="Origin" value={alertDetail.origin} clazz="" />
+                            <AlertDataCell label="Origin" value={alertDetail.origin} />
                             <div className="flex xs12 ma-1">
                               <div className="d-flex align-top">
                                 <div className="flex xs3 text-xs-left">
@@ -480,7 +570,7 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                             <div>
                               {Object.entries(alertDetail.attributes).map(([key, value]) => {
                                 return (
-                                  <AlertDataCell key={key} label={splitCaps(key)} value={`${value}`} clazz="" />
+                                  <AlertDataCell key={key} label={splitCaps(key)} value={`${value}`} />
                                 );
                               })}
                             </div>
@@ -504,34 +594,23 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                 </div>
               </div>
             </div>
-            <div>
-              <div className="container pa-1 fluid">
-                <div className="layout">
-                  <div className="flex">
-                    <button type="button" className={clsx('v-btn v-btn--outline v-btn--depressed', theme, 'grey--text text--darken-2')}>
-                      <div className="v-btn__content">
-                        <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>visibility</i>&nbsp;Watch
-                      </div>
-                    </button>
-                    <button type="button" className={clsx('v-btn v-btn--outline v-btn--depressed', theme, 'grey--text text--darken-2')}>
-                      <div className="v-btn__content">
-                        <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>visibility_off</i>&nbsp;Unwatch
-                      </div>
-                    </button>
-                    <button type="button" className={clsx('v-btn v-btn--outline v-btn--depressed', theme, 'grey--text text--darken-2')}>
-                      <div className="v-btn__content">
-                        <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>note_add</i>&nbsp;Add note
-                      </div>
-                    </button>
-                    <button type="button" className={clsx('v-btn v-btn--outline v-btn--depressed', theme, 'grey--text text--darken-2')}>
-                      <div className="v-btn__content">
-                        <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>delete_forever</i>&nbsp;Delete
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <AlertaDetailActions
+              theme={theme}
+              basicAuthUser={basicAuthUser}
+              alertDetail={alertDetail}
+              isOpen={isOpen(alertDetail.status)}
+              isClosed={isClosed(alertDetail.status)}
+              isWatched={isWatched(alertDetail.tags, basicAuthUser)}
+              isAcked={isAcked(alertDetail.status)}
+              isShelved={isShelved(alertDetail.status)}
+              handleWatchAlert={handleWatchAlert}
+              handleUnwatchAlert={handleUnwatchAlert}
+              handleDeleteAlertDetails={handleDeleteAlertDetails}
+              handleAckAlert={handleAckAlert}
+              handleShelveAlert={handleShelveAlert}
+              handleTakeAction={handleTakeAction}
+              handleAddNote={handleAddNote}
+            />
           </div>
         </div>
       )}

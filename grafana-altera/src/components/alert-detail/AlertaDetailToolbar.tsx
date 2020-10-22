@@ -16,7 +16,6 @@ import UndoIcon from '@material-ui/icons/Undo';
 import RestoreIcon from '@material-ui/icons/Restore';
 
 import { IAlert } from 'shared/models/model-data/alert.model';
-import { Status } from 'shared/constants/status.enum';
 
 interface IAlertaDetailToolbarProps {
   theme: any;
@@ -29,42 +28,26 @@ interface IAlertaDetailToolbarProps {
   handleAckAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
   handleShelveAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
   handleTakeAction: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
+  isOpen: boolean;
+  isClosed: boolean;
+  isWatched: boolean;
+  isAcked: boolean;
+  isShelved: boolean;
 }
 
 export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
 
-  isOpen(status: string): boolean {
-    return status === Status.open || status === Status.NORM;
-  }
-
-  isAcked(status: string): boolean {
-    return status === Status.ack || status === Status.ACKED;
-  }
-
-  isClosed(status: string): boolean {
-    return status === Status.closed;
-  }
-
-  isWatched(tags: string[], username: string): boolean {
-    const tag = `watch:${username}`;
-    return tags ? tags.indexOf(tag) > -1 : false;
-  }
-
-  isShelved(status: string): boolean {
-    return status === Status.shelved || status === Status.SHLVD;
-  }
-
   render() {
-    const { theme,
-      basicAuthUser,
-      alertDetail,
+    const {
+      theme, basicAuthUser, alertDetail,
       handleHiddenAlertDetails,
       handleDeleteAlertDetails,
       handleWatchAlert,
       handleUnwatchAlert,
       handleAckAlert,
       handleShelveAlert,
-      handleTakeAction
+      handleTakeAction,
+      isOpen, isClosed, isWatched, isAcked, isShelved
     } = this.props;
 
     return (
@@ -89,13 +72,13 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
               color="default"
               size="medium"
               component="span"
-              disabled={!this.isAcked(alertDetail.status) && !this.isClosed(alertDetail.status)}
+              disabled={!isAcked && !isClosed}
               onClick={() => handleTakeAction(alertDetail.id, 'open', '')}
             >
               <RefreshIcon />
             </IconButton>
           </Tooltip>
-          {(!this.isWatched(alertDetail.tags, basicAuthUser)) && (
+          {(!isWatched) && (
             <Tooltip title="Watch">
               <IconButton
                 className={clsx('v-btn v-btn--icon', theme)}
@@ -109,7 +92,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
               </IconButton>
             </Tooltip>
           )}
-          {(this.isWatched(alertDetail.tags, basicAuthUser)) && (
+          {(isWatched) && (
             <Tooltip title="Unwatch">
               <IconButton
                 className={clsx('v-btn v-btn--icon', theme)}
@@ -123,7 +106,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
               </IconButton>
             </Tooltip>
           )}
-          {(!this.isAcked(alertDetail.status)) && (
+          {(!isAcked) && (
             <Tooltip title="Ack">
               <IconButton
                 className={clsx('v-btn v-btn--icon', theme)}
@@ -132,13 +115,13 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
                 size="medium"
                 component="span"
                 onClick={() => handleAckAlert(alertDetail.id, 'ack', '')}
-                disabled={!this.isOpen(alertDetail.status)}
+                disabled={!isOpen}
               >
                 <CheckIcon />
               </IconButton>
             </Tooltip>
           )}
-          {(this.isAcked(alertDetail.status)) && (
+          {(isAcked) && (
             <Tooltip title="Unack">
               <IconButton
                 className={clsx('v-btn v-btn--icon', theme)}
@@ -152,7 +135,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
               </IconButton>
             </Tooltip>
           )}
-          {(!this.isShelved(alertDetail.status)) && (
+          {(!isShelved) && (
             <Tooltip title="Shelve">
               <IconButton
                 className={clsx('v-btn v-btn--icon', theme)}
@@ -161,13 +144,13 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
                 size="medium"
                 component="span"
                 onClick={() => handleShelveAlert(alertDetail.id, 'shelve', '')}
-                disabled={!this.isOpen(alertDetail.status) && !this.isAcked(alertDetail.status)}
+                disabled={!isOpen && !isAcked}
               >
                 <ScheduleIcon />
               </IconButton>
             </Tooltip>
           )}
-          {(this.isShelved(alertDetail.status)) && (
+          {(isShelved) && (
             <Tooltip title="Unshelve">
               <IconButton
                 className={clsx('v-btn v-btn--icon', theme)}
@@ -189,7 +172,7 @@ export class AlertaDetailToolbar extends Component<IAlertaDetailToolbarProps> {
               size="medium"
               component="span"
               onClick={() => handleTakeAction(alertDetail.id, 'close', '')}
-              disabled={this.isClosed(alertDetail.status)}
+              disabled={isClosed}
             >
               <HighlightOffIcon />
             </IconButton>

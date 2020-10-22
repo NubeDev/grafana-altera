@@ -36,12 +36,21 @@ const actions = {
   },
   getAlert(alertId: string) {
     return api.get(`/api/alert/${alertId}`);
+  },
+  addNote(alertId: string, data: object) {
+    return api.put(`/api/alert/${alertId}/note`, data)
+  },
+  getNotes(alertId: string) {
+    return api.get(`/api/alert/${alertId}/notes`)
+  },
+  deleteNote(alertId: string, noteId: string) {
+    return api.delete(`/api/alert/${alertId}/note/${noteId}`)
   }
 }
 
 export default {
 
-  getAlerts({ rootGetters, commit, state }: any) {
+  getAlerts({ state }: any) {
     const params = new URLSearchParams();
 
     // append filter params to query params
@@ -119,4 +128,19 @@ export default {
       })
       .catch(error => console.log(error));
   },
+  addNote(alertId: string, text: string) {
+    return actions.addNote(alertId, {
+      text
+    });
+  },
+  getNotes(alertId: string) {
+    return actions.getNotes(alertId)
+      .then(({ notes }) => {
+        return notes;
+      })
+      .catch(error => console.log(error));
+  },
+  deleteNote(alertId: string, noteId: string) {
+    return actions.deleteNote(alertId, noteId);
+  }
 }

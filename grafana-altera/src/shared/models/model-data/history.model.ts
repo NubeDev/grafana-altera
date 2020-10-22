@@ -7,7 +7,7 @@ export interface IHistory {
   timeout: any;
   text: any;
   type: string;
-  updateTime: string;
+  updateTime: any;
   user: any;
   value: string;
 }
