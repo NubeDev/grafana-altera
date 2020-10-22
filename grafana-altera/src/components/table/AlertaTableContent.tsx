@@ -38,7 +38,8 @@ interface IAlertaTableContentProps {
   handleShelveAlert: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
   handleDeleteAlert: DebouncedFunc<(alertId: string) => void>;
   handleTakeAction: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
-  handleShowAlertDetails: (alert: IAlert) => void
+  handleShowAlertDetails: (alert: IAlert) => void;
+  isWatch: boolean;
 }
 
 export class AlertaTableContent extends Component<IAlertaTableContentProps> {
@@ -123,14 +124,24 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
 
   render() {
     const {
-      theme, order, orderBy, handleTableSort,
-      rowSelected, numSelected, handleSelectAllClick, handleSelectRowClick,
-      alerts, searchText, basicAuthUser,
-      handleWatchAlert, handleUnWatchAlert, handleAckAlert, handleShelveAlert, handleDeleteAlert, handleTakeAction,
-      handleShowAlertDetails
+      theme, order, orderBy, rowSelected, numSelected, alerts, searchText, basicAuthUser, isWatch,
+      handleTableSort,
+      handleSelectAllClick,
+      handleSelectRowClick,
+      handleShowAlertDetails,
+      handleWatchAlert,
+      handleUnWatchAlert,
+      handleAckAlert,
+      handleShelveAlert,
+      handleDeleteAlert,
+      handleTakeAction,
     } = this.props;
 
-    const filteredData = alerts && alerts.filter(alert => {
+    const isWatchAlerts = isWatch
+      ? alerts && alerts.filter(alert => (alert.tags && alert.tags.indexOf(`watch:${basicAuthUser}`) !== -1))
+      : alerts;
+
+    const filteredData = isWatchAlerts && isWatchAlerts.filter(alert => {
       return (
         (alert.severity && alert.severity.toLowerCase().includes(searchText.toLowerCase())) ||
         (alert.status && alert.status.toLowerCase().includes(searchText.toLowerCase())) ||
@@ -143,7 +154,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
         (alert.value && alert.value.toLowerCase().includes(searchText.toLowerCase())) ||
         (alert.text && alert.text.toLowerCase().includes(searchText.toLowerCase()))
       );
-    })
+    });
 
     const isSelected = (id: string) => rowSelected.map(alert => alert.id).indexOf(id) !== -1;
 

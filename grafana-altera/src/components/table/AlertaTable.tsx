@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import debounce from 'lodash/debounce';
 import clsx from 'clsx';
 import moment from 'moment';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, withStyles, Theme } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -21,6 +21,8 @@ import Chip from '@material-ui/core/Chip';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Tooltip from '@material-ui/core/Tooltip';
+import Switch from '@material-ui/core/Switch';
 import SearchIcon from '@material-ui/icons/Search';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -72,8 +74,6 @@ interface IMainTableProps {
   shelveTimeout: number;
   refreshInterval: number;
 }
-
-interface IFilterForm { }
 
 // Init state param request
 const paramState = {
@@ -208,6 +208,20 @@ function MainTable(props: IMainTableProps) {
     })
   );
   const classes = useStyles();
+
+  const AlertaSwitch = withStyles({
+    switchBase: {
+      color: '#bdbdbd !important',
+      '&$checked': {
+        color: '#ffa726 !important',
+      },
+      '&$checked + $track': {
+        backgroundColor: '#ffa726 !important',
+      },
+    },
+    checked: {},
+    track: {},
+  })(Switch);
 
   /* Use for table header */
   // Sort table
@@ -519,10 +533,6 @@ function MainTable(props: IMainTableProps) {
       <Formik
         initialValues={{
         }}
-        validate={(values) => {
-          const errors: Partial<IFilterForm> = {};
-          return errors;
-        }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             setSubmitting(false);
@@ -828,6 +838,13 @@ function MainTable(props: IMainTableProps) {
     </div>
   );
 
+  /* Use for isWatch Switch */
+  const [isWatch, setIsWatch] = React.useState(false);
+
+  const handleChangeIsWatch = () => {
+    setIsWatch(!isWatch);
+  };
+
   /* Use for table function menu */
   const [anchorElFuncMenu, setAnchorElFuncMenu] = React.useState<null | HTMLElement>(null);
 
@@ -1001,18 +1018,25 @@ function MainTable(props: IMainTableProps) {
                   </div>
                 )}
                 <div className="spacer" />
+                <div className={clsx('is-watch', theme)}>
+                  <Tooltip title="Watch">
+                    <AlertaSwitch checked={isWatch} onClick={() => handleChangeIsWatch()} name="isWatch" />
+                  </Tooltip>
+                </div>
                 <div className={theme}>
                   <React.Fragment key="right">
                     <div className={clsx('v-btn v-btn--flat v-btn--icon filter-active', theme)}>
-                      <Button
-                        id="filter-list-btn"
-                        size="medium"
-                        onClick={toggleDrawer('right', true)}
-                      >
-                        <div className="v-btn__content">
-                          <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>filter_list</i>
-                        </div>
-                      </Button>
+                      <Tooltip title="Filter">
+                        <Button
+                          id="filter-list-btn"
+                          size="medium"
+                          onClick={toggleDrawer('right', true)}
+                        >
+                          <div className="v-btn__content">
+                            <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>filter_list</i>
+                          </div>
+                        </Button>
+                      </Tooltip>
                     </div>
                     <SwipeableDrawer
                       anchor={'right'}
@@ -1031,17 +1055,19 @@ function MainTable(props: IMainTableProps) {
                 <div className="v-menu v-menu--inline">
                   <div className="v-menu__activator">
                     <div className={clsx('v-btn v-btn--flat v-btn--icon', theme)}>
-                      <Button
-                        id="table-func-menu-btn"
-                        size="medium"
-                        aria-controls="table-func-menu"
-                        aria-haspopup="true"
-                        onClick={handleOpenFuncMenu}
-                      >
-                        <div className="v-btn__content">
-                          <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>more_vert</i>
-                        </div>
-                      </Button>
+                      <Tooltip title="More">
+                        <Button
+                          id="table-func-menu-btn"
+                          size="medium"
+                          aria-controls="table-func-menu"
+                          aria-haspopup="true"
+                          onClick={handleOpenFuncMenu}
+                        >
+                          <div className="v-btn__content">
+                            <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>more_vert</i>
+                          </div>
+                        </Button>
+                      </Tooltip>
                       <Menu
                         id="table-func-menu"
                         anchorEl={anchorElFuncMenu}
@@ -1093,6 +1119,7 @@ function MainTable(props: IMainTableProps) {
                           handleDeleteAlert={handleDeleteAlert}
                           handleTakeAction={handleTakeAction}
                           handleShowAlertDetails={handleShowAlertDetails}
+                          isWatch={isWatch}
                         />
                       </table>
                       <TablePagination
@@ -1210,8 +1237,8 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
 
   render() {
     const theme = this.context;
-
     const { environments, services, groups, basicAuthUser, ackTimeout, shelveTimeout, refreshInterval } = this.state;
+
     return (
       <MainTable
         theme={theme}

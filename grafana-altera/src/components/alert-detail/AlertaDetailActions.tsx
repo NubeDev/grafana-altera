@@ -113,6 +113,9 @@ function AlertActionsButton(props: IAlertaDetailActionsProps) {
                           type="text"
                           fullWidth
                           value={values.note}
+                          InputProps={{
+                            autoComplete: "off"
+                          }}
                           helperText={
                             errors.note && touched.note ? errors.note : ''
                           }

@@ -7,9 +7,11 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import HistoryIcon from '@material-ui/icons/History';
 import AssessmentIcon from '@material-ui/icons/Assessment';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import './AlertDetail.scss';
 import config from '../../shared/config/config.json';
@@ -379,7 +381,108 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
 
   return (
     <>
-      {alertDetail.id === '' ? '' : (
+      {alertDetail.id === '' ? (
+        <div className={clsx('v-card v-card--flat v-sheet', theme)}>
+          <div className={clsx('v-card v-card--flat v-sheet v-sheet--tile', theme)}>
+            <nav className={clsx('v-toolbar v-toolbar--dense nav-style alerta-toolbars-details', theme)} data-booted="true">
+              <div className="v-toolbar__content h-48">
+                <IconButton
+                  className={clsx('v-btn v-btn--icon', theme)}
+                  color="default"
+                  size="medium"
+                  component="span"
+                >
+                  <ArrowBackIcon />
+                </IconButton>
+              </div>
+            </nav>
+            <div className={clsx('v-card v-card--flat v-sheet v-sheet-cus', theme)}>
+              <div className="v-tabs" data-booted="true">
+                <div className={clsx('v-tabs__bar', theme)}>
+                  <div className="v-tabs__wrapper">
+                    <div className="v-tabs__container v-tabs__container--grow height-unset">
+                      <div className={classes.rootTabs}>
+                        <Paper className={classes.rootTabs} square>
+                          <Tabs
+                            value={tabValue}
+                            variant="fullWidth"
+                            classes={{
+                              indicator: classes.accent
+                            }}
+                            TabIndicatorProps={{
+                              style: {
+                                backgroundColor: '#ffa726',
+                                borderColor: '#ffa726'
+                              }
+                            }}
+                          >
+                            <Tab
+                              label="&nbsp;Details"
+                              icon={<InfoIcon />}
+                              classes={{
+                                wrapper: classes.iconLabelWrapper,
+                                labelIcon: classes.labelContainer
+                              }}
+                            />
+                            <Tab
+                              label="&nbsp;History"
+                              icon={<HistoryIcon />}
+                              classes={{
+                                wrapper: classes.iconLabelWrapper,
+                                labelIcon: classes.labelContainer
+                              }}
+                            />
+                            <Tab
+                              label="&nbsp;Data"
+                              icon={<AssessmentIcon />}
+                              classes={{
+                                wrapper: classes.iconLabelWrapper,
+                                labelIcon: classes.labelContainer
+                              }}
+                            />
+                          </Tabs>
+                        </Paper>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="v-window">
+                  <div className="v-window__container">
+                    <div className="v-window-item">
+                      <div className={clsx('v-card v-card--flat v-sheet', theme)}>
+                        <div className="v-card__text">
+                          <AlertDataCell label="Alert ID" value="" />
+                          <AlertDataCell label="Last Receive Alert ID" value="" />
+                          <AlertDataCell label="Create Time" value="" />
+                          <AlertDataCell label="Receive Time" value="" />
+                          <AlertDataCell label="Last Receive Time" value="" />
+                          <AlertDataCell label="Service" value="" />
+                          <AlertDataCell label="Environment" value="" />
+                          <AlertDataCell label="Resource" value="" />
+                          <AlertDataCell label="Event" value="" />
+                          <AlertDataCell label="Correlate" value="" />
+                          <AlertDataCell label="Group" value="" />
+                          <AlertDataCell label="Severity" value="" />
+                          <AlertDataCell label="Status" value="" />
+                          <AlertDataCell label="Value" value="" />
+                          <AlertDataCell label="Text" value="" />
+                          <AlertDataCell label="Trend Indication" value="" />
+                          <AlertDataCell label="Timeout" value="" />
+                          <AlertDataCell label="Type" value="" />
+                          <AlertDataCell label="Duplicate count" value="" />
+                          <AlertDataCell label="Repeat" value="" />
+                          <AlertDataCell label="Origin" value="" />
+                          <AlertDataCell label="Tags" value="" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
         <div className={clsx('v-card v-card--flat v-sheet', theme)}>
           <div className={clsx('v-card v-card--flat v-sheet v-sheet--tile', theme)}>
             <AlertaDetailToolbar
@@ -633,12 +736,6 @@ export class AlertDetail extends Component<IAlertDetailProps, any> {
     return (
       <div className="v-content" data-booted="true" style={{ padding: '0px' }}>
         <div className="v-content__wrap">
-          <div className="v-alert v-alert--outline error--text">
-            <div />
-            <a className="v-alert__dismissible">
-              <i aria-hidden="true" className={clsx('v-icon v-icon--right material-icons', theme)}>cancel</i>
-            </a>
-          </div>
           <div className="alert-detail">
             <AlertDetailContent
               theme={theme}
