@@ -24,8 +24,10 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Tooltip from '@material-ui/core/Tooltip';
 import Switch from '@material-ui/core/Switch';
 import SearchIcon from '@material-ui/icons/Search';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { ExportToCsv } from 'export-to-csv';
 
 import './AlertaTable.scss';
 import { AlertaTableToolbar } from './AlertaTableToolbar';
@@ -856,6 +858,57 @@ function MainTable(props: IMainTableProps) {
     setAnchorElFuncMenu(null);
   };
 
+  const handleToCsv = () => {
+    const alerts = handleFilteredAlerts(alertState.alerts, searchTextFilter, isWatch, basicAuthUser);
+
+    const options = {
+      fieldSeparator: ',',
+      filename: `Alerts_${paramState.filter.environment || 'ALL'}`,
+      quoteStrings: '"',
+      decimalSeparator: 'locale',
+      showLabels: true,
+      useTextFile: false,
+      useBom: true,
+      useKeysAsHeaders: true
+    };
+    const attrs: any = {};
+    alerts.map(d => Object.keys(d.attributes).forEach((attr) => attrs['attributes.' + attr] = d.attributes[attr]));
+
+    const csvExporter = new ExportToCsv(options);
+    csvExporter.generateCsv(alerts.map(({ correlate, service, tags, attributes, rawData, history, ...item }) => ({
+      correlate: correlate.join(','),
+      service: service.join(','),
+      tags: tags.join(','),
+      ...attrs,
+      ...item,
+      rawData: rawData ? rawData.toString() : ''
+    })));
+
+    setAnchorElFuncMenu(null);
+  };
+
+  /* Use for data table filter */
+  const handleFilteredAlerts = (alerts: IAlert[], searchText: string, switchWatch: boolean, username: string) => {
+    const isWatchAlerts = switchWatch
+      ? alerts && alerts.filter(alert => (alert.tags && alert.tags.indexOf(`watch:${username}`) !== -1))
+      : alerts;
+
+    return isWatchAlerts && isWatchAlerts.filter(alert => {
+      return (
+        (alert.severity && alert.severity.toLowerCase().includes(searchText.toLowerCase())) ||
+        (alert.status && alert.status.toLowerCase().includes(searchText.toLowerCase())) ||
+        (alert.duplicateCount && alert.duplicateCount.toString().toLowerCase().includes(searchText.toLowerCase())) ||
+        (alert.customer && alert.customer.toLowerCase().includes(searchText.toLowerCase())) ||
+        (alert.environment && alert.environment.toLowerCase().includes(searchText.toLowerCase())) ||
+        (alert.service && alert.service.join(', ').toLowerCase().includes(searchText.toLowerCase())) ||
+        (alert.resource && alert.resource.toLowerCase().includes(searchText.toLowerCase())) ||
+        (alert.event && alert.event.toLowerCase().includes(searchText.toLowerCase())) ||
+        (alert.value && alert.value.toLowerCase().includes(searchText.toLowerCase())) ||
+        (alert.text && alert.text.toLowerCase().includes(searchText.toLowerCase()))
+      );
+    });
+  };
+
   /* Use for table toolbar */
   const handleClearSelected = () => {
     setRowSelected([]);
@@ -1063,9 +1116,7 @@ function MainTable(props: IMainTableProps) {
                           aria-haspopup="true"
                           onClick={handleOpenFuncMenu}
                         >
-                          <div className="v-btn__content">
-                            <i aria-hidden="true" className={clsx('v-icon material-icons', theme)}>more_vert</i>
-                          </div>
+                          <MoreVertIcon />
                         </Button>
                       </Tooltip>
                       <Menu
@@ -1083,8 +1134,7 @@ function MainTable(props: IMainTableProps) {
                         className={theme}
                       >
                         <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Show Panel</MenuItem>
-                        <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Display density</MenuItem>
-                        <MenuItem onClick={handleCloseFuncMenu} className="menu-item">Download as CSV</MenuItem>
+                        <MenuItem onClick={handleToCsv} className="menu-item">Download as CSV</MenuItem>
                       </Menu>
                     </div>
                   </div>
@@ -1106,11 +1156,9 @@ function MainTable(props: IMainTableProps) {
                           orderBy={orderBy}
                           handleTableSort={handleTableSort}
                           rowSelected={rowSelected}
-                          numSelected={rowSelected.length}
                           handleSelectAllClick={handleSelectAllClick}
                           handleSelectRowClick={handleSelectRowClick}
-                          alerts={alertState.alerts}
-                          searchText={searchTextFilter}
+                          alerts={handleFilteredAlerts(alertState.alerts, searchTextFilter, isWatch, basicAuthUser)}
                           basicAuthUser={basicAuthUser}
                           handleWatchAlert={handleWatchAlert}
                           handleUnWatchAlert={handleUnWatchAlert}
@@ -1119,7 +1167,6 @@ function MainTable(props: IMainTableProps) {
                           handleDeleteAlert={handleDeleteAlert}
                           handleTakeAction={handleTakeAction}
                           handleShowAlertDetails={handleShowAlertDetails}
-                          isWatch={isWatch}
                         />
                       </table>
                       <TablePagination

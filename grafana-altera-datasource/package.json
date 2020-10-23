@@ -7,8 +7,7 @@
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
-    "prettier:check": "prettier --list-different \"**/*.{ts,tsx,scss}\"",
-    "prettier:write": "prettier --list-different \"**/*.{ts,tsx,scss}\" --write"
+    "prettier:fix": "prettier --write src/**/*.{js,tsx,scss}"
   },
   "author": "NubeDev",
   "license": "Apache-2.0",

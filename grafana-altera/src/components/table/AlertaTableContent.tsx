@@ -26,11 +26,9 @@ interface IAlertaTableContentProps {
   orderBy: string;
   handleTableSort: (column: string) => void;
   rowSelected: IAlert[];
-  numSelected: number;
   handleSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, filteredData: IAlert[]) => void;
   handleSelectRowClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, alert: IAlert) => void;
   alerts: IAlert[];
-  searchText: string;
   basicAuthUser: string;
   handleWatchAlert: DebouncedFunc<(username: string, alertId: string) => void>;
   handleUnWatchAlert: DebouncedFunc<(username: string, alertId: string) => void>;
@@ -39,7 +37,6 @@ interface IAlertaTableContentProps {
   handleDeleteAlert: DebouncedFunc<(alertId: string) => void>;
   handleTakeAction: DebouncedFunc<(alertId: string, action: string, text: string) => void>;
   handleShowAlertDetails: (alert: IAlert) => void;
-  isWatch: boolean;
 }
 
 export class AlertaTableContent extends Component<IAlertaTableContentProps> {
@@ -125,11 +122,8 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
       order,
       orderBy,
       rowSelected,
-      numSelected,
       alerts,
-      searchText,
       basicAuthUser,
-      isWatch,
       handleTableSort,
       handleSelectAllClick,
       handleSelectRowClick,
@@ -142,26 +136,26 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
       handleTakeAction,
     } = this.props;
 
-    const isWatchAlerts = isWatch
-      ? alerts && alerts.filter(alert => (alert.tags && alert.tags.indexOf(`watch:${basicAuthUser}`) !== -1))
-      : alerts;
-
-    const filteredData = isWatchAlerts && isWatchAlerts.filter(alert => {
-      return (
-        (alert.severity && alert.severity.toLowerCase().includes(searchText.toLowerCase())) ||
-        (alert.status && alert.status.toLowerCase().includes(searchText.toLowerCase())) ||
-        (alert.duplicateCount && alert.duplicateCount.toString().toLowerCase().includes(searchText.toLowerCase())) ||
-        (alert.customer && alert.customer.toLowerCase().includes(searchText.toLowerCase())) ||
-        (alert.environment && alert.environment.toLowerCase().includes(searchText.toLowerCase())) ||
-        (alert.service && alert.service.join(', ').toLowerCase().includes(searchText.toLowerCase())) ||
-        (alert.resource && alert.resource.toLowerCase().includes(searchText.toLowerCase())) ||
-        (alert.event && alert.event.toLowerCase().includes(searchText.toLowerCase())) ||
-        (alert.value && alert.value.toLowerCase().includes(searchText.toLowerCase())) ||
-        (alert.text && alert.text.toLowerCase().includes(searchText.toLowerCase()))
-      );
-    });
-
     const isSelected = (id: string) => rowSelected.map(alert => alert.id).indexOf(id) !== -1;
+
+    const someSelected = () => {
+      const availableToSelect = alerts.map(alert => alert.id);
+      const selection = rowSelected.map(alert => alert.id);
+      const selectionSet = new Set(selection);
+
+      return availableToSelect.length !== 0 && selectionSet.size !== 0
+        && availableToSelect.some(elem => selectionSet.has(elem))
+        && availableToSelect.some(elem => !selectionSet.has(elem));
+    };
+
+    const allSelected = () => {
+      const availableToSelect = alerts.map(alert => alert.id);
+      const selection = rowSelected.map(alert => alert.id);
+      const selectionSet = new Set(selection);
+
+      return selectionSet.size !== 0 && availableToSelect.length !== 0
+        && !availableToSelect.some(elem => !selectionSet.has(elem));
+    };
 
     return (
       <>
@@ -172,9 +166,9 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
                 <Checkbox
                   className={clsx('v-icon material-icons', theme)}
                   color="default"
-                  indeterminate={numSelected > 0 && numSelected < filteredData.length}
-                  checked={filteredData.length > 0 && numSelected === filteredData.length}
-                  onChange={(event) => handleSelectAllClick(event, filteredData)}
+                  indeterminate={someSelected()}
+                  checked={allSelected()}
+                  onChange={(event) => handleSelectAllClick(event, alerts)}
                   inputProps={{ 'aria-label': 'select all alerts' }} />
               </div>
             </th>
@@ -195,7 +189,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
           </tr>
         </thead>
         <tbody>
-          {(filteredData.length > 0) && filteredData.map((alert, index) => {
+          {(alerts.length > 0) && alerts.map((alert, index) => {
             const labelId = `main-table-checkbox-${index}`;
             const isRowSelected = isSelected(alert.id);
 
@@ -247,7 +241,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
               </TableRow>
             );
           })}
-          {(filteredData.length === 0) && (
+          {(alerts.length === 0) && (
             <tr className="hover-lighten">
               <td colSpan={13} className="text-no-wrap">
                 <span className="no-record">No matching records found!</span>

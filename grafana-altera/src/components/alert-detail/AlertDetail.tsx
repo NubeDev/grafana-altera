@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import HistoryIcon from '@material-ui/icons/History';
 import AssessmentIcon from '@material-ui/icons/Assessment';
@@ -50,6 +51,7 @@ interface IAlertDataCellProps {
   value: any;
   timeAgo?: any;
   clazz?: string;
+  tooltip?: any;
 }
 
 interface IAlertNoteProps {
@@ -152,7 +154,7 @@ function AlertDataCell(props: IAlertDataCellProps) {
 }
 
 function AlertDataCellForTime(props: IAlertDataCellProps) {
-  const { label, value, timeAgo } = props;
+  const { label, value, timeAgo, tooltip } = props;
 
   return (
     <div className="flex xs12 ma-1">
@@ -163,9 +165,9 @@ function AlertDataCellForTime(props: IAlertDataCellProps) {
         <div className="flex xs9 text-xs-left">
           <div>
             <span className="v-tooltip v-tooltip--top">
-              <span>
+              <Tooltip title={tooltip} placement="top">
                 <span className="text-no-wrap">{value} </span>
-              </span>
+              </Tooltip>
             </span>
             ({timeAgo})
           </div>
@@ -223,7 +225,7 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
     return {
       id: `details-tab-${index}`,
       'aria-controls': `details-tabpanel-${index}`
-    }
+    };
   };
 
   const formatDateTime = (type: string, dateTime: any) => {
@@ -244,6 +246,8 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
         const hours = Math.floor(duration.as('h'));
         return `${hours}:${minutes}:${seconds}`;
       }
+    } else if (type === 'tooltip') {
+      return moment(dateTime).utcOffset('+00:00').format('YYYY/MM/DD HH:mm:ss.SSS +00:00');
     }
     return dateTime;
   };
@@ -286,11 +290,7 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
 
   /* Use for Alerta detail toolbars */
   const initAlertDetail: IAlert = {
-    attributes: {
-      isOutOfHours: false,
-      region: '',
-      runBookUrl: ''
-    },
+    attributes: {},
     correlate: [],
     createTime: '',
     customer: null,
@@ -357,7 +357,10 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
 
   const handleAddNote = debounce((alertId: string, text: string) => {
     alertService.addNote(alertId, text)
-      .then(() => getNotes(alertId, setNotes));
+      .then(() => {
+        getNotes(alertId, setNotes);
+        getAlert(alertId, setAlertDetail);
+      });
   }, 200, { leading: true, trailing: false });
 
   const handleDeleteNote = debounce((alertId: string, noteId: string) => {
@@ -585,16 +588,19 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                               label="Create Time"
                               value={formatDateTime('longDate', alertDetail.createTime)}
                               timeAgo={getTimeAgo(alertDetail.createTime)}
+                              tooltip={formatDateTime('tooltip', alertDetail.createTime)}
                             />
                             <AlertDataCellForTime
                               label="Receive Time"
                               value={formatDateTime('longDate', alertDetail.receiveTime)}
                               timeAgo={getTimeAgo(alertDetail.receiveTime)}
+                              tooltip={formatDateTime('tooltip', alertDetail.receiveTime)}
                             />
                             <AlertDataCellForTime
                               label="Last Receive Time"
                               value={formatDateTime('longDate', alertDetail.lastReceiveTime)}
                               timeAgo={getTimeAgo(alertDetail.lastReceiveTime)}
+                              tooltip={formatDateTime('tooltip', alertDetail.lastReceiveTime)}
                             />
                             <AlertDataCell label="Service" value={alertDetail.service && alertDetail.service.join(', ')} />
                             <AlertDataCell label="Environment" value={alertDetail.environment} />

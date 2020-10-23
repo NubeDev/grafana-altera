@@ -8,13 +8,9 @@
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
-    "lint": "tslint -c tslint.json src/**/*.{ts,tsx}",
     "lint:fix": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
-    "prettier:fix": "prettier --write src/**/*.{js,tsx,scss}",
-    "prettier:check": "prettier --list-different \"**/*.{ts,tsx,scss}\"",
-    "prettier:write": "prettier --list-different \"**/*.{ts,tsx,scss}\" --write"
+    "prettier:fix": "prettier --write src/**/*.{js,tsx,scss}"
   },
-  "repository": "github:grafana/simple-react-panel",
   "author": "NubeDev",
   "license": "Apache-2.0",
   "bugs": {
@@ -26,6 +22,7 @@
     "@material-ui/icons": "^4.9.1",
     "axios": "^0.20.0",
     "css-loader": "^4.2.2",
+    "export-to-csv": "^0.2.1",
     "express": "^4.17.1",
     "formik": "^2.1.5",
     "formik-material-ui": "^3.0.0",

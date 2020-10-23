@@ -1,8 +1,7 @@
-import { IAttributes } from './attributes.model';
 import { IHistory } from './history.model';
 
 export interface IAlert {
-  attributes: IAttributes;
+  attributes: any;
   correlate: string[];
   createTime: any;
   customer: any;
