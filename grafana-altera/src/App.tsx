@@ -11,7 +11,7 @@ import { ThemeContext } from 'shared/contexts/ThemeContext';
 
 const isDarkMode = config.theme.isDark;
 
-interface IProps extends PanelProps<IGrafanaAlertaOptions> { }
+interface IProps extends PanelProps<IGrafanaAlertaOptions> {}
 
 interface IState {
   theme: any;

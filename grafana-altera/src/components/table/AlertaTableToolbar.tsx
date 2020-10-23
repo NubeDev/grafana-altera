@@ -22,9 +22,10 @@ interface IAlertaTableToolbarProps {
 }
 
 export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
-
   render() {
-    const { theme, numSelected,
+    const {
+      theme,
+      numSelected,
       handleClearSelected,
       handleToggleWatch,
       handleBulkAckAlert,
@@ -51,7 +52,10 @@ export class AlertaTableToolbar extends Component<IAlertaTableToolbarProps> {
             </Tooltip>
             <div className="v-toolbar__title">Back</div>
             <div className="spacer" />
-            <span className="subheading">{numSelected}<span className="hidden-xs-only"> Selected</span></span>
+            <span className="subheading">
+              {numSelected}
+              <span className="hidden-xs-only"> Selected</span>
+            </span>
             <div className="spacer" />
             <Tooltip title="Watch">
               <IconButton

@@ -57,7 +57,7 @@ interface IAlertNoteProps {
   type: string;
   icon: string;
   note: INote;
-  onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 interface ITabPanelProps {
@@ -264,9 +264,14 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
     if (value === null) {
       return '';
     }
-    return value.toString().replace(/([A-Z])/g, ' $1').split(' ').map((word: string) => {
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    }).join(' ');
+    return value
+      .toString()
+      .replace(/([A-Z])/g, ' $1')
+      .split(' ')
+      .map((word: string) => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(' ');
   };
 
   const history = (item: any) => {
@@ -274,7 +279,9 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
   };
 
   const statusNote = (item: any) => {
-    return history(item).filter((h: any) => h.type !== 'note' && h.status === item.status).pop();
+    return history(item)
+      .filter((h: any) => h.type !== 'note' && h.status === item.status)
+      .pop();
   };
 
   /* Use for Alerta detail toolbars */
@@ -750,5 +757,5 @@ export class AlertDetail extends Component<IAlertDetailProps, any> {
         </div>
       </div>
     )
-  }
+  };
 }

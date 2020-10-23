@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import config from 'shared/config/config.json';
 
 interface IAlertaTruncateCellProps {
-  cellClass: any;
-  textClass: any;
   text: any;
 }
 
@@ -19,9 +17,6 @@ export class AlertaTruncateCell extends Component<IAlertaTruncateCellProps> {
 
   constructor(props: IAlertaTruncateCellProps) {
     super(props);
-    if (this.props.cellClass.trim() !== '') {
-      this.cellClass = this.props.cellClass;
-    }
   }
 
   render() {

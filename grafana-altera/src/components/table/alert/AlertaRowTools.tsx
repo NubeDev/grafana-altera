@@ -79,7 +79,9 @@ export class AlertaRowTools extends Component<IAlertaRowToolsProps> {
   }
 
   render() {
-    const { alert, basicAuthUser,
+    const {
+      alert,
+      basicAuthUser,
       handleWatchAlert,
       handleUnWatchAlert,
       handleAckAlert,

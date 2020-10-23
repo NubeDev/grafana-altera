@@ -28,7 +28,7 @@ interface IAlertaTableContentProps {
   rowSelected: IAlert[];
   numSelected: number;
   handleSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, filteredData: IAlert[]) => void;
-  handleSelectRowClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, alert: IAlert) => void
+  handleSelectRowClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, alert: IAlert) => void;
   alerts: IAlert[];
   searchText: string;
   basicAuthUser: string;
@@ -43,7 +43,6 @@ interface IAlertaTableContentProps {
 }
 
 export class AlertaTableContent extends Component<IAlertaTableContentProps> {
-
   customHeaders = () => {
     const headersMap: any = {
       severity: { text: 'Severity', value: 'severity' },
@@ -59,9 +58,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
       value: { text: 'Value', value: 'value' },
       text: { text: 'Description', value: 'text' },
     };
-    return config.columns.map(c =>
-      headersMap[c]
-    );
+    return config.columns.map(c => headersMap[c]);
   };
 
   severityColor(severity: string): string {
@@ -124,7 +121,15 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
 
   render() {
     const {
-      theme, order, orderBy, rowSelected, numSelected, alerts, searchText, basicAuthUser, isWatch,
+      theme,
+      order,
+      orderBy,
+      rowSelected,
+      numSelected,
+      alerts,
+      searchText,
+      basicAuthUser,
+      isWatch,
       handleTableSort,
       handleSelectAllClick,
       handleSelectRowClick,
@@ -216,18 +221,18 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
                   </div>
                 </td>
 
-                <AlertaDataCell tooltip="" cellClass="" textClass={`label ${'label-' + alert.severity.toLowerCase()} text-capitalize`} text={alert.severity} />
-                <AlertaDataCell tooltip="" cellClass="" textClass="label text-capitalize" text={alert.status} />
-                <AlertaDataCell tooltip={this.formatDateTime('tooltip', alert.lastReceiveTime)} cellClass="" textClass="" text={this.formatDateTime('mediumDate', alert.lastReceiveTime)} />
-                <AlertaDataCell tooltip="" cellClass="" textClass="text-xs-right" text={this.formatDateTime('hhmmss', this.timeoutLeft(alert))} />
-                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.duplicateCount} />
-                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.customer} />
-                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.environment} />
-                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.service && alert.service.join(', ')} />
-                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.resource} />
-                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.event} />
-                <AlertaDataCell tooltip="" cellClass="" textClass="" text={alert.value} />
-                <AlertaTruncateCell cellClass="" textClass="" text={alert.text} />
+                <AlertaDataCell tooltip="" textClass={`label ${'label-' + alert.severity.toLowerCase()} text-capitalize`} text={alert.severity} />
+                <AlertaDataCell tooltip="" textClass="label text-capitalize" text={alert.status} />
+                <AlertaDataCell tooltip={this.formatDateTime('tooltip', alert.lastReceiveTime)} text={this.formatDateTime('mediumDate', alert.lastReceiveTime)} />
+                <AlertaDataCell tooltip="" textClass="text-xs-right" text={this.formatDateTime('hhmmss', this.timeoutLeft(alert))} />
+                <AlertaDataCell tooltip="" text={alert.duplicateCount} />
+                <AlertaDataCell tooltip="" text={alert.customer} />
+                <AlertaDataCell tooltip="" text={alert.environment} />
+                <AlertaDataCell tooltip="" text={alert.service && alert.service.join(', ')} />
+                <AlertaDataCell tooltip="" text={alert.resource} />
+                <AlertaDataCell tooltip="" text={alert.event} />
+                <AlertaDataCell tooltip="" text={alert.value} />
+                <AlertaTruncateCell text={alert.text} />
 
                 <AlertaRowTools
                   alert={alert}

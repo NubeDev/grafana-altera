@@ -34,7 +34,7 @@ interface IButtonProps {
   classIcon: any;
   label?: any;
   icon: any;
-  onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 function Button(props: IButtonProps) {
@@ -66,10 +66,20 @@ function Button(props: IButtonProps) {
 function AlertActionsButton(props: IAlertaDetailActionsProps) {
   const {
     theme,
-    isWatched, isAcked, isShelved, isOpen, isClosed,
-    basicAuthUser, alertDetail,
+    isWatched,
+    isAcked,
+    isShelved,
+    isOpen,
+    isClosed,
+    basicAuthUser,
+    alertDetail,
     handleDeleteAlertDetails,
-    handleWatchAlert, handleUnwatchAlert, handleAckAlert, handleShelveAlert, handleTakeAction, handleAddNote
+    handleWatchAlert,
+    handleUnwatchAlert,
+    handleAckAlert,
+    handleShelveAlert,
+    handleTakeAction,
+    handleAddNote
   } = props;
 
   const [showForm, setShowForm] = React.useState(false);
@@ -114,7 +124,7 @@ function AlertActionsButton(props: IAlertaDetailActionsProps) {
                           fullWidth
                           value={values.note}
                           InputProps={{
-                            autoComplete: "off"
+                            autoComplete: 'off'
                           }}
                           helperText={
                             errors.note && touched.note ? errors.note : ''
@@ -290,13 +300,23 @@ export class AlertaDetailActions extends Component<IAlertaDetailActionsProps> {
   }
 
   render() {
-    const { 
-      theme, 
-      isWatched, isAcked, isShelved, isOpen, isClosed, 
-      basicAuthUser, alertDetail,
+    const {
+      theme,
+      isWatched,
+      isAcked,
+      isShelved,
+      isOpen,
+      isClosed,
+      basicAuthUser,
+      alertDetail,
       handleDeleteAlertDetails,
-      handleWatchAlert, handleUnwatchAlert, handleAckAlert, handleShelveAlert, handleTakeAction, handleAddNote
-     } = this.props;
+      handleWatchAlert,
+      handleUnwatchAlert,
+      handleAckAlert,
+      handleShelveAlert,
+      handleTakeAction,
+      handleAddNote
+    } = this.props;
 
     return (
       <AlertActionsButton

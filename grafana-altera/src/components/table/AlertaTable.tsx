@@ -46,7 +46,7 @@ import { AlertDetail } from 'components/alert-detail/AlertDetail';
 
 const { useEffect } = React;
 
-interface IAlertaTableProps { }
+interface IAlertaTableProps {}
 
 interface IAlertaDataTable {
   alerts: IAlert[];
@@ -340,7 +340,7 @@ function MainTable(props: IMainTableProps) {
       group['ALL'] = group['ALL'] + e.count
       return group;
     }, { 'ALL': 0 });
-  }
+  };
 
   const handleEnvTabChange = (env: string) => {
     if (env !== 'ALL') {
@@ -350,7 +350,7 @@ function MainTable(props: IMainTableProps) {
     }
     // Update data
     updateData(setAlertState);
-  }
+  };
 
   /* Use for filter */
   // Set default value start date
@@ -411,7 +411,7 @@ function MainTable(props: IMainTableProps) {
 
   const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTextFilter(event.target.value);
-  }
+  };
 
   const handleChangeStatus = (event: React.ChangeEvent<{ value: unknown }>) => {
     const status = event.target.value as string[];
@@ -466,11 +466,11 @@ function MainTable(props: IMainTableProps) {
 
   const handleChangeStartDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStartDateFilter(event.target.value);
-  }
+  };
 
   const handleChangeEndDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEndDateFilter(event.target.value);
-  }
+  };
 
   // Custom render value from select
   const renderValueSelect = (value: any) => {
@@ -508,10 +508,10 @@ function MainTable(props: IMainTableProps) {
   const handleApply = () => {
     const toEpoch = (dt: any) => {
       return new Date(dt).getTime() / 1000;
-    }
+    };
     paramState.filter.dateRange = [toEpoch(startDateFilter), toEpoch(endDateFilter)];
     updateData(setAlertState);
-  }
+  };
 
   // Drawer  filter UI
   const alertListEventFilter = (anchor: string) => (
@@ -563,7 +563,7 @@ function MainTable(props: IMainTableProps) {
                                 <SearchIcon style={{ color: theme === THEME.DARK_MODE ? '#ffffff' : '#424242' }} />
                               </InputAdornment>
                             ),
-                            autoComplete: "off"
+                            autoComplete: 'off'
                           }}
                           className={classes.rootTextField}
                         />
@@ -865,13 +865,13 @@ function MainTable(props: IMainTableProps) {
     const isWatched = (tags: string[]) => {
       const tag = `watch:${basicAuthUser}`;
       return tags ? tags.indexOf(tag) > -1 : false;
-    }
+    };
     const watchAlert = (alertId: string) => {
       alertService.watchAlert(basicAuthUser, alertId);
-    }
+    };
     const unwatchAlert = (alertId: string) => {
       alertService.unWatchAlert(basicAuthUser, alertId);
-    }
+    };
 
     let map;
     if (rowSelected.some(a => !isWatched(a.tags))) {
@@ -883,7 +883,7 @@ function MainTable(props: IMainTableProps) {
     Promise.all(map).then(() => {
       handleClearSelected();
       updateData(setAlertState);
-    })
+    });
   };
 
   const handleBulkAckAlert = () => {
@@ -918,7 +918,7 @@ function MainTable(props: IMainTableProps) {
         .then(() => {
           handleClearSelected();
           updateData(setAlertState);
-        })
+        });
   };
 
   /* Use for function buttons of each row */
@@ -954,7 +954,7 @@ function MainTable(props: IMainTableProps) {
   }, 200, { leading: true, trailing: false });
 
   /* Use for Alert details */
-  const [showAlertDetail, setShowAlertDetail] = React.useState(false)
+  const [showAlertDetail, setShowAlertDetail] = React.useState(false);
   const [alertDetailId, setAlertDetailId] = React.useState('');
 
   const handleShowAlertDetails = (alert: IAlert) => {
@@ -1233,7 +1233,7 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
           }
         }
       });
-  }
+  };
 
   render() {
     const theme = this.context;

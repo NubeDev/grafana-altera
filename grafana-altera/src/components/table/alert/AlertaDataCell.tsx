@@ -4,8 +4,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import config from '../../../shared/config/config.json';
 
 interface IAlertaDataCellProps {
-  cellClass: any;
-  textClass: any;
+  cellClass?: any;
+  textClass?: any;
   text: any;
   tooltip: string;
 }
@@ -21,9 +21,6 @@ export class AlertaDataCell extends Component<IAlertaDataCellProps> {
 
   constructor(props: IAlertaDataCellProps) {
     super(props);
-    if (this.props.cellClass.trim() !== '') {
-      this.cellClass = this.props.cellClass;
-    }
   }
 
   render() {
