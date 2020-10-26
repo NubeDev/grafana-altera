@@ -43,11 +43,11 @@ In Iteration 3 we'll introduce user actions, these are extra action beside filte
 - Assign (query list of users in Grafana and assign issues/tasks)
 
 ### Assign users feature
-API key: for development purpose, an api key is created for the plugin: `eyJrIjoiZUcwbDh0RzduZldnUTF0UWJYNFV4UUU4cjNDYkNQMTEiLCJuIjoiYWxlcnRhIiwiaWQiOjF9`
+API key: for development purpose, an api key is created for the plugin: `eyJrIjoiZUcwbDh0R...xlcnRhIiwiaWQiOjF9`
 
 Users from Grafana can be obtained using the following api
 ```bash
-curl -H "Authorization: Bearer eyJrIjoiZUcwbDh0RzduZldnUTF0UWJYNFV4UUU4cjNDYkNQMTEiLCJuIjoiYWxlcnRhIiwiaWQiOjF9" http://188.166.245.250:3000/api/org/users
+curl -H "Authorization: Bearer eyJrIjoiZUcwbDh0R...xlcnRhIiwiaWQiOjF9" http://188.166.245.250:3000/api/org/users
 
 Output: 
 
