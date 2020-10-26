@@ -89,9 +89,9 @@ Output:
 ```
 with this data, `userId` can be used as the unique identifier, and `login` can be used as the friendly identifier, following are some use-cases:
 
-- As a plugin user, when click on assign button, then user can choose from a <Select> another user to assign the alert to.
-- As a plugin user, when I click on the filter, then I can select to filter which alerts have been assigned to me
-- As a plugin user, when there is notification feature from Grafana, then I should be able to received notified message when an alert has been assigned to me.
+ - As a plugin user, when click on assign button, then user can choose from a select like: <Select><Option>Peter Pan</Option><Option>Robin Hood</Option></Select> for another user to assign the alert to.
+ - As a plugin user, when I click on the filter "Show alerts from = () All  (x) Assigned to me", then I can select to filter which alerts have been assigned to me
+ - As a plugin user, when there is notification feature from Grafana, then I should be able to received notified message when an alert has been assigned to me.
 
 
 ## Iteration 4
