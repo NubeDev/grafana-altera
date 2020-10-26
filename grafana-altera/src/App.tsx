@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
+import { ToastContainer } from 'react-toastify';
 import clsx from 'clsx';
 import { PanelProps } from '@grafana/data';
 import { config } from '@grafana/runtime';
 
 import './App.scss';
+import 'react-toastify/dist/ReactToastify.css';
 import { IGrafanaAlertaOptions } from './types';
 import { AlertaTable } from 'components/table/AlertaTable';
 import { THEME } from 'shared/constants/theme.constants';
@@ -34,6 +36,18 @@ export class AppComponent extends PureComponent<IProps, IState> {
           <div className="alerts" style={{ width: '100%' }}>
             <div className="v-tabs px-1">
               <AlertaTable />
+              <ToastContainer
+                position="top-right"
+                autoClose={10000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                limit={1}
+              />
             </div>
           </div>
         </div>

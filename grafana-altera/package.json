@@ -20,6 +20,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "axios": "^0.20.0",
     "css-loader": "^4.2.2",
     "export-to-csv": "^0.2.1",
@@ -30,6 +31,7 @@
     "lodash": "latest",
     "moment": "^2.27.0",
     "react-router-dom": "^5.2.0",
+    "react-toastify": "^6.0.9",
     "resolve-url-loader": "^3.1.1",
     "sass": "1.26.5",
     "sass-loader": "8.0.2",

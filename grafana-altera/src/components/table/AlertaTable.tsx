@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import debounce from 'lodash/debounce';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -108,7 +109,8 @@ async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAl
           pageSize: res.pageSize
         });
       }
-    });
+    })
+    .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
 }
 
 /**
@@ -933,16 +935,19 @@ function MainTable(props: IMainTableProps) {
       map = rowSelected.map(a => unwatchAlert(a.id));
     }
 
-    Promise.all(map).then(() => {
-      handleClearSelected();
-      updateData(setAlertState);
-    });
+    Promise.all(map)
+      .then(() => {
+        handleClearSelected();
+        updateData(setAlertState);
+      })
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   };
 
   const handleBulkAckAlert = () => {
     rowSelected.map(alert => {
       alertService.takeAction(alert.id, 'ack', '', ackTimeout)
-        .then(() => updateData(setAlertState));
+        .then(() => updateData(setAlertState))
+        .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
     }).reduce(() => handleClearSelected());
   };
 
@@ -952,7 +957,8 @@ function MainTable(props: IMainTableProps) {
       .then(() => {
         handleClearSelected();
         updateData(setAlertState);
-      });
+      })
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   };
 
   const handleTakeBulkAction = (action: string) => {
@@ -961,7 +967,8 @@ function MainTable(props: IMainTableProps) {
       .then(() => {
         handleClearSelected();
         updateData(setAlertState);
-      });
+      })
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   };
 
   const handleBulkDeleteAlert = () => {
@@ -971,39 +978,46 @@ function MainTable(props: IMainTableProps) {
         .then(() => {
           handleClearSelected();
           updateData(setAlertState);
-        });
+        })
+        .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   };
 
   /* Use for function buttons of each row */
   const handleWatchAlert = debounce((username: string, alertId: string) => {
     alertService.watchAlert(username, alertId)
-      .then(() => updateData(setAlertState));
+      .then(() => updateData(setAlertState))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleUnWatchAlert = debounce((username: string, alertId: string) => {
     alertService.unWatchAlert(username, alertId)
-      .then(() => updateData(setAlertState));
+      .then(() => updateData(setAlertState))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleAckAlert = debounce((alertId: string, action: string, text: string) => {
     alertService.takeAction(alertId, action, text, ackTimeout)
-      .then(() => updateData(setAlertState));
+      .then(() => updateData(setAlertState))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleShelveAlert = debounce((alertId: string, action: string, text: string) => {
     alertService.takeAction(alertId, action, text, shelveTimeout)
-      .then(() => updateData(setAlertState));
+      .then(() => updateData(setAlertState))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleDeleteAlert = debounce((alertId: string) => {
     confirm('Are you sure you want to delete this item?') &&
       alertService.deleteAlert(alertId)
-        .then(() => updateData(setAlertState));
+        .then(() => updateData(setAlertState))
+        .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleTakeAction = debounce((alertId: string, action: string, text: string) => {
     alertService.takeAction(alertId, action, text)
-      .then(() => updateData(setAlertState));
+      .then(() => updateData(setAlertState))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   /* Use for Alert details */
@@ -1026,7 +1040,8 @@ function MainTable(props: IMainTableProps) {
         .then(() => {
           updateData(setAlertState);
           handleHiddenAlertDetails();
-        });
+        })
+        .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   return (
@@ -1235,7 +1250,8 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
         if (res) {
           this.setState({ environments: res.environments });
         }
-      });
+      })
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   };
 
   getServices = () => {
@@ -1244,7 +1260,8 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
         if (res) {
           this.setState({ services: res.services });
         }
-      });
+      })
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   };
 
   getGroups = () => {
@@ -1253,7 +1270,8 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
         if (res) {
           this.setState({ groups: res.groups });
         }
-      });
+      })
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   };
 
   getUsername = () => {
@@ -1262,7 +1280,8 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
         if (res) {
           this.setState({ basicAuthUser: res.basicAuthUser });
         }
-      });
+      })
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   };
 
   getTimeout = () => {
@@ -1279,7 +1298,8 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
             this.setState({ refreshInterval: res.attributes.prefs.refreshInterval });
           }
         }
-      });
+      })
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   };
 
   render() {

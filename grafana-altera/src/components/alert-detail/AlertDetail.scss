@@ -95,3 +95,9 @@
   background-color: #fb8c00 !important;
   border-color: #fb8c00 !important;
 }
+
+.theme--dark {
+  .MuiSkeleton-wave::after {
+    background: linear-gradient(90deg, transparent, #838383, transparent) !important;
+  }
+}

@@ -1,9 +1,11 @@
 import React, { Component, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import clsx from 'clsx';
 import moment from 'moment';
 import debounce from 'lodash/debounce';
 import { DebouncedFunc } from 'lodash';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Skeleton from '@material-ui/lab/Skeleton';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -74,7 +76,8 @@ function getAlert(alertId: string, setAlertDetail: React.Dispatch<React.SetState
       if (res) {
         setAlertDetail(res);
       }
-    });
+    })
+    .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
 }
 
 function getNotes(alertId: string, setNotes: React.Dispatch<React.SetStateAction<INote[]>>) {
@@ -83,7 +86,8 @@ function getNotes(alertId: string, setNotes: React.Dispatch<React.SetStateAction
       if (res) {
         setNotes(res);
       }
-    });
+    })
+    .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
 }
 
 function TabPanel(props: ITabPanelProps) {
@@ -209,6 +213,10 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
       labelContainer: {
         width: 'auto',
         padding: 0
+      },
+      rootSkeleton: {
+        width: 400,
+        backgroundColor: theme === THEME.DARK_MODE ? '#717171' : 'rgba(0, 0, 0, 0.11)'
       }
     })
   );
@@ -332,27 +340,32 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
 
   const handleWatchAlert = debounce((username: string, alertId: string) => {
     alertService.watchAlert(username, alertId)
-      .then(() => getAlert(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleUnwatchAlert = debounce((username: string, alertId: string) => {
     alertService.unWatchAlert(username, alertId)
-      .then(() => getAlert(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleAckAlert = debounce((alertId: string, action: string, text: string) => {
     alertService.takeAction(alertId, action, text, ackTimeout)
-      .then(() => getAlert(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleShelveAlert = debounce((alertId: string, action: string, text: string) => {
     alertService.takeAction(alertId, action, text, shelveTimeout)
-      .then(() => getAlert(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleTakeAction = debounce((alertId: string, action: string, text: string) => {
     alertService.takeAction(alertId, action, text)
-      .then(() => getAlert(alertId, setAlertDetail));
+      .then(() => getAlert(alertId, setAlertDetail))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleAddNote = debounce((alertId: string, text: string) => {
@@ -360,12 +373,14 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
       .then(() => {
         getNotes(alertId, setNotes);
         getAlert(alertId, setAlertDetail);
-      });
+      })
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const handleDeleteNote = debounce((alertId: string, noteId: string) => {
     alertService.deleteNote(alertId, noteId)
-      .then(() => getNotes(alertId, setNotes));
+      .then(() => getNotes(alertId, setNotes))
+      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
   }, 200, { leading: true, trailing: false });
 
   const isOpen = (status: string) => {
@@ -461,28 +476,28 @@ function AlertDetailContent(props: IAlertDetailContentProps) {
                     <div className="v-window-item">
                       <div className={clsx('v-card v-card--flat v-sheet', theme)}>
                         <div className="v-card__text">
-                          <AlertDataCell label="Alert ID" value="" />
-                          <AlertDataCell label="Last Receive Alert ID" value="" />
-                          <AlertDataCell label="Create Time" value="" />
-                          <AlertDataCell label="Receive Time" value="" />
-                          <AlertDataCell label="Last Receive Time" value="" />
-                          <AlertDataCell label="Service" value="" />
-                          <AlertDataCell label="Environment" value="" />
-                          <AlertDataCell label="Resource" value="" />
-                          <AlertDataCell label="Event" value="" />
-                          <AlertDataCell label="Correlate" value="" />
-                          <AlertDataCell label="Group" value="" />
-                          <AlertDataCell label="Severity" value="" />
-                          <AlertDataCell label="Status" value="" />
-                          <AlertDataCell label="Value" value="" />
-                          <AlertDataCell label="Text" value="" />
-                          <AlertDataCell label="Trend Indication" value="" />
-                          <AlertDataCell label="Timeout" value="" />
-                          <AlertDataCell label="Type" value="" />
-                          <AlertDataCell label="Duplicate count" value="" />
-                          <AlertDataCell label="Repeat" value="" />
-                          <AlertDataCell label="Origin" value="" />
-                          <AlertDataCell label="Tags" value="" />
+                          <AlertDataCell label="Alert ID" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="30%" />} />
+                          <AlertDataCell label="Last Receive Alert ID" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="30%" />} />
+                          <AlertDataCell label="Create Time" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Receive Time" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="10%" />} />
+                          <AlertDataCell label="Last Receive Time" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Service" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Environment" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Resource" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="30%" />} />
+                          <AlertDataCell label="Event" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Correlate" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="20%" />} />
+                          <AlertDataCell label="Group" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Severity" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="30%" />} />
+                          <AlertDataCell label="Status" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Value" value={<Skeleton className={classes.rootSkeleton} animation="wave"  width="10%" />} />
+                          <AlertDataCell label="Text" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Trend Indication" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="30%" />} />
+                          <AlertDataCell label="Timeout" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="10%" />} />
+                          <AlertDataCell label="Type" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Duplicate count" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Repeat" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="10%" />} />
+                          <AlertDataCell label="Origin" value={<Skeleton className={classes.rootSkeleton} animation="wave" />} />
+                          <AlertDataCell label="Tags" value={<Skeleton className={classes.rootSkeleton} animation="wave" width="30%" />} />
                         </div>
                       </div>
                     </div>
