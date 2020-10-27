@@ -1,0 +1,39 @@
+{
+  "type": "datasource",
+  "name": "Grafana Alerta Datasource Plugin",
+  "id": "nube-dev-grafana-altera-datasource",
+  "metrics": true,
+  "info": {
+    "description": "Grafana Alerta Datasource Plugin",
+    "author": {
+      "name": "NubeDev",
+      "url": ""
+    },
+    "keywords": [
+      "grafana-altera",
+      "grafana-alerta",
+      "grafana-alerta-datasource"
+    ],
+    "logos": {
+      "small": "shared/img/nube-dev-logo.png",
+      "large": "shared/img/nube-dev-logo.png"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/grafana/simple-datasource"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/grafana/simple-datasource/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaVersion": "7.2.x",
+    "plugins": []
+  }
+}

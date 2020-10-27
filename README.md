@@ -36,8 +36,49 @@ This would be for adding the alerta
 ### So research on grafana HTTP/REST API/Data soruce
 
 https://github.com/grafana/strava-datasource
+
 https://community.grafana.com/t/how-to-import-rest-api-data/5772
 
 
+## Getting started
+1. Go to folder `grafana-altera`
+    ```BASH
+    cd grafana-altera
+    ```
+    1.1. Install dependencies
+    ```BASH
+    yarn install
+    ```
+    1.2. Build plugin in development mode or run in watch mode
+    ```BASH
+    yarn dev
+    ```
+    or
+    ```BASH
+    yarn watch
+    ```
+    1.3. Build plugin in production mode
+    ```BASH
+    yarn build
+    ```
 
-
+2. Go to folder `grafana-altera-datasource`
+    ```BASH
+    cd grafana-altera-datasource
+    ```
+    2.1. Install dependencies
+    ```BASH
+    yarn install
+    ```
+    2.2. Build plugin in development mode or run in watch mode
+    ```BASH
+    yarn dev
+    ```
+    or
+    ```BASH
+    yarn watch
+    ```
+    2.3. Build plugin in production mode
+    ```BASH
+    yarn build
+    ```

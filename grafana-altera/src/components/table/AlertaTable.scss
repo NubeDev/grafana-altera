@@ -1,0 +1,97 @@
+.theme--dark {
+
+  label,
+  input {
+    color: #fff;
+  }
+
+  .MuiButtonBase-root {
+    color: #fff;
+  }
+
+  #reset-btn:hover {
+    background-color: #3e4c57;
+  }
+
+  .menu-item:hover {
+    background-color: #555 !important;
+  }
+}
+
+#filter-list-btn:hover {
+  text-decoration: unset;
+  background-color: unset;
+}
+
+#table-func-menu-btn:hover {
+  text-decoration: unset;
+  background-color: unset;
+}
+
+.v-text-field__details {
+  padding: 0 12px;
+  margin-top: 4px;
+}
+
+.MuiChip-root {
+  height: 22px !important;
+}
+
+.settings {
+  margin-top: 24px;
+}
+
+.valign-center {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+}
+
+.p-l-4 {
+  padding-left: 4px;
+}
+
+.alerta-toolbars {
+
+  height: 64px;
+
+  &.theme--dark {
+    background-color: rgb(142, 142, 142) !important;
+    border-color: rgb(142, 142, 142) !important;
+  }
+
+  &.theme-light {
+    background-color: rgb(188, 188, 188) !important;
+    border-color: rgb(188, 188, 188) !important;
+  }
+
+  .MuiSvgIcon-root {
+    font-size: 24px;
+  }
+}
+
+.MuiIconButton-label input[type=checkbox] {
+  width: 100% !important;
+  max-height: unset !important;
+}
+
+.action-buttons {
+
+  &.row-tools {
+    .MuiSvgIcon-root {
+      font-size: 20px;
+    }
+  }
+}
+
+.MuiTooltip-tooltip {
+  font-size: 12px !important;
+}
+
+#alert-dialog-title h2 {
+  color: #000000de !important;
+}
+
+.is-watch {
+  margin: 6px 8px;
+}

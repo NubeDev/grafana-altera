@@ -1,0 +1,24 @@
+@import '../public/assets/css/fonts.css';
+@import '../public/assets/css/app.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+.text-capitalize {
+  text-transform: 'capitalize';
+}
+
+.hover-lighten:hover {
+  border-top: 1px solid #ddd !important;
+}
+
+.v-datatable {
+  .no-record {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+  }
+}
+
+.MuiTablePagination-selectRoot {
+  margin-top: 3px;
+}

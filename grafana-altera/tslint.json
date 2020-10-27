@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier"
+  ],
+  "rulesDirectory": [
+    "tslint-plugin-prettier"
+  ],
+  "rules": {
+    "interface-name": true,
+    "no-empty-interface": false,
+    "no-unused-expression": false,
+    "jsx-boolean-value": false,
+    "no-console": false,
+    "jsx-no-lambda": false,
+    "no-string-literal": false
+  }
+}

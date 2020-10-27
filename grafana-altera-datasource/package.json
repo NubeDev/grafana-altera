@@ -1,0 +1,26 @@
+{
+  "name": "nube-dev-grafana-altera-datasource",
+  "version": "1.0.0",
+  "description": "Grafana Alerta Datasource Plugin",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch",
+    "prettier:fix": "prettier --write src/**/*.{js,tsx,scss}"
+  },
+  "author": "NubeDev",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@grafana/data": "7.2.0",
+    "@grafana/runtime": "7.2.0",
+    "@grafana/toolkit": "7.2.0",
+    "@grafana/ui": "7.2.0",
+    "@testing-library/jest-dom": "5.4.0",
+    "@testing-library/react": "^10.0.2",
+    "@types/lodash": "^4.14.161"
+  },
+  "engines": {
+    "node": ">=12 <13"
+  }
+}
