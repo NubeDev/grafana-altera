@@ -91,8 +91,7 @@ export default {
           total: res.total,
           pageSize: res.pageSize
         };
-      })
-      .catch(error => console.log(error));
+      });
   },
   getServices() {
     return actions.getServices()
@@ -100,8 +99,7 @@ export default {
         return {
           services: res.services
         };
-      })
-      .catch(error => console.log(error));
+      });
   },
   watchAlert(username: string, alertId: string) {
     const tag = `watch:${username}`;
@@ -125,8 +123,7 @@ export default {
     return actions.getAlert(alertId)
       .then(({ alert }) => {
         return alert;
-      })
-      .catch(error => console.log(error));
+      });
   },
   addNote(alertId: string, text: string) {
     return actions.addNote(alertId, {
@@ -137,8 +134,7 @@ export default {
     return actions.getNotes(alertId)
       .then(({ notes }) => {
         return notes;
-      })
-      .catch(error => console.log(error));
+      });
   },
   deleteNote(alertId: string, noteId: string) {
     return actions.deleteNote(alertId, noteId);

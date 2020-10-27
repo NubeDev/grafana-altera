@@ -20,7 +20,6 @@ export default {
         return {
           basicAuthUser: res.basicAuthUser
         };
-      })
-      .catch(error => console.log(error));
+      });
   }
 }

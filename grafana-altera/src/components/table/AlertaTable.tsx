@@ -99,7 +99,7 @@ const paramState = {
  * Call API get alerts.
  * @param setAlertState
  */
-async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAlertaDataTable>>) {
+function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAlertaDataTable>>) {
   alertService.getAlerts({ state: paramState })
     .then(res => {
       if (res) {
@@ -110,7 +110,11 @@ async function updateData(setAlertState: React.Dispatch<React.SetStateAction<IAl
         });
       }
     })
-    .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
+    .catch(error => {
+      if (error.response) {
+        toast.error(`${error.response.statusText} (${error.response.status})`);
+      }
+    });
 }
 
 /**
@@ -1244,7 +1248,7 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
     setInterval(this.getEnvironments, config.refresh_interval);
   }
 
-  getEnvironments = async () => {
+  getEnvironments = () => {
     environmentService.getEnvironments({ state: paramState })
       .then(res => {
         if (res) {

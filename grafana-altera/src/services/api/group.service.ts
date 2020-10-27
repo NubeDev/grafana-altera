@@ -18,7 +18,6 @@ export default {
         return {
           groups: res.groups
         };
-      })
-      .catch(error => console.log(error));
+      });
   },
 }

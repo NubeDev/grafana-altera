@@ -14,7 +14,6 @@ export default {
         return {
           attributes
         };
-      })
-      .catch(error => console.log(error));
+      });
   }
 }

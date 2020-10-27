@@ -2,6 +2,7 @@ import { DataQueryResponse, DataSourceApi, DataSourceInstanceSettings, MutableDa
 import { getBackendSrv } from '@grafana/runtime';
 
 import { GenericOptions, GrafanaQuery, QueryRequest } from './types';
+import { APP_CONFIG } from 'shared/config/config';
 
 export class DataSource extends DataSourceApi<GrafanaQuery, GenericOptions> {
   url: string;
@@ -15,8 +16,8 @@ export class DataSource extends DataSourceApi<GrafanaQuery, GenericOptions> {
 
     this.withCredentials = instanceSettings.withCredentials !== undefined;
     this.headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json'
+      'Access-Control-Allow-Origin': APP_CONFIG.HEADERS_ACCESS_CONTROL_ALLOW_ORIGIN,
+      'Content-Type': APP_CONFIG.HEADERS_CONTENT_TYPE
     };
     if (typeof instanceSettings.basicAuth === 'string' && instanceSettings.basicAuth.length > 0) {
       this.headers['Authorization'] = instanceSettings.basicAuth;

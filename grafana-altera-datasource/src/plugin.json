@@ -15,8 +15,8 @@
       "grafana-alerta-datasource"
     ],
     "logos": {
-      "small": "img/nube-dev-logo.png",
-      "large": "img/nube-dev-logo.png"
+      "small": "shared/img/nube-dev-logo.png",
+      "large": "shared/img/nube-dev-logo.png"
     },
     "links": [
       {

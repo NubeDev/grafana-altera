@@ -40,7 +40,6 @@ export default {
         return {
           environments: res.environments
         };
-      })
-      .catch(error => console.log(error));
+      });
   }
 }
