@@ -139,22 +139,28 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
     const isSelected = (id: string) => rowSelected.map(alert => alert.id).indexOf(id) !== -1;
 
     const someSelected = () => {
-      const availableToSelect = alerts.map(alert => alert.id);
-      const selection = rowSelected.map(alert => alert.id);
-      const selectionSet = new Set(selection);
+      if (alerts) {
+        const availableToSelect = alerts.map(alert => alert.id);
+        const selection = rowSelected.map(alert => alert.id);
+        const selectionSet = new Set(selection);
 
-      return availableToSelect.length !== 0 && selectionSet.size !== 0
-        && availableToSelect.some(elem => selectionSet.has(elem))
-        && availableToSelect.some(elem => !selectionSet.has(elem));
+        return availableToSelect.length !== 0 && selectionSet.size !== 0
+          && availableToSelect.some(elem => selectionSet.has(elem))
+          && availableToSelect.some(elem => !selectionSet.has(elem));
+      }
+      return false;
     };
 
     const allSelected = () => {
-      const availableToSelect = alerts.map(alert => alert.id);
-      const selection = rowSelected.map(alert => alert.id);
-      const selectionSet = new Set(selection);
+      if (alerts) {
+        const availableToSelect = alerts && alerts.map(alert => alert.id);
+        const selection = rowSelected.map(alert => alert.id);
+        const selectionSet = new Set(selection);
 
-      return selectionSet.size !== 0 && availableToSelect.length !== 0
-        && !availableToSelect.some(elem => !selectionSet.has(elem));
+        return selectionSet.size !== 0 && availableToSelect.length !== 0
+          && !availableToSelect.some(elem => !selectionSet.has(elem));
+      }
+      return false;
     };
 
     return (
@@ -189,7 +195,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
           </tr>
         </thead>
         <tbody>
-          {(alerts.length > 0) && alerts.map((alert, index) => {
+          {(alerts && alerts.length > 0) && alerts.map((alert, index) => {
             const labelId = `main-table-checkbox-${index}`;
             const isRowSelected = isSelected(alert.id);
 
@@ -241,7 +247,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
               </TableRow>
             );
           })}
-          {(alerts.length === 0) && (
+          {(alerts && alerts.length === 0) && (
             <tr className="hover-lighten">
               <td colSpan={13} className="text-no-wrap">
                 <span className="no-record">No matching records found!</span>
