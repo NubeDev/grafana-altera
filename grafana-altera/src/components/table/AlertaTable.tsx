@@ -1255,7 +1255,11 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
           this.setState({ environments: res.environments });
         }
       })
-      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
+      .catch(error => {
+        if (error.response) {
+          toast.error(`${error.response.statusText} (${error.response.status})`);
+        }
+      });
   };
 
   getServices = () => {
@@ -1265,7 +1269,11 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
           this.setState({ services: res.services });
         }
       })
-      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
+      .catch(error => {
+        if (error.response) {
+          toast.error(`${error.response.statusText} (${error.response.status})`);
+        }
+      });
   };
 
   getGroups = () => {
@@ -1275,7 +1283,11 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
           this.setState({ groups: res.groups });
         }
       })
-      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
+      .catch(error => {
+        if (error.response) {
+          toast.error(`${error.response.statusText} (${error.response.status})`);
+        }
+      });
   };
 
   getUsername = () => {
@@ -1285,7 +1297,11 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
           this.setState({ basicAuthUser: res.basicAuthUser });
         }
       })
-      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
+      .catch(error => {
+        if (error.response) {
+          toast.error(`${error.response.statusText} (${error.response.status})`);
+        }
+      });
   };
 
   getTimeout = () => {
@@ -1303,7 +1319,11 @@ export class AlertaTable extends Component<IAlertaTableProps, IAlertaTableState>
           }
         }
       })
-      .catch(error => toast.error(`${error.response.statusText} (${error.response.status})`));
+      .catch(error => {
+        if (error.response) {
+          toast.error(`${error.response.statusText} (${error.response.status})`);
+        }
+      });
   };
 
   render() {
