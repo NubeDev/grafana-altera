@@ -12,11 +12,6 @@
     "prettier:fix": "prettier --write src/**/*.{js,tsx,scss}"
   },
   "author": "NubeDev",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/grafana/simple-react-panel/issues",
-    "email": "plugins@grafana.com"
-  },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",

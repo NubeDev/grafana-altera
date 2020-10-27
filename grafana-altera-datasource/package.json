@@ -10,7 +10,6 @@
     "prettier:fix": "prettier --write src/**/*.{js,tsx,scss}"
   },
   "author": "NubeDev",
-  "license": "Apache-2.0",
   "devDependencies": {
     "@grafana/data": "7.2.0",
     "@grafana/runtime": "7.2.0",
