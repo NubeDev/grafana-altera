@@ -42,6 +42,57 @@ In Iteration 3 we'll introduce user actions, these are extra action beside filte
 - And and edit Notes
 - Assign (query list of users in Grafana and assign issues/tasks)
 
+### Assign users feature
+API key: for development purpose, an api key is created for the plugin: `eyJrIjoiZUcwbDh0R...xlcnRhIiwiaWQiOjF9`
+
+Users from Grafana can be obtained using the following api
+```bash
+curl -H "Authorization: Bearer eyJrIjoiZUcwbDh0R...xlcnRhIiwiaWQiOjF9" http://188.166.245.250:3000/api/org/users
+
+Output: 
+
+[
+   {
+      "avatarUrl" : "/avatar/46d229b033af06a191ff2267bca9ae56",
+      "email" : "admin@localhost",
+      "lastSeenAt" : "2020-10-26T23:25:28Z",
+      "lastSeenAtAge" : "2m",
+      "login" : "admin",
+      "name" : "",
+      "orgId" : 1,
+      "role" : "Admin",
+      "userId" : 1
+   },
+   {
+      "avatarUrl" : "/avatar/7c8542f06428b4c018c4ed5883428779",
+      "email" : "peter@localhost.com",
+      "lastSeenAt" : "2020-10-26T23:13:06Z",
+      "lastSeenAtAge" : "15m",
+      "login" : "peter",
+      "name" : "Peter Pan",
+      "orgId" : 1,
+      "role" : "Editor",
+      "userId" : 2
+   },
+   {
+      "avatarUrl" : "/avatar/da5d9f50e650a9d5c1727fd67de72d86",
+      "email" : "robin@localhost.com",
+      "lastSeenAt" : "2020-10-26T23:14:16Z",
+      "lastSeenAtAge" : "13m",
+      "login" : "robin",
+      "name" : "Robin Hood",
+      "orgId" : 1,
+      "role" : "Editor",
+      "userId" : 3
+   }
+]
+```
+with this data, `userId` can be used as the unique identifier, and `login` can be used as the friendly identifier, following are some use-cases:
+
+ - As a plugin user, when click on assign button, then user can choose from a select like: <Select><Option>Peter Pan</Option><Option>Robin Hood</Option></Select> for another user to assign the alert to.
+ - As a plugin user, when I click on the filter "Show alerts from = () All  (x) Assigned to me", then I can select to filter which alerts have been assigned to me
+ - As a plugin user, when there is notification feature from Grafana, then I should be able to received notified message when an alert has been assigned to me.
+
 
 ## Iteration 4
 TBD
