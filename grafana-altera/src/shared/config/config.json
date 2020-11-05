@@ -78,6 +78,7 @@
     "text": "black"
   }, 
   "columns": [
+    "id",
     "severity", 
     "status", 
     "lastReceiveTime", 

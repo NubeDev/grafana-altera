@@ -42,6 +42,7 @@ interface IAlertaTableContentProps {
 export class AlertaTableContent extends Component<IAlertaTableContentProps> {
   customHeaders = () => {
     const headersMap: any = {
+      id: { text: 'ID', value: 'id' },
       severity: { text: 'Severity', value: 'severity' },
       status: { text: 'Status', value: 'status' },
       lastReceiveTime: { text: 'Last Receive Time', value: 'lastReceiveTime' },
@@ -114,6 +115,13 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
     }
 
     return icon;
+  }
+
+  shortId(value: any) {
+    if (value) {
+      return String(value).substring(0, 8);
+    }
+    return '';
   }
 
   render() {
@@ -191,7 +199,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
             )}
           </tr>
           <tr className="v-datatable__progress">
-            <th colSpan={13} className="column" />
+            <th colSpan={14} className="column" />
           </tr>
         </thead>
         <tbody>
@@ -221,6 +229,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
                   </div>
                 </td>
 
+                <AlertaDataCell tooltip="" text={this.shortId(alert.id)} />
                 <AlertaDataCell tooltip="" textClass={`label ${'label-' + alert.severity.toLowerCase()} text-capitalize`} text={alert.severity} />
                 <AlertaDataCell tooltip="" textClass="label text-capitalize" text={alert.status} />
                 <AlertaDataCell tooltip={this.formatDateTime('tooltip', alert.lastReceiveTime)} text={this.formatDateTime('mediumDate', alert.lastReceiveTime)} />
@@ -249,7 +258,7 @@ export class AlertaTableContent extends Component<IAlertaTableContentProps> {
           })}
           {(alerts && alerts.length === 0) && (
             <tr className="hover-lighten">
-              <td colSpan={13} className="text-no-wrap">
+              <td colSpan={14} className="text-no-wrap">
                 <span className="no-record">No matching records found!</span>
               </td>
             </tr>

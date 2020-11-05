@@ -901,6 +901,7 @@ function MainTable(props: IMainTableProps) {
 
     return isWatchAlerts && isWatchAlerts.filter(alert => {
       return (
+        (alert.id && alert.id.toLowerCase().includes(searchText.toLowerCase())) ||
         (alert.severity && alert.severity.toLowerCase().includes(searchText.toLowerCase())) ||
         (alert.status && alert.status.toLowerCase().includes(searchText.toLowerCase())) ||
         (alert.duplicateCount && alert.duplicateCount.toString().toLowerCase().includes(searchText.toLowerCase())) ||
