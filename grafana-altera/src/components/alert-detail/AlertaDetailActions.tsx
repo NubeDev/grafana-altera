@@ -4,9 +4,14 @@ import { DebouncedFunc } from 'lodash';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as Yup from 'yup';
+import TextFieldMaterial from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { IAlert } from 'shared/models/model-data/alert.model';
 import { THEME } from 'shared/constants/theme.constants';
+import { IGrafanaUser } from 'shared/models/model-data/grafana-user.model';
+import userService from 'services/api/user.service';
 
 interface IAlertaDetailActionsProps {
   theme: any;
@@ -87,6 +92,59 @@ function AlertActionsButton(props: IAlertaDetailActionsProps) {
   const handleClose = () => {
     setShowForm(false);
   };
+
+  const [showAssignList, setShowAssignList] = React.useState(false);
+
+  const handleShowAssignList = () => {
+    setShowAssignList(!showAssignList);
+  };
+
+  const [assignList, setAssignList] = React.useState([] as any);
+
+  const handleSubmitAssign = () => {
+    console.log(assignList);
+  };
+
+  const handleCancelAssign = () => {
+    setShowAssignList(!showAssignList);
+    setAssignList([]);
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const [options, setOptions] = React.useState<IGrafanaUser[]>([]);
+  const loading = open && options.length === 0;
+
+  const sleep = (delay = 0) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, delay);
+    });
+  };
+
+  React.useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    (async () => {
+      const response = await userService.getGrafanaUsers();
+      await sleep(1000);
+      if (active) {
+        setOptions(response);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [loading]);
+
+  React.useEffect(() => {
+    if (!open) {
+      setOptions([]);
+    }
+  }, [open]);
 
   return (
     <div>
@@ -286,6 +344,72 @@ function AlertActionsButton(props: IAlertaDetailActionsProps) {
                 icon="delete_forever"
                 onClick={() => handleDeleteAlertDetails(alertDetail.id)}
               />
+              <Button
+                show={!showAssignList}
+                type="button"
+                classBtn={clsx('v-btn v-btn--outline v-btn--depressed', theme, 'grey--text text--darken-2')}
+                classIcon={clsx('v-icon material-icons', theme)}
+                label="Assign"
+                icon="assignment"
+                onClick={handleShowAssignList}
+              />
+              {showAssignList === true ? (
+                <div className="assign">
+                  <Autocomplete
+                    multiple
+                    id="assign-to"
+                    style={{ width: 500 }}
+                    open={open}
+                    onOpen={() => {
+                      setOpen(true);
+                    }}
+                    onClose={() => {
+                      setOpen(false);
+                    }}
+                    getOptionSelected={(option, value) => option.login === value.login}
+                    getOptionLabel={(option) => `${option.name} (${option.login})`}
+                    options={options}
+                    loading={loading}
+                    renderInput={(params) => (
+                      <TextFieldMaterial
+                        {...params}
+                        label="Assign to"
+                        variant="outlined"
+                        name="assignTo"
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <React.Fragment>
+                              {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                              {params.InputProps.endAdornment}
+                            </React.Fragment>
+                          ),
+                        }}
+                      />
+                    )}
+                    onChange={(event, value) => setAssignList(value.map(v => v.email))}
+                  />
+                  <Button
+                    show={true}
+                    type="button"
+                    classBtn={clsx(theme === THEME.DARK_MODE ? 'black--text' : '', 'v-btn', theme, 'white')}
+                    classIcon={clsx('v-icon material-icons', theme)}
+                    label="Assign"
+                    icon="assignment"
+                    onClick={handleSubmitAssign}
+                  />
+                  <Button
+                    show={true}
+                    type="button"
+                    classBtn={clsx(theme === THEME.DARK_MODE ? 'black--text' : '', 'v-btn', theme, 'white')}
+                    classIcon={clsx('v-icon material-icons', theme)}
+                    label="Cancel"
+                    icon="cancel"
+                    onClick={handleCancelAssign}
+                  />
+                </div>
+                ) : ''
+              }
             </div>
           </div>
         </div>
