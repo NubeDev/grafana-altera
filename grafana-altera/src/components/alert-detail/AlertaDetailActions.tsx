@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import clsx from 'clsx';
 import { DebouncedFunc } from 'lodash';
 import { Formik, Form, Field } from 'formik';
@@ -7,11 +8,16 @@ import * as Yup from 'yup';
 import TextFieldMaterial from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import emailjs from 'emailjs-com';
+import{ init } from 'emailjs-com';
 
 import { IAlert } from 'shared/models/model-data/alert.model';
 import { THEME } from 'shared/constants/theme.constants';
+import { EMAILJS } from 'shared/constants/emailjs.constants';
 import { IGrafanaUser } from 'shared/models/model-data/grafana-user.model';
 import userService from 'services/api/user.service';
+
+init(EMAILJS.USER_ID);
 
 interface IAlertaDetailActionsProps {
   theme: any;
@@ -99,10 +105,26 @@ function AlertActionsButton(props: IAlertaDetailActionsProps) {
     setShowAssignList(!showAssignList);
   };
 
-  const [assignList, setAssignList] = React.useState([] as any);
+  const sendMail = (serviceId: any, templateId: any, variables: any) => {
+    emailjs.send(serviceId, templateId, variables)
+      .then(() => {
+        toast.success('Email successfully sent!');
+      })
+      .catch(err => toast.error(`There has been an error. Here some thoughts on the error that occured: ${err}`));
+  };
 
-  const handleSubmitAssign = () => {
-    console.log(assignList);
+  const [assignList, setAssignList] = React.useState([] as IGrafanaUser[]);
+
+  const handleSubmitAssign = (alertId: any) => {
+    if (assignList && assignList.length !== 0) {
+      const templateId = EMAILJS.TEMPLATE_ID;
+      const serviceId = EMAILJS.SERVICE_ID;
+      assignList.forEach((user: any) => {
+        sendMail(serviceId, templateId, { to_name: user.name, message: alertId, reply_to: assignList })
+      });
+      setShowAssignList(!showAssignList);
+      setAssignList([]);
+    }
   };
 
   const handleCancelAssign = () => {
@@ -387,7 +409,7 @@ function AlertActionsButton(props: IAlertaDetailActionsProps) {
                         }}
                       />
                     )}
-                    onChange={(event, value) => setAssignList(value.map(v => v.email))}
+                    onChange={(event, value) => setAssignList(value)}
                   />
                   <Button
                     show={true}
@@ -396,7 +418,7 @@ function AlertActionsButton(props: IAlertaDetailActionsProps) {
                     classIcon={clsx('v-icon material-icons', theme)}
                     label="Assign"
                     icon="assignment"
-                    onClick={handleSubmitAssign}
+                    onClick={() => handleSubmitAssign(alertDetail.id)}
                   />
                   <Button
                     show={true}
